@@ -1,0 +1,118 @@
+@(message: String)
+
+@main("GB-Monitor 2.0") {
+
+    <div>
+
+    @snip_headerbar()
+
+    <script>
+       $('#header-tab-lcpevents').addClass("active");
+    </script>
+
+    <!-- Begin Body -->
+    <div class="container overwrite-margin">
+        <div class="row">
+
+            <div class="col-md-12">
+
+                <h4 id="sec1">
+                    Select Customer &nbsp;
+                    <select>
+                        <option>All</option>
+                        <option>aruba-aruba-pod</option>
+                        <option>aruba-airwave-pod</option>
+                        <option>vce-vce-pod</option>
+                    </select>
+                </h4>
+                <hr>
+
+                <h3 id="sec2">Open events</h3>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <table id="lcpevents-open-events"
+                        data-sort-name="doc-count"
+                        data-sort-order="desc"
+                        data-search="true"
+                        data-show-columns="true"
+                        data-height="400">
+                            <thead>
+                                <tr>
+                                    <th data-field="id" data-sortable="true">EventID</th>
+                                    <th data-field="name" data-sortable="true">Name</th>
+                                    <th data-field="mps" data-sortable="true">MPS</th>
+                                    <th data-field="h2" data-sortable="true">H2 IP</th>
+                                    <th data-field="load_id" data-sortable="true">Load ID</th>
+                                    <th data-field="source" data-sortable="true">Source</th>
+                                    <th data-field="occurred_at" data-sortable="true">OccuredAt</th>
+                                    <th data-field="owner" data-sortable="true">Owner</th>
+                                    <th data-field="escalation_level" data-sortable="true">EscalationLevel</th>
+                                    <th data-field="actions" data-sortable="true">Actions</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+
+                <hr />
+
+                <h3 id="sec3">Closed Events</h3>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <table id="lcpevents-closed-events"
+                               data-sort-name="doc-count"
+                               data-sort-order="desc"
+                               data-search="true"
+                               data-show-columns="true"
+                               data-height="400">
+                            <thead>
+                            <tr>
+                                <th data-field="id" data-sortable="true">ID</th>
+                                <th data-field="name" data-sortable="true">Name</th>
+                                <th data-field="customer" data-sortable="true">Customer</th>
+                                <th data-field="is-bug" data-sortable="true">isBug</th>
+                                <th data-field="component" data-sortable="true">Component</th>
+                                <th data-field="source" data-sortable="true">Source</th>
+                                <th data-field="timestamp" data-sortable="true">Closed At</th>
+                                <th data-field="owner" data-sortable="true">Owner</th>
+                                <th data-field="status" data-sortable="true">Status</th>
+                                <th data-field="kb" data-sortable="true">KB</th>
+                                <th data-field="actions" data-sortable="true">Actions</th>
+                            </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+
+                <hr />
+
+
+
+                <h3>Bulk Operations</h3>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <button type="button" class="btn btn-info">Delete All</button>
+                        <button type="button" class="btn btn-info">Resend All Notifications</button>
+
+                    </div>
+                </div>
+
+
+
+            </div>
+        </div>
+    </div>
+
+
+    <br/>
+    <br/>
+
+    </div>
+
+    <script src="@routes.Assets.at("javascripts/app/lcpevents.js")" type="text/javascript"></script>
+
+
+}

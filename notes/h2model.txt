@@ -1,0 +1,9 @@
+INSERT INTO PUBLIC.LCP_DEFAULT_CHECKS("cid", "mps", "description", "interval", "critical_threshold", "warning_threshold", "threshold_unit", "wait_duration", "status") VALUES
+('lcp-c01', 'default', 'File stuck in parsing', '300', '900', '300', 'time', '0', 'enabled'),
+('lcp-c02', 'default', 'File stuck in seen', '300', '60', '30', 'time', '0', 'enabled');
+
+
+drop table lcp_checks ;
+drop table lcp_default_checks ;
+drop table monitor_config ;
+drop table  lcp_event ;

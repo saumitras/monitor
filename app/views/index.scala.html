@@ -1,0 +1,121 @@
+@(message: String)
+
+@main("GB-Monitor 2.0") {
+
+    <div>
+
+    @snip_headerbar()
+
+    <script>
+       $('#header-tab-summary').addClass("active");
+    </script>
+
+    <!-- Begin Body -->
+    <div class="container overwrite-margin">
+        <div class="row">
+            <div class="col-md-12">
+                <h4 id="sec1">
+                    Duration &nbsp;
+                    <select>
+                        <option>Last 24 hours</option>
+                        <option>Last 2 days</option>
+                        <option>Last 7 days</option>
+                        <option>Forever</option>
+                    </select>
+                </h4>
+
+                <hr/>
+
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="panel panel-default">
+                            <div class="panel-heading"><h3 align="center">20 events (15 warning, 5 critical)</h3></div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="panel panel-default">
+                            <div class="panel-heading"><h3 align="center">4 active (2 owners)</h3></div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="panel panel-default">
+                            <div class="panel-heading"><h3 align="center">16 closed (3 owners)</h3></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="panel panel-default">
+                            <div class="panel-heading"><h3 align="center">3 Platform issues</h3></div>
+                        </div>
+                    </div>
+
+
+                    <div class="col-md-3">
+                        <div class="panel panel-default">
+                            <div class="panel-heading"><h3 align="center">2 Solution issues</h3></div>
+                        </div>
+                    </div>
+
+
+                    <div class="col-md-3">
+                        <div class="panel panel-default">
+                            <div class="panel-heading"><h3 align="center">0 devops issues</h3></div>
+                        </div>
+                    </div>
+
+
+                    <div class="col-md-3">
+                        <div class="panel panel-default">
+                            <div class="panel-heading"><h3 align="center">2 new bug opened</h3></div>
+                        </div>
+                    </div>
+
+
+
+                </div>
+
+                <hr />
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div id="summary-chart1-div"></div>
+                    </div>
+                </div>
+
+                <hr />
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div id="summary-chart2-div"></div>
+                    </div>
+                </div>
+
+
+                <hr />
+
+                <h3>Utilities</h3>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <button type="button" class="btn btn-info">Export Last 24 hrs events</button>
+                        <button type="button" class="btn btn-info">Export all events</button>
+                    </div>
+                </div>
+
+
+
+            </div>
+        </div>
+    </div>
+
+
+    <br/>
+    <br/>
+
+    </div>
+
+    <script src="@routes.Assets.at("javascripts/app/summary.js")" type="text/javascript"></script>
+
+}

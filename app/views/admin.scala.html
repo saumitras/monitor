@@ -1,0 +1,58 @@
+@(message: String)
+
+@main("GBMonitor - LCP Checks") {
+
+    <div>
+
+    @snip_headerbar()
+
+    <script>
+       $('#header-tab-admin').addClass("active");
+    </script>
+
+
+    <!-- Begin Body -->
+    <div class="container overwrite-margin">
+
+        <div class="row">
+            <div class="col-md-6">
+                <h4>Add/Remove Clients</h4>
+                <div class="input-group" id='admin-client-input-h2'>
+                    <span class="input-group-addon" style='width: 100px'>H2</span>
+                    <input type="text" class="client-list form-control" placeholder="Ex: jdbc:h2:tcp://gbp-h2-01/lcp-opdb" />
+                    <span action='add' class="input-group-addon"><a href="#">Add</a></span>
+                    <span action='remove' class="input-group-addon"><a href="#">Remove</a></span>
+                </div>
+                <br />
+                <div class="input-group" id='admin-client-input-zk'>
+                    <span class="input-group-addon"  style='width: 100px'>Zookeeper</span>
+                    <input type="text" class="client-list form-control" placeholder="Ex: gbp-solr-01:2181,gbp-solr-02:2181/explorer" />
+                    <span action='add' class="input-group-addon"><a href="#">Add</a></span>
+                    <span action='remove' class="input-group-addon"><a href="#">Remove</a></span>
+                </div>
+                <br />
+                <div class="input-group" id='admin-client-input-lcp'>
+                    <span class="input-group-addon"  style='width: 100px'>LCP</span>
+                    <input type="text" class="client-list form-control" placeholder="Ex: gbp-lcp-11,gbp-lcp-12" />
+                    <span action='add' class="input-group-addon"><a href="#">Add</a></span>
+                    <span action='remove' class="input-group-addon"><a href="#">Remove</a></span>
+                </div>
+
+            </div>
+
+        </div>
+        <hr/>
+
+
+    </div>
+
+
+    <br/>
+    <br/>
+
+    </div>
+
+    <script src="@routes.Assets.at("javascripts/app/admin.js")" type="text/javascript"></script>
+
+
+}

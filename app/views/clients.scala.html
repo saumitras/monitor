@@ -1,0 +1,142 @@
+@(message: String)
+
+@main("GBMonitor - LCP Checks") {
+
+    <div>
+
+    @snip_headerbar()
+
+    <script>
+       $('#header-tab-clients').addClass("active");
+    </script>
+
+
+    <!-- Begin Body -->
+    <div class="container overwrite-margin">
+        <div class="row">
+
+            <div class="col-md-12">
+
+                <h3>Clients</h3>
+                <div class="row">
+                    <div class="col-md-12">
+                        <table id="clients-table1"
+                               data-sort-name="group"
+                               data-sort-order="asc"
+                               data-search="true"
+                               data-show-columns="true"
+                               data-height="400">
+                            <thead>
+                            <tr>
+                                <th data-field="name" data-sortable="true">Name</th>
+                                <th data-field="group" data-sortable="true">Group</th>
+                                <th data-field="status" data-sortable="true">Status</th>
+                                <th data-field="health" data-sortable="true">Health</th>
+                                <th data-field="stashed_mps" data-sortable="true">Stashed MPS</th>
+                                <th data-field="stash_duration" data-sortable="true">Stash Duration</th>
+                                <th data-field="actions" data-sortable="true">Actions</th>
+                            </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+
+                <hr/>
+
+                @*
+                <h3>Bulk Operations</h3>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <button type="button" class="btn btn-danger">Silence All Clients</button>
+                        <button type="button" class="btn btn-danger">Silence All LCP</button>
+                        <button type="button" class="btn btn-danger">Silence All Solr</button>
+                        <button type="button" class="btn btn-info">Unsilence All LCP</button>
+                        <button type="button" class="btn btn-info">Unsilence All Solr</button>
+                        <button type="button" class="btn btn-info">Export as CSV</button>
+                    </div>
+                </div>
+                *@
+
+            </div>
+        </div>
+    </div>
+
+
+    <br/>
+    <br/>
+
+    </div>
+
+    <div class="modal" id="clients-edit1" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="heading">Edit client</h4>
+                </div>
+                <div class="modal-body">
+
+                    <form class="form-horizontal" role="form">
+
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">Status</label>
+                            <div class="col-sm-8">
+                                <label class="radio-inline"> <input type="radio" name="client-status" id="status-active" value="active" checked>Active</label>
+                                <label class="radio-inline"> <input type="radio" name="client-status" id="status-stashed" value="stashed">Stashed</label>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">Stashed MPS</label>
+                            <div class="col-sm-8">
+                                <div class="radio">
+                                    <label> <input type="radio" name="stashed-mps" id="stashed-mps-none" value="none" checked>None</label>
+                                </div>
+                                <div class="radio">
+                                    <label> <input type="radio" name="stashed-mps" id="stashed-mps-all" value="all">All</label>
+                                </div>
+                                <div class="radio">
+                                    <label> <input type="radio" name="stashed-mps" id="stashed-mps-selected" value="selected">Specific</label>
+                                    <input class="form-control input-sm" type="text" id="stashed-mps-selected-list" placeholder="Ex: aruba/aruba/v3_pod"  />
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">Stash Duration</label>
+                            <div class="col-sm-8" id="stashed-duration">
+                                <label class="radio-inline"> <input type="radio" name="stash_duration" value="15" checked>15 mins</label>
+                                <label class="radio-inline"> <input type="radio" name="stash_duration" value="60">1 hour</label>
+                                <label class="radio-inline"> <input type="radio" name="stash_duration" value="240">4 hours</label>
+                                <label class="radio-inline"> <input type="radio" name="stash_duration" value="720">12 hours</label>
+                                <label class="radio-inline"> <input type="radio" name="stash_duration" value="1440">24 hour</label>
+                                <label class="radio-inline"> <input type="radio" name="stash_duration" value="0">Forever</label>
+                            </div>
+                        </div>
+
+
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">Reason</label>
+                            <div class="col-sm-8">
+                                <input class="form-control input-sm" type="text" id="edit-reason-text"  placeholder="Why are you making this change?"  />
+                            </div>
+                        </div>
+
+                    </form>
+
+
+                </div> <!-- body ends -->
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" id="client-edit-apply-change">Apply Changes</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script src="@routes.Assets.at("javascripts/app/clients.js")" type="text/javascript"></script>
+
+}

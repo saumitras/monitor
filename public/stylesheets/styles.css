@@ -1,0 +1,12 @@
+header {
+	margin-bottom:30px;
+}
+
+.overwrite-margin {
+	margin-left: 10px;
+	margin-right: 10px;
+}
+
+html, body { height: 100%; }
+
+.link1, .details, .update { text-decoration: underline; margin-right: 10px; color: blue; cursor:pointer; }

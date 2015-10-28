@@ -1,0 +1,50 @@
+@(title: String)(content: Html)
+
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+        <meta charset="utf-8">
+
+        <title>@title</title>
+
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+        <!-- stylesheets -->
+        <link rel="stylesheet" media="screen" href="@routes.Assets.at("javascripts/lib/bootstrap/css/bootstrap.css")">
+        <link rel="stylesheet" media="screen" href="@routes.Assets.at("javascripts/lib/bootstrap-table/bootstrap-table.min.css")">
+        <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/styles.css")">
+        <link rel="stylesheet" media="screen" href="@routes.Assets.at("javascripts/lib/alertify.js-0.3.11/themes/alertify.core.css")">
+        <link rel="stylesheet" media="screen" href="@routes.Assets.at("javascripts/lib/alertify.js-0.3.11/themes/alertify.default.css")">
+
+
+
+        <!-- plugins and libraries -->
+        <link rel="shortcut icon" type="image/png" href="@routes.Assets.at("img/favicon.png")">
+
+        <!-- js plugins -->
+        <script src="@routes.Assets.at("javascripts/lib/jquery-1.9.0.min.js")" type="text/javascript"></script>
+        <script src="@routes.Assets.at("javascripts/lib/bootstrap/js/bootstrap.min.js")" type="text/javascript"></script>
+        <script src="@routes.Assets.at("javascripts/lib/bootstrap-table/bootstrap-table.min.js")" type="text/javascript"></script>
+        <script src="@routes.Assets.at("javascripts/lib/highcharts/highcharts.js")" type="text/javascript"></script>
+        <script src="@routes.Assets.at("javascripts/lib/highcharts/no-data-to-display.js")" type="text/javascript"></script>
+
+
+
+    </head>
+    <body>
+
+        @content
+
+        <!-- application js -->
+        <script src="@routes.Assets.at("javascripts/chart.js")" type="text/javascript"></script>
+        <script src="@routes.Assets.at("javascripts/app.js")" type="text/javascript"></script>
+        <script src="@routes.Assets.at("javascripts/lib/alertify.js-0.3.11/lib/alertify.js")" type="text/javascript"></script>
+
+        @snip_popup1()
+        @snip_popup2()
+
+
+    </body>
+</html>

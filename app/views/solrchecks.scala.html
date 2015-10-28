@@ -1,0 +1,69 @@
+@(message: String)
+
+@main("GBMonitor - LCP Checks") {
+
+    <div>
+
+    @snip_headerbar()
+
+    <script>
+       $('#header-tab-solrchecks').addClass("active");
+    </script>
+
+
+    <!-- Begin Body -->
+    <div class="container overwrite-margin">
+        <div class="row">
+
+            <div class="col-md-12">
+
+                <h4 id="sec1">
+                    Customer &nbsp;
+                    <select>
+                        <option>All</option>
+                        <option>aruba-aruba-pod</option>
+                        <option>aruba-airwave-pod</option>
+                        <option>vce-vce-pod</option>
+                    </select>
+                </h4>
+                <hr>
+
+                <h3 id="sec2">Health Checks</h3>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <table class="temp-values"
+                        data-sort-name="doc-count"
+                        data-sort-order="desc"
+                        data-search="true"
+                        data-show-columns="true"
+                        data-height="400">
+                            <thead>
+                                <tr>
+                                    <th data-field="id" data-sortable="true">ID</th>
+                                    <th data-field="name" data-sortable="true">Name</th>
+                                    <th data-field="frequency" data-sortable="true">Frequency</th>
+                                    <th data-field="critical_threshold" data-sortable="true">Critical Threshold</th>
+                                    <th data-field="warning_threshold" data-sortable="true">Warning Threshold</th>
+                                    <th data-field="threshold_unit" data-sortable="true">Threshold Unit</th>
+                                    <th data-field="status" data-sortable="true">Status</th>
+                                    <th data-field="details" data-sortable="true">Details</th>
+                                    <th data-field="actions" data-sortable="true">Actions</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+
+
+    <br/>
+    <br/>
+
+    </div>
+
+}

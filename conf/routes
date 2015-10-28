@@ -1,0 +1,31 @@
+# Map static resources from the /public folder to the /assets URL path
+GET        /assets/*file                                controllers.Assets.at(path="/public", file)
+
+GET        /                                            controllers.Application.index
+GET        /lcpevents                                   controllers.Application.lcpevents
+GET        /solrevents                                  controllers.Application.solrevents
+GET        /clients                                     controllers.Application.clients
+GET        /lcpchecks                                   controllers.Application.lcpchecks
+GET        /solrchecks                                  controllers.Application.solrchecks
+GET        /reports                                     controllers.Application.reports
+GET        /admin                                       controllers.Application.admin
+GET        /kb                                          controllers.Application.kb
+
+GET        /v1/solr/cluster/explorer/healthcheck        controllers.SolrStats.getExplorerClusterHealth(sensu:Option[Boolean])
+GET        /v1/solr/cluster/logvault/healthcheck        controllers.SolrStats.getLogvaultClusterHealth(sensu:Option[Boolean])
+
+GET        /v1/api/admin/client                         controllers.Admin.client(action:String, group:String, nodes:String)
+
+#event tab APIs
+GET        /v1/api/event/lcp/info/all                   controllers.LcpEvents.getAllLcpEvents()
+
+
+#client tab API
+GET        /v1/api/client/info/all                      controllers.Client.getAllClient()
+GET        /v1/api/client/info/single                   controllers.Client.getSingleClientInfo(name:String)
+
+
+#test apis
+GET        /v1/api/emailtest                            controllers.Application.emailTest()
+
+
