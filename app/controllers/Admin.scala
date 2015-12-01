@@ -10,6 +10,5 @@ object Admin extends Controller {
     val resp = Map("status" -> "0",
       "msg" -> s"Client request processed: action=$action, group:$group, nodes=$nodes")
     Ok(Json.toJson(resp))
-
   }
 }

@@ -35,7 +35,17 @@ object LcpChecks {
 //      Logger.info("After addition " + MonitorDb.getCustomerLcpChecks())
 
     }
+  }
 
+  def getDefaultLcpChecks = {
 
+    val defaultLcpChecks = MonitorDb.getDefaultLcpChecks()
+    defaultLcpChecks
+
+  }
+
+  def getCustLcpChecks = {
+    val customerLcpChecks = MonitorDb.getCustomerLcpChecks()
+    customerLcpChecks
   }
 }

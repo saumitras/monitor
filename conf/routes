@@ -24,6 +24,12 @@ GET        /v1/api/event/lcp/info/all                   controllers.LcpEvents.ge
 GET        /v1/api/client/info/all                      controllers.Client.getAllClient()
 GET        /v1/api/client/info/single                   controllers.Client.getSingleClientInfo(name:String)
 
+#checks tab API
+GET        /v1/api/checks/info/default                  controllers.LcpChecks.getDefaultChecks
+GET        /v1/api/checks/info/cust                     controllers.LcpChecks.getCustChecks
+
+
+
 
 #test apis
 GET        /v1/api/emailtest                            controllers.Application.emailTest()
