@@ -10,6 +10,7 @@ object LcpEvents extends Controller  {
     val events:List[Map[String, String]] = MonitorDb.getAllLcpEvents().map(e =>
       Map(
         "id" -> e.id.get.toString,
+        "status" -> e.status,
         "signature" -> e.signature,
         "name" -> e.name,
         "mps" -> e.mps,

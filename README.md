@@ -1,4 +1,4 @@
-# captain
+# Alerts
 
 Change config in **conf/application.conf**
 

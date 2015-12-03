@@ -69,11 +69,8 @@ var LcpCheckData = function() {
 
         $.when(data1,data2).then(function(resp1,resp2) {
 
-            console.log(defaultChecks);
             defaultChecks = respToRows(resp1[0],"default");
             custChecks = respToRows(resp2[0],"cust");
-            console.log(defaultChecks);
-            console.log(custChecks);
 
             function respToRows(resp,mode) {
                 var rows = [];
@@ -103,8 +100,6 @@ var LcpCheckData = function() {
         })
 
     }
-
-
 
     function getLcpChecksData(dType) {
 
