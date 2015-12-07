@@ -1,6 +1,6 @@
 @(message: String)
 
-@main("GB-Monitor 2.0") {
+@main("GB-Monitor") {
 
     <div>
 
@@ -105,60 +105,40 @@
 
 
 
-
-
-                <div class="modal" id="lcpchecks-edit1" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
+                <div class="modal" id="lcp-event-close-popup" event-id="0" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
                     <div class="modal-dialog">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h4 class="modal-title" id="heading">Edit client</h4>
+                                <h4 class="modal-title" id="heading">Closing event ID: 1</h4>
                             </div>
                             <div class="modal-body">
 
                                 <form class="form-horizontal" role="form">
 
                                     <div class="form-group">
-                                        <label class="col-sm-4 control-label">Status</label>
-                                        <div class="col-sm-8">
-                                            <label class="radio-inline"> <input type="radio" name="client-status" id="status-active" value="active" checked>Active</label>
-                                            <label class="radio-inline"> <input type="radio" name="client-status" id="status-stashed" value="stashed">Stashed</label>
+                                        <label class="col-sm-4 control-label">Component</label>
+                                        <div class="col-sm-4">
+                                            <select class="form-control input-sm event-component">
+                                                <option>Platform (LCP)</option>
+                                                <option>Solutions (SPL/Context)</option>
+                                                <option>Ops</option>
+                                                <option>Third Party (Bad data)</option>
+                                                <option>Not Yet Identified</option>
+                                            </select>
                                         </div>
                                     </div>
 
                                     <div class="form-group">
-                                        <label class="col-sm-4 control-label">Stashed MPS</label>
+                                        <label class="col-sm-4 control-label">Bug</label>
                                         <div class="col-sm-8">
-                                            <div class="radio">
-                                                <label> <input type="radio" name="stashed-mps" id="stashed-mps-none" value="none" checked>None</label>
-                                            </div>
-                                            <div class="radio">
-                                                <label> <input type="radio" name="stashed-mps" id="stashed-mps-all" value="all">All</label>
-                                            </div>
-                                            <div class="radio">
-                                                <label> <input type="radio" name="stashed-mps" id="stashed-mps-selected" value="selected">Specific</label>
-                                                <input class="form-control input-sm" type="text" id="stashed-mps-selected-list" placeholder="Ex: aruba/aruba/v3_pod"  />
-
-                                            </div>
+                                            <input class="form-control input-sm event-bugid" type="text"  placeholder="Enter bug-id if bug is opened for this event."  />
                                         </div>
                                     </div>
 
                                     <div class="form-group">
-                                        <label class="col-sm-4 control-label">Stash Duration</label>
-                                        <div class="col-sm-8" id="stashed-duration">
-                                            <label class="radio-inline"> <input type="radio" name="stash_duration" value="15" checked>15 mins</label>
-                                            <label class="radio-inline"> <input type="radio" name="stash_duration" value="60">1 hour</label>
-                                            <label class="radio-inline"> <input type="radio" name="stash_duration" value="240">4 hours</label>
-                                            <label class="radio-inline"> <input type="radio" name="stash_duration" value="720">12 hours</label>
-                                            <label class="radio-inline"> <input type="radio" name="stash_duration" value="1440">24 hour</label>
-                                            <label class="radio-inline"> <input type="radio" name="stash_duration" value="0">Forever</label>
-                                        </div>
-                                    </div>
-
-
-                                    <div class="form-group">
-                                        <label class="col-sm-4 control-label">Reason</label>
+                                        <label class="col-sm-4 control-label">Knowledge Base</label>
                                         <div class="col-sm-8">
-                                            <input class="form-control input-sm" type="text" id="edit-reason-text"  placeholder="Why are you making this change?"  />
+                                            <textarea class="form-control custom-control input-sm event-kb" rows="3" style="resize:none" placeholder="Why are you closing this event? Enter any information which might help in debugging similar event in future."></textarea>
                                         </div>
                                     </div>
 
@@ -168,7 +148,7 @@
                             </div> <!-- body ends -->
 
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-default" id="client-edit-apply-change">Apply Changes</button>
+                                <button type="button" class="btn btn-default close-event">Close Event</button>
                                 <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
                             </div>
                         </div>

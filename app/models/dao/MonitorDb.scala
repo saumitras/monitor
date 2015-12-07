@@ -192,6 +192,12 @@ object MonitorDb {
     lcpEvent.list
   }
 
+  def closeLcpEvent(id:Long, kb:String, closed_at:String, bug:String) = dbConn withDynSession {
+    lcpEvent.filter(_.id === id)
+      .map(r => (r.status, r.kb, r.closedAt, r.bug))
+      .update(("closed",kb,new Timestamp(System.currentTimeMillis),bug))
+  }
+
   def getOpenLcpEvents() = dbConn withDynSession {
     lcpEvent.filter(_.status === "open").list
   }

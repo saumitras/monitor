@@ -18,7 +18,7 @@ GET        /v1/api/admin/client                         controllers.Admin.client
 
 #event tab APIs
 GET        /v1/api/event/lcp/info/all                   controllers.LcpEvents.getAllLcpEvents()
-
+GET        /v1/api/event/lcp/close/:id                  controllers.LcpEvents.closeLcpEvent(id:Long, kb:String, closed_at:String, bug:String)
 
 #client tab API
 GET        /v1/api/client/info/all                      controllers.Client.getAllClient()

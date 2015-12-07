@@ -25,6 +25,8 @@ object LcpAlerts {
                           "L3", "NA", "NA",  new Timestamp(System.currentTimeMillis), "NA", "NA")
       MonitorDb.insertLcpEvent(event)
 
+      Notification.sendNotification(event)
+
     }
 
 

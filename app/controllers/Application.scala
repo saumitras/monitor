@@ -65,7 +65,7 @@ object Application extends Controller {
   }
 
   def emailTest = Action {
-    models.checks.Notification.sendMail()
+    models.checks.Notification.sendMailOld()
     Ok("Sent")
   }
 

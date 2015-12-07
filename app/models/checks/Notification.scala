@@ -6,11 +6,33 @@ import play.api.Play.current
 
 object Notification {
 
-  def lcpEventToEmail(event:LCPEvent) = {
-    sendMail()
+  def sendNotification(event:LCPEvent) = {
+    val recipients = "saumitra.srivastav7@gmail.com"
+    val (title, content) = lcpEventToEmail(event)
+    sendMail(recipients, title, content)
   }
 
-  def sendMail() = {
+  def lcpEventToEmail(event:LCPEvent):(String, String) = {
+
+    var title = "title"
+    var content = "content"
+
+    (title, content)
+  }
+
+  def sendMail(recipients:String, title:String, body:String) = {
+    println("Sending email to " + recipients)
+    val email = Email(
+      title,
+      "gbmonitor1@gmail.com",
+      Seq("saumitra.srivastav7@gmail.com","saumitra.srivastav@glassbeam.com"),
+      bodyHtml = Some(body)
+    )
+    MailerPlugin.send(email)
+  }
+
+
+  def sendMailOld() = {
 
     val email = Email(
       "Simple email",

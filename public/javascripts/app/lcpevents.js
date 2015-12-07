@@ -1,6 +1,6 @@
 $(document).ready(function() {
 
- new LcpEventData()
+ new LcpEventData();
 /*
 
    populateOpenEventsTable();
@@ -30,31 +30,75 @@ var LcpEventData = function() {
 
     var eventDataOpen = undefined;
     var eventDataClosed = undefined;
+    var members = ['Saumitra','Bharath','Aklank','Raj'];
 
     //data refresher which will run for lifetime of app
-     var refresher = setInterval(function() {
+     /*var refresher = setInterval(function() {
         updateEventData()
      }, 10000);
-
+*/
     //scheduler which will kill itself after init is done
     updateEventData();
     var initializer = setInterval(function() {
         if(eventDataOpen != undefined && eventDataClosed != undefined) {
-            console.log(eventDataOpen)
-            console.log(eventDataClosed)
-            $('#lcp-events-table-open').bootstrapTable({
-                data: eventDataOpen
-            });
-            $('#lcp-events-table-closed').bootstrapTable({
-                data: eventDataClosed
-            });
+            //console.log(eventDataOpen);
+            //console.log(eventDataClosed);
+            resetData();
             clearTimeout(initializer);
         }
     },50);
 
+    function resetData() {
+        $('#lcp-events-table-open').bootstrapTable({
+            data: eventDataOpen
+        });
+        $('#lcp-events-table-closed').bootstrapTable({
+            data: eventDataClosed
+        });
+
+        $('#lcp-events-table-open').find('.event-update').click(function () {
+            var eventId = $(this).attr("event-id");
+            showEventClosePopUp(eventId)
+        });
+
+
+        $('#lcp-event-close-popup').find('.close-event').click(function () {
+            var eventId = $('#lcp-event-close-popup').attr("event-id");
+            var component = $('#lcp-event-close-popup').find('.event-component').val();
+            var kb = $('#lcp-event-close-popup').find('.event-kb').val();
+            var bug = $('#lcp-event-close-popup').find('.event-bugid').val();
+
+            closeEvent({
+                "id":eventId,
+                "component": component,
+                "kb":kb,
+                "bug":bug
+            })
+        });
+
+
+    }
+
+    function showEventClosePopUp(eventId)  {
+        $('#lcp-event-close-popup').attr("event-id",eventId);
+        $('#lcp-event-close-popup').modal('show');
+    }
+
+    function closeEvent(data) {
+        console.log("Closing event " + data.id);
+
+        $.when(ajax_closeEvent(data)).then(function() {
+
+        });
+
+        $('#lcp-event-close-popup').modal('hide');
+    }
+
+
+
 
     function updateEventData() {
-        $.when(getLcpEventData()).then(function(resp) {
+        $.when(ajax_getLcpEventData()).then(function(resp) {
 
             respToRows(resp);
 
@@ -73,13 +117,14 @@ var LcpEventData = function() {
                         resolution: value.resolution,
                         status: value.status,
                         closed_at: value.closed_at,
-                        load_id: value.load_id,
+                        load_id: (value.load_id).replace(/,/g,', '),
                         occurred_at: value.occurred_at,
                         kb: value.kb,
-                        owner: value.owner,
+                        owner: populateOwnerList(value.owner),
                         component: value.component,
                         escalation_level: value.escalation_level,
-                        actions:"<span class='details'>Show Details</span><span class='update'>Update</span>"
+                        actions:"<span class='link1 event-details' event-id='" + value.id + "'>Details</span>" +
+                                "<span class='link1 event-update' event-id='" + value.id + "'>Update</span>"
                     };
 
                     if(row.status == "open")
@@ -88,10 +133,6 @@ var LcpEventData = function() {
                       closed.push(row);
 
                 });
-                console.log("respToRows");
-
-                console.log(open);
-                console.log(closed);
 
                 eventDataOpen = open;
                 eventDataClosed = closed;
@@ -99,7 +140,26 @@ var LcpEventData = function() {
         })
     }
 
-    function getLcpEventData() {
+
+    function populateOwnerList(current) {
+
+        var ownerHtml = "<select><option>" + current + "</option>";
+        //console.log(members);
+        $.each(members,function(index, member) {
+            if(member != current) {
+                //console.log(member);
+                ownerHtml += "<option>" + member + "</option>";
+            }
+
+        });
+        ownerHtml += "</select>";
+        //console.log(ownerHtml);
+
+        return ownerHtml;
+
+    }
+
+    function ajax_getLcpEventData() {
 
         var params = {};
         return ($.ajax({
@@ -108,70 +168,47 @@ var LcpEventData = function() {
             data: params
         }))
     }
-}
 
+    function ajax_closeEvent(data) {
 
+        var id = data['id'];
+        var closed_at = getDateTime;
 
-function populateOpenEventsTable() {
+        var params = data;
+        params['closed_at'] = closed_at;
 
-    var data = [];
-    for(var i=1;i<200;i++) {
-        var obj = {
-                "id": "E" + i,
-                "name": "File Stuck In Parsing",
-                "customer": "aruba-aruba-pod",
-                "h2": "h2-02",
-                "load_id": "2172",
-                "source":"lcp-11",
-                "timestamp":"2012/08/20 11:08:56",
-                "owner":"Amar",
-                "status":"P3",
-                "actions":"<span class='details'>Show Details</span><span class='update'>Update</span>"
-            };
-        if(i % 3 == 0) obj['status'] = "P1"
-        if(i % 5 == 0) obj['status'] = "Un-Acknowledged"
-        if(i % 5 == 0) obj['owner'] = "-"
-
-
-        data.push(obj);
+        return ($.ajax({
+            type: "GET",
+            url: "v1/api/event/lcp/close/" + id,
+            data: params
+        }))
     }
-
-    $('#lcpevents-open-events').bootstrapTable({
-        data: data
-    });
-}
+};
 
 
-function populateClosedEventsTable() {
-
-    var data = [];
-    for(var i=1;i<200;i++) {
-        var obj = {
-            "id": "E" + i,
-            "name": "File Stuck In Parsing",
-            "customer": "aruba-aruba-pod",
-            "is-bug": "NO",
-            "component": "Solution",
-            "load_id": "2172",
-            "source":"lcp-11",
-            "timestamp":"2012/08/20 11:08:56",
-            "owner":"Amar",
-            "kb": "<a href='#'>Knowledge Base Link</a>",
-            "status":"Resolved In Prod",
-            "actions":"<span class='details'>Show Details</span><span class='update'>Update</span>"
-        };
-        if(i % 3 == 0) obj['kb'] = "NA"
-        if(i % 3 == 0) obj['is-bug'] = "BG-1082"
-        if(i % 3 == 0) obj['component'] = "Platform"
-        if(i % 3 == 0) obj['status'] = "Unresolved. Bug opened."
-
-        data.push(obj);
+function getDateTime() {
+    var now     = new Date();
+    var year    = now.getFullYear();
+    var month   = now.getMonth()+1;
+    var day     = now.getDate();
+    var hour    = now.getHours();
+    var minute  = now.getMinutes();
+    var second  = now.getSeconds();
+    if(month.toString().length == 1) {
+        month = '0'+month;
     }
-
-    $('#lcpevents-closed-events').bootstrapTable({
-        data: data
-    });
+    if(day.toString().length == 1) {
+        day = '0'+day;
+    }
+    if(hour.toString().length == 1) {
+        hour = '0'+hour;
+    }
+    if(minute.toString().length == 1) {
+        minute = '0'+minute;
+    }
+    if(second.toString().length == 1) {
+        second = '0'+second;
+    }
+    var dateTime = year+'-'+month+'-'+day+' '+hour+':'+minute+':'+second;
+    return dateTime;
 }
-
-
-
