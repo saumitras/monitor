@@ -14,11 +14,11 @@ object Notification {
 
   def sendMail(recipients:Seq[String], title:String, body:String):String = {
     println("Sending email to " + recipients)
-    println("Title:\n" + title + "\nBody\n" + body)
+    //println("Title:\n" + title + "\nBody\n" + body)
     //return ""
     val email = Email(
       title,
-      "gbmonitor1@gmail.com",
+      "Glassbeam Monitor <gbmonitor1@gmail.com>",
       recipients,
       //Seq("saumitra.srivastav7@gmail.com","saumitra.srivastav@glassbeam.com"),
       bodyHtml = Some(body)

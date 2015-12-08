@@ -27,8 +27,9 @@ object FileStuckInSeenAlert {
       println("New event id " + newEventId)
 
       val (title, body) = getEmailBody(files, event)
-      val recipient = models.config.CustomerConfig.get(mps,"internalEmailRecipients")
-      //Notification.sendMail(recipient,title,body)
+      val recipient = models.config.CustomerConfig.get(mps,"internalEmailRecipients").split(",").toSeq
+
+      Notification.sendMail(recipient,title,body)
       //Notification.sendNotification(event)
     }
   }

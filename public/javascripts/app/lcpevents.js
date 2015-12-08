@@ -119,8 +119,8 @@ var LcpEventData = function() {
 
                     if(row.status == "open") {
                       row['actions'] =
-                          "<span class='link1 event-details' event-id='" + value.id + "'>Escalate</span>" +
-                          "<span class='link1 event-details' event-id='" + value.id + "'>Panic</span>" +
+                          "<span class='link1 event-escalate' event-id='" + value.id + "'>Escalate</span>" +
+                          "<span class='link1 event-details' event-id='" + value.id + "'>Details</span>" +
                         "<span class='link1 event-update' event-id='" + value.id + "'>Close</span>";
                       row['owner'] = populateOwnerList(value.owner);
                       open.push(row);
