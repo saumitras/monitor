@@ -1,30 +1,8 @@
 $(document).ready(function() {
 
  new LcpEventData();
-/*
-
-   populateOpenEventsTable();
-   populateClosedEventsTable();
-
-   $('.details').click(function() {
-       showPopup1();
-   });
-
-   $('.update').click(function(){
-       showPopup2();
-   });
-*/
-
 });
 
-/*
-function showPopup1() {
-    $('#lcpevents-popup1').modal("show");
-}
-function showPopup2() {
-    $('#lcpevents-popup2').modal("show");
-}
-*/
 
 var LcpEventData = function() {
 
@@ -33,9 +11,9 @@ var LcpEventData = function() {
     var members = ['Saumitra','Bharath','Aklank','Raj'];
 
     //data refresher which will run for lifetime of app
-     /*var refresher = setInterval(function() {
-        updateEventData()
-     }, 10000);
+    /*var refresher = setInterval(function() {
+      updateEventData(GLOBALS.autoRefresh)
+    }, 5000);
 */
     //scheduler which will kill itself after init is done
     updateEventData();
@@ -60,11 +38,13 @@ var LcpEventData = function() {
             data: eventDataClosed
         });
 
+        $('#lcp-events-table-open').find('.event-update').unbind('click');
         $('#lcp-events-table-open').find('.event-update').click(function () {
             var eventId = $(this).attr("event-id");
             showEventClosePopUp(eventId)
         });
 
+        $('#lcp-events-table-open').find('.event-owner').unbind('change');
         $('#lcp-events-table-open').find('.event-owner').change(function () {
             console.log($(this).val());
             var id = $(this).parent().parent().find('td').first().html();
@@ -75,7 +55,7 @@ var LcpEventData = function() {
         });
 
 
-
+        $('#lcp-event-close-popup').find('.close-event').unbind('click');
         $('#lcp-event-close-popup').find('.close-event').click(function () {
             var eventId = $('#lcp-event-close-popup').attr("event-id");
             var component = $('#lcp-event-close-popup').find('.event-component').val();
@@ -218,29 +198,3 @@ var LcpEventData = function() {
 };
 
 
-function getDateTime() {
-    var now     = new Date();
-    var year    = now.getFullYear();
-    var month   = now.getMonth()+1;
-    var day     = now.getDate();
-    var hour    = now.getHours();
-    var minute  = now.getMinutes();
-    var second  = now.getSeconds();
-    if(month.toString().length == 1) {
-        month = '0'+month;
-    }
-    if(day.toString().length == 1) {
-        day = '0'+day;
-    }
-    if(hour.toString().length == 1) {
-        hour = '0'+hour;
-    }
-    if(minute.toString().length == 1) {
-        minute = '0'+minute;
-    }
-    if(second.toString().length == 1) {
-        second = '0'+second;
-    }
-    var dateTime = year+'-'+month+'-'+day+' '+hour+':'+minute+':'+second;
-    return dateTime;
-}

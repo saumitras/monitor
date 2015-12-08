@@ -32,7 +32,8 @@ object Notification {
     val email = Email(
       title,
       "gbmonitor1@gmail.com",
-      Seq(recipients),
+      //Seq(recipients),
+      Seq("saumitra.srivastav7@gmail.com","saumitra.srivastav@glassbeam.com"),
       bodyHtml = Some(body)
     )
     MailerPlugin.send(email)

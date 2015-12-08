@@ -1,4 +1,4 @@
-<header class="navbar navbar-default navbar-static-top" role="banner">
+<header class="navbar navbar-default navbar-static-top" role="banner" xmlns="http://www.w3.org/1999/html">
     <div class="container overwrite-margin">
         <div class="navbar-header">
             <button class="navbar-toggle" type="button" data-toggle="collapse" data-target=".navbar-collapse">
@@ -22,7 +22,6 @@
                 <li id="header-tab-reports"><a href="/reports">Reports</a></li>
                 <li id="header-tab-kb"><a href="/kb">KB</a></li>
                 <li id="header-tab-admin"><a href="/admin">Admin</a></li>
-                <li id="header-tab-admin" ><a href="/admin">Admin</a></li>
             </ul>
 
             <ul class="nav navbar-nav navbar-right">
@@ -30,28 +29,22 @@
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">Settings<b class="caret"></b></a>
                     <ul class="dropdown-menu">
-                        <li><a href="#">Enable AutoRefresh</a></li>
-                        <li><a href="#">My Profile</a></li>
+                        <li><a href="#">
+                            <label for="auto-refresh-checkbox">Auto Refresh</label>
+                            <input type="checkbox" id="auto-refresh-checkbox"
+                            data-on-text="ON"
+                            data-off-text="OFF"
+                            data-size="small" />
+                        </a></li>
+                        <li><a href="#"><b>My Profile</b></a></li>
                         <li class="divider"></li>
-                        <li><a href="#">Sign Out</a></li>
+                        <li><a href="#"><b>Sign Out</b></a></li>
                     </ul>
                 </li>
             </ul>
-@*
-            <ul class="nav navbar-nav  navbar-right">
-                <li>
-                    <a href="#">
-                        <label class="navbar-link" for="filterUnfulfilled">
-                            <input type="checkbox" id="filterUnfulfilled" value="true">
-                            Unfulfilled Only
-                        </label>
-                    </a>
-                </li>
-            </ul>*@
+
         </nav>
 
-        @*<nav class="pull-right" style="display: inline;">
-        </nav>*@
 
     </div>
 </header>
