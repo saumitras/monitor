@@ -23,9 +23,9 @@ object LcpAlerts {
       val sources = files.map(f => f.node).distinct.take(10).mkString(",")
       val event = LCPEvent(None, signature, "open", check.description, mps, h2, loadIds, sources,  new Timestamp(System.currentTimeMillis), "none",
                           "L3", "NA", "NA",  new Timestamp(System.currentTimeMillis), "NA", "NA")
-      //MonitorDb.insertLcpEvent(event)
+      MonitorDb.insertLcpEvent(event)
 
-      Notification.sendNotification(event)
+      //Notification.sendNotification(event)
     }
 
   }

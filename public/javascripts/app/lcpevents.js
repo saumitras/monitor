@@ -49,9 +49,13 @@ var LcpEventData = function() {
     },50);
 
     function resetData() {
+        console.log("Reset data");
+        $('#lcp-events-table-open').bootstrapTable("destroy");
         $('#lcp-events-table-open').bootstrapTable({
             data: eventDataOpen
         });
+
+        $('#lcp-events-table-closed').bootstrapTable("destroy");
         $('#lcp-events-table-closed').bootstrapTable({
             data: eventDataClosed
         });
@@ -87,17 +91,16 @@ var LcpEventData = function() {
     function closeEvent(data) {
         console.log("Closing event " + data.id);
 
-        $.when(ajax_closeEvent(data)).then(function() {
-
+        $.when(ajax_closeEvent(data), updateEventData()).then(function() {
+            $('#lcp-event-close-popup').modal('hide');
+            updateEventData(true);
         });
 
-        $('#lcp-event-close-popup').modal('hide');
+
     }
 
 
-
-
-    function updateEventData() {
+    function updateEventData(reset) {
         $.when(ajax_getLcpEventData()).then(function(resp) {
 
             respToRows(resp);
@@ -136,6 +139,11 @@ var LcpEventData = function() {
 
                 eventDataOpen = open;
                 eventDataClosed = closed;
+
+                if(reset != undefined && reset == true) {
+                    resetData()
+                }
+
             }
         })
     }
