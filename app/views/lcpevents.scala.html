@@ -78,10 +78,10 @@
                                 <th data-field="component" data-sortable="true">Component</th>
                                 <th data-field="source" data-sortable="true">Source</th>
                                 <th data-field="closed_at" data-sortable="true">Closed At</th>
-                                <th data-field="owner" data-sortable="true">Owner</th>
+                                <th data-field="owner" data-sortable="true">Closed By</th>
                                 <th data-field="status" data-sortable="true">Status</th>
                                 <th data-field="kb" data-sortable="true">KB</th>
-                                <th data-field="actions" data-sortable="true">Actions</th>
+                                @*<th data-field="actions" data-sortable="true">Actions</th>*@
                             </tr>
                             </thead>
                         </table>
@@ -109,7 +109,7 @@
                     <div class="modal-dialog">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h4 class="modal-title" id="heading">Closing event ID: 1</h4>
+                                <h4 class="modal-title">Closing Event-<span id="heading">1</span></h4>
                             </div>
                             <div class="modal-body">
 
@@ -119,11 +119,11 @@
                                         <label class="col-sm-4 control-label">Component</label>
                                         <div class="col-sm-4">
                                             <select class="form-control input-sm event-component">
-                                                <option>Platform (LCP)</option>
-                                                <option>Solutions (SPL/Context)</option>
+                                                <option>Platform</option>
+                                                <option>Solutions</option>
                                                 <option>Ops</option>
-                                                <option>Third Party (Bad data)</option>
-                                                <option>Not Yet Identified</option>
+                                                <option>ThirdParty</option>
+                                                <option>Not-Yet-Identified</option>
                                             </select>
                                         </div>
                                     </div>

@@ -65,6 +65,16 @@ var LcpEventData = function() {
             showEventClosePopUp(eventId)
         });
 
+        $('#lcp-events-table-open').find('.event-owner').change(function () {
+            console.log($(this).val());
+            var id = $(this).parent().parent().find('td').first().html();
+            var owner = $(this).val();
+            $.when(ajax_changeOwner(id,owner)).then(function() {
+                alertify.success("<b>Event-" + id + "</b> assigned to <b>" + owner + "</b>")
+            })
+        });
+
+
 
         $('#lcp-event-close-popup').find('.close-event').click(function () {
             var eventId = $('#lcp-event-close-popup').attr("event-id");
@@ -80,11 +90,11 @@ var LcpEventData = function() {
             })
         });
 
-
     }
 
     function showEventClosePopUp(eventId)  {
         $('#lcp-event-close-popup').attr("event-id",eventId);
+        $('#lcp-event-close-popup').find("#heading").html(eventId);
         $('#lcp-event-close-popup').modal('show');
     }
 
@@ -92,8 +102,9 @@ var LcpEventData = function() {
         console.log("Closing event " + data.id);
 
         $.when(ajax_closeEvent(data), updateEventData()).then(function() {
-            $('#lcp-event-close-popup').modal('hide');
             updateEventData(true);
+            $('#lcp-event-close-popup').modal('hide');
+            alertify.success("<b>Event-" + data.id + " closed successfully.")
         });
 
 
@@ -123,17 +134,21 @@ var LcpEventData = function() {
                         load_id: (value.load_id).replace(/,/g,', '),
                         occurred_at: value.occurred_at,
                         kb: value.kb,
-                        owner: populateOwnerList(value.owner),
                         component: value.component,
-                        escalation_level: value.escalation_level,
-                        actions:"<span class='link1 event-details' event-id='" + value.id + "'>Details</span>" +
-                                "<span class='link1 event-update' event-id='" + value.id + "'>Update</span>"
+                        escalation_level: value.escalation_level
                     };
 
-                    if(row.status == "open")
+                    if(row.status == "open") {
+                      row['actions'] =
+                          "<span class='link1 event-details' event-id='" + value.id + "'>Escalate</span>" +
+                          "<span class='link1 event-details' event-id='" + value.id + "'>Panic</span>" +
+                        "<span class='link1 event-update' event-id='" + value.id + "'>Close</span>";
+                      row['owner'] = populateOwnerList(value.owner);
                       open.push(row);
-                    else
+                    } else {
+                      row['owner'] = value.owner;
                       closed.push(row);
+                    }
 
                 });
 
@@ -151,7 +166,7 @@ var LcpEventData = function() {
 
     function populateOwnerList(current) {
 
-        var ownerHtml = "<select><option>" + current + "</option>";
+        var ownerHtml = "<select class='event-owner'><option selected='selected'>" + current + "</option>";
         //console.log(members);
         $.each(members,function(index, member) {
             if(member != current) {
@@ -173,6 +188,15 @@ var LcpEventData = function() {
         return ($.ajax({
             type: "GET",
             url: "v1/api/event/lcp/info/all",
+            data: params
+        }))
+    }
+
+    function ajax_changeOwner(id, owner) {
+        var params = {};
+        return ($.ajax({
+            type: "GET",
+            url: "v1/api/event/lcp/setowner/" + id + "/" + owner,
             data: params
         }))
     }

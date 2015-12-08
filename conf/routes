@@ -18,7 +18,8 @@ GET        /v1/api/admin/client                         controllers.Admin.client
 
 #event tab APIs
 GET        /v1/api/event/lcp/info/all                   controllers.LcpEvents.getAllLcpEvents()
-GET        /v1/api/event/lcp/close/:id                  controllers.LcpEvents.closeLcpEvent(id:Long, kb:String, closed_at:String, bug:String)
+GET        /v1/api/event/lcp/close/:id                  controllers.LcpEvents.closeLcpEvent(id:Long, kb:String, closed_at:String, bug:String, component:String)
+GET        /v1/api/event/lcp/setowner/:id/:owner        controllers.LcpEvents.setOwner(id:Long, owner:String)
 
 #client tab API
 GET        /v1/api/client/info/all                      controllers.Client.getAllClient()
