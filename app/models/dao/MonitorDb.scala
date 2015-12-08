@@ -96,14 +96,41 @@ object MonitorDb {
   }
   val clients = TableQuery[ClientT]
 
+
+
+  //separate Db for emails...move to to FS later
+  val emailH2 = Play.current.configuration.getString("monitor_email_h2_host") match {
+    case Some(x) => x
+    case None => Constants.DEFAULT_EMAIL_DB
+  }
+  val emailDbConn:DatabaseDef = Connections.getH2(emailH2)
+
+  class EmailT(tag:Tag) extends Table[Email](tag, "EMAIL") {
+    def id = column[Option[Long]]("ID",O.PrimaryKey, O.AutoInc)
+    def eventId = column[Long]("EVENT_ID")
+    def title = column[String]("TITLE")
+    def recipient = column[String]("RECIPIENT")
+    def body = column[String]("BODY")
+
+    def * = (id, eventId, title, recipient, body)  <> (Email.tupled, Email.unapply)
+  }
+
+  val email = TableQuery[EmailT]
+
+
   def createTables() = {
-    val tables = List(lcpDefaultChecks, lcpChecks, monitorConfig, lcpEvent, clients)
+    val tables = List(lcpDefaultChecks, lcpChecks, monitorConfig, lcpEvent, clients, email)
     tables.foreach(t =>
       try {
-        Logger.info(s"Creating monitordb table: ${t.baseTableRow.tableName}")
-        dbConn withDynSession {
-          t.ddl.create
+        val tableName = t.baseTableRow.tableName
+        Logger.info(s"Creating monitordb table: $tableName")
+
+        if(tableName == "EMAIL") {
+          emailDbConn withDynSession {  t.ddl.create }
+        } else {
+          dbConn withDynSession {  t.ddl.create }
         }
+
       } catch  {
         case e:Exception =>
           if (e.getMessage.contains("""org.h2.jdbc.JdbcSQLException: Table already exists""") ||
@@ -210,8 +237,12 @@ object MonitorDb {
     lcpEvent.filter(_.status === "open").list
   }
 
-  def insertLcpEvent(event:LCPEvent) = dbConn withDynSession  {
-    lcpEvent.insert(event)
+  def insertLcpEvent(event:LCPEvent):Long = dbConn withDynSession  {
+     //lcpEvent.insert(event)
+    val id = (lcpEvent returning lcpEvent.map(_.id)) += event
+    id.getOrElse(0)
+    //(addresses returning addresses.map(_.id)) += (city, stateName, street1, street2, zip)
+
   }
 
   def updateClientConfig(action:String, group:String, nodes:String) = {

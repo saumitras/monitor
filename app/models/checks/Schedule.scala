@@ -41,7 +41,7 @@ object Schedule {
 
           val matchingFiles:List[FileStuckInSeen] = lcpDao.getFilesStuckInSeen(mps, criticalThredhold.toLong)
           if(matchingFiles.nonEmpty) {
-            models.alerts.FileStuckInSeen.generateAlert(h2, mps, check, matchingFiles)
+            models.alerts.FileStuckInSeenAlert.generateAlert(h2, mps, check, matchingFiles)
           }
         }
       }

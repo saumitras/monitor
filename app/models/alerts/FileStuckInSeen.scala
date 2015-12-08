@@ -7,7 +7,7 @@ import play.api.Logger
 
 import models.checks.Notification
 
-object FileStuckInSeen {
+object FileStuckInSeenAlert {
 
   var alertsFilesStuckInSeen = ""
 
@@ -23,16 +23,20 @@ object FileStuckInSeen {
       val event = LCPEvent(None, signature, "open", check.description, mps, h2, loadIds, sources, new Timestamp(System.currentTimeMillis), "none",
         "L3", "NA", "NA",  new Timestamp(System.currentTimeMillis), "NA", "NA")
 
-      //MonitorDb.insertLcpEvent(event)
+      val newEventId = MonitorDb.insertLcpEvent(event)
+      println("New event id " + newEventId)
 
-      val emailBody = getEmailBody(files)
-      Notification.sendMail("saumitra.srivastav7@gmail.com","File Stuck In Seen",emailBody)
+      val (title, body) = getEmailBody(files, event)
+      val recipient = models.config.CustomerConfig.get(mps,"internalEmailRecipients")
+      //Notification.sendMail(recipient,title,body)
       //Notification.sendNotification(event)
     }
   }
 //case class FileStuckInSeen(mps:String, loadId:Long, node:String, ts:Timestamp, obs_ts:Timestamp,
 //                           seen:Timestamp, fileType:Byte, name:String)
-  def getEmailBody(files:List[FileStuckInSeen]):String = {
+  def getEmailBody(files:List[FileStuckInSeen], event:LCPEvent):(String,String) = {
+
+    val title = s"[${event.mps}] ${event.name} [${event.escalationLevel}] "
 
     val MAX_LOAD_ID_TO_DISPLAY = 20
     val borderStyle = " style='border: 1px solid #e9e9e9;'"
@@ -79,7 +83,7 @@ object FileStuckInSeen {
     body += "</table>"
 
     //println(body)
-    body
+    (title, body)
   }
 }
 

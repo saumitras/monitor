@@ -17,6 +17,8 @@ object Messages {
                       occurredAt:Timestamp, owner:String, escalationLevel:String, bug:String, component:String,
                       closedAt:Timestamp, resolution:String, kb:String)
   case class Client(name:String, group:String, status:String, health:String, stashedMps:String, stashDuration:Long)
+  case class Email(id:Option[Long], eventId:Long, title:String, recipient:String, body:String)
+
 
 }
 

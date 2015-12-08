@@ -1,6 +1,6 @@
 $(document).ready(function() {
 
- new LcpEventData();
+  new LcpEventData();
 });
 
 
@@ -11,10 +11,9 @@ var LcpEventData = function() {
     var members = ['Saumitra','Bharath','Aklank','Raj'];
 
     //data refresher which will run for lifetime of app
-    /*var refresher = setInterval(function() {
+    var refresher = setInterval(function() {
       updateEventData(GLOBALS.autoRefresh)
     }, 5000);
-*/
     //scheduler which will kill itself after init is done
     updateEventData();
     var initializer = setInterval(function() {
