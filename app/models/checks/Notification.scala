@@ -1,31 +1,38 @@
 package models.checks
 
+
 import models.dao.Messages.LCPEvent
 import play.api.libs.mailer._
 import play.api.Play.current
 
 object Notification {
 
-  def sendNotification(event:LCPEvent) = {
+  def sendNotification(event:LCPEvent, category: String = "New " ) = {
     val recipients = "saumitra.srivastav7@gmail.com"
-    val (title, content) = lcpEventToEmail(event)
+    val (title, content) = lcpEventToEmail(event, category)
     sendMail(recipients, title, content)
   }
 
-  def lcpEventToEmail(event:LCPEvent):(String, String) = {
-
-    var title = "title"
-    var content = "content"
+  def lcpEventToEmail(event:LCPEvent, category:String):(String, String) = {
+    /**
+     * LCPEvent(id:Option[Long], signature:String, status:String, name:String, mps:String, h2:String,
+     * loadId:String, source:String,  occurredAt:Timestamp, owner:String, escalationLevel:String,
+     * bug:String, component:String, closedAt:Timestamp, resolution:String, kb:String)
+     */
+    val title = s"$category [${event.escalationLevel}] [${event.mps}] ${event.name}"
+    val content = "LoadIds " + event.loadId
 
     (title, content)
   }
 
-  def sendMail(recipients:String, title:String, body:String) = {
+  def sendMail(recipients:String, title:String, body:String):String = {
     println("Sending email to " + recipients)
+    println("Title:\n" + title + "\nBody\n" + body)
+    //return ""
     val email = Email(
       title,
       "gbmonitor1@gmail.com",
-      Seq("saumitra.srivastav7@gmail.com","saumitra.srivastav@glassbeam.com"),
+      Seq(recipients),
       bodyHtml = Some(body)
     )
     MailerPlugin.send(email)
