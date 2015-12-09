@@ -1,4 +1,7 @@
 var GLOBALS = {
+    'userName': "saumitra",
+    'userDisplayName': "Saumitra",
+    'userEmail': "saumitra.srivastav@glassbeam.com",
     'autoRefresh':false
 };
 
@@ -6,7 +9,10 @@ $(document).ready(function() {
     $('#auto-refresh-checkbox').bootstrapSwitch();
     $('#auto-refresh-checkbox').on('switchChange.bootstrapSwitch', function(event, state) {
         GLOBALS.autoRefresh = state
-    })
+    });
+
+    $('#header-username').html("Saumitra")
+
 });
 
 function getDateTime() {

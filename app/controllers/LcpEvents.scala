@@ -32,9 +32,9 @@ object LcpEvents extends Controller  {
 
   }
 
-  def closeLcpEvent(id:Long,kb:String, closed_at:String, bug:String,  component:String) = Action {
+  def closeLcpEvent(id:Long,kb:String, closed_at:String, bug:String,  component:String, owner:String) = Action {
     println(s"Id=$id, kb:$kb, closed_at:$closed_at, bug:$bug")
-    MonitorDb.closeLcpEvent(id,kb,closed_at,bug,  component)
+    MonitorDb.closeLcpEvent(id,kb,closed_at,bug,  component, owner)
     Ok(id.toString)
   }
 

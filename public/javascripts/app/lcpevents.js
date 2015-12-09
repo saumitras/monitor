@@ -1,5 +1,4 @@
 $(document).ready(function() {
-
   new LcpEventData();
 });
 
@@ -60,12 +59,14 @@ var LcpEventData = function() {
             var component = $('#lcp-event-close-popup').find('.event-component').val();
             var kb = $('#lcp-event-close-popup').find('.event-kb').val();
             var bug = $('#lcp-event-close-popup').find('.event-bugid').val();
+            var owner = GLOBALS.userName
 
             closeEvent({
                 "id":eventId,
                 "component": component,
                 "kb":kb,
-                "bug":bug
+                "bug":bug,
+                "owner":owner
             })
         });
 
