@@ -17,15 +17,20 @@
 
             <div class="col-md-12">
 
-                <h4 id="sec1">
-                    Choose a customer to see customer-specific thresholds: &nbsp;
-                    <select id="lcp-check-current-mps">
-                        <option value="default" selected="selected">Default</option>
-                    </select>
-                </h4>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group form-inline">
+                            <label for="lcp-check-current-mps">Choose a customer to see customer-specific thresholds</label>
+                            <select class="form-control" id="lcp-check-current-mps">
+                                <option value="default" selected="selected">Default</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
                 <hr>
 
-                <h3>"<span id="lcp-checks-heading1">Default</span>" Checks/Thresholds </h3>
+                <h4><span class="style2" id="lcp-checks-heading1">Default</span></h4>
 
                 <div class="row">
                     <div class="col-md-12">
@@ -81,16 +86,92 @@
                     </div> <!-- end of col -->
                 </div> <!-- end of row -->
 
-
                 <hr />
-
 
             </div>
         </div>
     </div>
 
 
-    <br/>
+
+    <div class="modal" id="lcp-checks-edit" event-id="0" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title"><span id="heading">1</span></h4>
+                </div>
+                <div class="modal-body">
+
+                    <form class="form-horizontal" role="form">
+
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">Check Id</label>
+                            <div class="col-sm-6">
+                                <input class="form-control input-sm event-bugid" type="text"  readonly  />
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">Name</label>
+                            <div class="col-sm-6">
+                                <input class="form-control input-sm event-bugid" type="text"   />
+                            </div>
+                        </div>
+
+
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">Check Interval</label>
+                            <div class="col-sm-6">
+                                <input class="form-control input-sm event-bugid" type="text"   />
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">Critical Threshold</label>
+                            <div class="col-sm-6">
+                                <input class="form-control input-sm event-bugid" type="text"   />
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">Warning Threshold</label>
+                            <div class="col-sm-6">
+                                <input class="form-control input-sm event-bugid" type="text"   />
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">Wait Duration</label>
+                            <div class="col-sm-6">
+                                <input class="form-control input-sm event-bugid" type="text"   />
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">Status</label>
+                            <div class="col-sm-6">
+                                <label class="radio-inline"> <input type="radio" name="client-status" id="status-active" value="active" checked>Enabled</label>
+                                <label class="radio-inline"> <input type="radio" name="client-status" id="status-stashed" value="stashed">Disabled</label>
+                            </div>
+                        </div>
+
+                    </form>
+
+
+                </div> <!-- body ends -->
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default close-event">Change All MPS</button>
+                    <button type="button" class="btn btn-default close-event">Change Defaults</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+        <br/>
     <br/>
 
     </div>

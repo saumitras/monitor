@@ -27,13 +27,13 @@ var LcpChecksData = function() {
         if(GLOBALS.autoRefresh) {
             resetData();
         }
-    }, 5000);
+    }, 10000);
 
 
     function resetData() {
         var mps = $('#lcp-check-current-mps').val();
         console.log("selectedMps=" + mps);
-        $("#lcp-checks-heading1").html(mps.toUpperCase());
+        $("#lcp-checks-heading1").html(mps.toUpperCase().replace(/\//g,' / '));
 
         var showTableId = "lcp-checks-table-default";
         var hideTableId = "lcp-checks-table-all";
@@ -47,6 +47,12 @@ var LcpChecksData = function() {
         $('#' + showTableId).bootstrapTable("destroy");
         $('#' + showTableId).bootstrapTable({
             data: checkData[mps]
+        });
+
+        $('.lcp-check-edit').unbind('click');
+        $('.lcp-check-edit').on('click', function(event){
+            var elem = $(event.target);
+            console.log(elem.attr('mps') + " "  + elem.attr('id')  + "  " + elem.attr('cid'))
         });
 
     }
@@ -83,7 +89,8 @@ var LcpChecksData = function() {
                         "wait_duration": value['wait_duration'],
                         "threshold_unit":value['threshold_unit'],
                         "status":value['status'],
-                        "actions":"<a href='#' class='popup1'>Edit</a>"
+                        "actions":"<a href='#' mps='" + mps  +"' id='" + value['id'] + "' cid='" + value['cid'] + "' " +
+                                    " class='lcp-check-edit'>Edit</a>"
                     };
 
                     checkData[mps].push(row);
