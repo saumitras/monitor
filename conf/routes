@@ -26,9 +26,10 @@ GET        /v1/api/client/info/all                      controllers.Client.getAl
 GET        /v1/api/client/info/single                   controllers.Client.getSingleClientInfo(name:String)
 
 #checks tab API
-GET        /v1/api/checks/info/default                  controllers.LcpChecks.getDefaultChecks
-GET        /v1/api/checks/info/cust                     controllers.LcpChecks.getCustChecks
-
+#GET        /v1/api/checks/info/default                  controllers.LcpChecks.getDefaultChecks(id:Option[String])
+#GET        /v1/api/checks/info/cust                     controllers.LcpChecks.getCustChecks(id:Option[String])
+#GET        /v1/api/checks/info/all                      controllers.LcpChecks.getAllChecks(id:Option[String])
+GET        /v1/api/checks/info/:mode                    controllers.LcpChecks.getChecksInfo(mode:String, id:Option[String])
 
 
 

@@ -22,7 +22,7 @@ object Schedule {
   def checkFilesStuckInSeen(): Unit = {
     //get all H2
     //get all customer checks
-    val custChecks = MonitorDb.getCustomerLcpChecks()
+    val custChecks = MonitorDb.getCustomerLcpChecks("")
     for(h2 <- Config.h2Hosts) {
       Logger.info("Checking files stuck in seen for H2: " + h2)
       val lcpDao = LcpDb.get(h2)

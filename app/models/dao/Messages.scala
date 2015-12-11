@@ -5,7 +5,7 @@ import java.sql.Timestamp
 object Messages {
   case class DefaultCheck(cid:String, mps:String, description:String, interval:String, critical_threshold:String,
                           warning_threshold:String, threshold_unit:String, wait_duration:String, status:String)
-  case class Check(id:Option[String], cid:String, mps:String, description:String, interval:String,
+  case class Check(id:Option[Long], cid:String, mps:String, description:String, interval:String,
                    critical_threshold:String, warning_threshold:String, threshold_unit:String,
                    wait_duration:String, status:String)
   case class FileStuckInSeen(mps:String, loadId:Long, node:String, ts:Timestamp, obs_ts:Timestamp,

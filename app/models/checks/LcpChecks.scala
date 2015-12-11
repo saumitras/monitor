@@ -14,8 +14,8 @@ object LcpChecks {
       //get all mps
       val lcpDbDao = LcpDb.get(h2Url)
       val mpsList = lcpDbDao.getMps()
-      val defaultLcpChecks = MonitorDb.getDefaultLcpChecks()
-      val customerLcpChecks = MonitorDb.getCustomerLcpChecks()
+      val defaultLcpChecks = MonitorDb.getDefaultLcpChecks("")
+      val customerLcpChecks = MonitorDb.getCustomerLcpChecks("")
 
       //get all default checks
       val dfltCheckIds = defaultLcpChecks.map(x => x.cid).toList
@@ -37,15 +37,17 @@ object LcpChecks {
     }
   }
 
-  def getDefaultLcpChecks = {
+  def getDefaultLcpChecks(idList:String) = {
 
-    val defaultLcpChecks = MonitorDb.getDefaultLcpChecks()
+    val defaultLcpChecks = MonitorDb.getDefaultLcpChecks(idList)
     defaultLcpChecks
 
   }
 
-  def getCustLcpChecks = {
-    val customerLcpChecks = MonitorDb.getCustomerLcpChecks()
+  def getCustLcpChecks(idList:String) = {
+    val customerLcpChecks = MonitorDb.getCustomerLcpChecks(idList)
     customerLcpChecks
   }
+
+
 }

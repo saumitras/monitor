@@ -1,7 +1,7 @@
 var checkData = undefined;
 
 $(document).ready(function() {
-   var lcpChecksData = new LcpChecksData();
+   new LcpChecksData();
 });
 
 var LcpChecksData = function() {
@@ -18,7 +18,7 @@ var LcpChecksData = function() {
             resetData();
             clearTimeout(initializer);
         }
-    },2000);
+    },50);
 
 
     //data refresher which will run for lifetime of app
@@ -60,25 +60,25 @@ var LcpChecksData = function() {
 
     function updateChecksData() {
 
-        var data1 = getLcpChecksData("default");
-        var data2 = getLcpChecksData("cust");
-
-        $.when(data1,data2).then(function(resp1,resp2) {
+        $.when(ajax_getLcpChecksData("all")).then(function(response) {
 
             checkData = {};
 
-            respToRows(resp1[0]);
-            respToRows(resp2[0]);
+            if(response != undefined) {
+                var defaultChecks  = response['default'];
+                var custChecks = response['cust'];
+                if(defaultChecks != undefined && custChecks != undefined) {
+                    respToRows(defaultChecks.concat(custChecks));
+                }
+            }
 
             function respToRows(resp) {
-
                 $.each(resp,function(index, value) {
                     var mps = value['mps'];
 
                     if(! checkData.hasOwnProperty(mps)) {
                         checkData[mps] = []
                     }
-
                     var row = {
                         "id":value['id'],
                         "cid": value['cid'],
@@ -118,17 +118,18 @@ var LcpChecksData = function() {
         $('#lcp-check-current-mps').html(htmlStr)
     }
 
-    function getLcpChecksData(dType) {
+    function ajax_getLcpChecksData(mode, idList) {
 
         var params = {};
+        if(idList != undefined && idList != "") {
+            params['id'] = idList
+        }
         return ($.ajax({
             type: "GET",
-            url: "v1/api/checks/info/" + dType,
-            data: params/*,
-            'success': function (data) {
-                console.log(data)
-            }*/
+            url: "v1/api/checks/info/" + mode,
+            data: params
         }))
     }
+
 };
 

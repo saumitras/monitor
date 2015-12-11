@@ -45,7 +45,7 @@ object MonitorDb {
   val lcpDefaultChecks = TableQuery[LcpDefaultChecksT]
 
   class LcpChecksT(tag: Tag) extends Table[Check](tag, "LCP_CHECKS") {
-    def id = column[Option[String]]("id", O.PrimaryKey, O.AutoInc)
+    def id = column[Option[Long]]("id", O.PrimaryKey, O.AutoInc)
     def cid = column[String]("cid")
     def mps = column[String]("mps")
     def description = column[String]("description")
@@ -201,12 +201,18 @@ object MonitorDb {
     monitorConfig.list.map(x => x._1 -> x._2).filter(_._2.nonEmpty).toMap
   }
 
-  def getDefaultLcpChecks():List[DefaultCheck] = dbConn withDynSession {
-    lcpDefaultChecks.list
+  def getDefaultLcpChecks(idList: String):List[DefaultCheck] = dbConn withDynSession {
+    if(idList.isEmpty)
+      lcpDefaultChecks.list
+    else
+      lcpDefaultChecks.filter(_.cid inSet idList.split(",").toList).list
   }
 
-  def getCustomerLcpChecks():List[Check] = dbConn withDynSession {
-    lcpChecks.list
+  def getCustomerLcpChecks(idList:String):List[Check] = dbConn withDynSession {
+    if(idList.isEmpty)
+      lcpChecks.list
+    else
+      lcpChecks.filter(_.id inSet idList.split(",").toList.map(_.toLong)).list
   }
 
   def insertCheck(mps:String, dc:DefaultCheck) = dbConn withDynSession {
