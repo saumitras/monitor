@@ -94,11 +94,11 @@
 
 
 
-    <div class="modal" id="lcp-checks-edit" event-id="0" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
+    <div class="modal" id="lcp-checks-edit-popup" event-id="0" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title"><span id="heading">1</span></h4>
+                    <h4 class="modal-title">Editing <span class="check-mps"></span> check</h4>
                 </div>
                 <div class="modal-body">
 
@@ -107,14 +107,14 @@
                         <div class="form-group">
                             <label class="col-sm-4 control-label">Check Id</label>
                             <div class="col-sm-6">
-                                <input class="form-control input-sm event-bugid" type="text"  readonly  />
+                                <input class="form-control input-sm check-id" type="text"  readonly  />
                             </div>
                         </div>
 
                         <div class="form-group">
                             <label class="col-sm-4 control-label">Name</label>
                             <div class="col-sm-6">
-                                <input class="form-control input-sm event-bugid" type="text"   />
+                                <input class="form-control input-sm check-name" type="text"   />
                             </div>
                         </div>
 
@@ -122,36 +122,36 @@
                         <div class="form-group">
                             <label class="col-sm-4 control-label">Check Interval</label>
                             <div class="col-sm-6">
-                                <input class="form-control input-sm event-bugid" type="text"   />
+                                <input class="form-control input-sm check-interval" type="text"   />
                             </div>
                         </div>
 
                         <div class="form-group">
                             <label class="col-sm-4 control-label">Critical Threshold</label>
                             <div class="col-sm-6">
-                                <input class="form-control input-sm event-bugid" type="text"   />
+                                <input class="form-control input-sm check-critical-threshold" type="text"   />
                             </div>
                         </div>
 
                         <div class="form-group">
                             <label class="col-sm-4 control-label">Warning Threshold</label>
                             <div class="col-sm-6">
-                                <input class="form-control input-sm event-bugid" type="text"   />
+                                <input class="form-control input-sm check-warning-threshold" type="text"   />
                             </div>
                         </div>
 
                         <div class="form-group">
                             <label class="col-sm-4 control-label">Wait Duration</label>
                             <div class="col-sm-6">
-                                <input class="form-control input-sm event-bugid" type="text"   />
+                                <input class="form-control input-sm check-wait-duration" type="text"   />
                             </div>
                         </div>
 
                         <div class="form-group">
                             <label class="col-sm-4 control-label">Status</label>
                             <div class="col-sm-6">
-                                <label class="radio-inline"> <input type="radio" name="client-status" id="status-active" value="active" checked>Enabled</label>
-                                <label class="radio-inline"> <input type="radio" name="client-status" id="status-stashed" value="stashed">Disabled</label>
+                                <label class="radio-inline"> <input type="radio" name="check-status" value="enabled">Enabled</label>
+                                <label class="radio-inline"> <input type="radio" name="check-status" value="disabled">Disabled</label>
                             </div>
                         </div>
 
@@ -161,8 +161,9 @@
                 </div> <!-- body ends -->
 
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default close-event">Change All MPS</button>
-                    <button type="button" class="btn btn-default close-event">Change Defaults</button>
+                    <button type="button" class="btn btn-default check-btn-change-all-mps">Change All MPS</button>
+                    <button type="button" class="btn btn-default check-btn-change-default">Change Defaults</button>
+                    <button type="button" class="btn btn-default check-btn-change-mps">Apply Change</button>
                     <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
                 </div>
             </div>

@@ -215,6 +215,34 @@ object MonitorDb {
       lcpChecks.filter(_.id inSet idList.split(",").toList.map(_.toLong)).list
   }
 
+  def updateLcpCheck(id:String, mps:String, name:String, interval:String, criticalThreshold:String,
+                     warningThreshold:String, waitDuration:String, status:String) = dbConn withDynSession {
+    mps.toUpperCase match {
+      case "DEFAULT" =>
+        //this will only update default checks so that only future checks see updated values. existing checks will work with existing
+        lcpDefaultChecks.filter(_.cid === id)
+          .map(r => (r.description, r.interval, r.critical_threshold, r.warning_threshold, r.wait_duration, r.status))
+          .update(name, interval, criticalThreshold, warningThreshold, waitDuration, status)
+
+      case "ALL" =>
+        //this update all default + MPS checks
+        lcpDefaultChecks.filter(_.cid === id)
+          .map(r => (r.description, r.interval, r.critical_threshold, r.warning_threshold, r.wait_duration, r.status))
+          .update(name, interval, criticalThreshold, warningThreshold, waitDuration, status)
+
+        lcpChecks.filter(_.cid === id)
+          .map(r => (r.description, r.interval, r.critical_threshold, r.warning_threshold, r.wait_duration, r.status))
+          .update(name, interval, criticalThreshold, warningThreshold, waitDuration, status)
+
+      case _ =>
+        //this case updates a single MPS
+        lcpChecks.filter(_.id === id.toLong)
+          .map(r => (r.description, r.interval, r.critical_threshold, r.warning_threshold, r.wait_duration, r.status))
+          .update(name, interval, criticalThreshold, warningThreshold, waitDuration, status)
+    }
+  }
+
+
   def insertCheck(mps:String, dc:DefaultCheck) = dbConn withDynSession {
     val c = Check(None, dc.cid, mps, dc.description, dc.interval, dc.critical_threshold, dc.warning_threshold,
       dc.threshold_unit, dc.wait_duration, dc.status)

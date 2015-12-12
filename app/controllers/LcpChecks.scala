@@ -3,7 +3,7 @@ package controllers
 import play.api.mvc.{Action, Controller}
 import play.api.libs.json.Json
 
-object LcpChecks extends Controller{
+object LcpChecks extends Controller {
 
   def getChecksInfo(mode:String, idList:Option[String]) = Action {
 
@@ -60,6 +60,15 @@ object LcpChecks extends Controller{
     }
 
     Ok(Json.toJson(resp))
+
+  }
+
+
+  def updateCheck(id:String, mps:String, name:String, interval:String, criticalThreshold:String,
+                  warningThreshold:String, waitDuration:String, status:String) = Action {
+
+    val result = models.checks.LcpChecks.updateLcpCheck(id, mps, name, interval, criticalThreshold, warningThreshold, waitDuration, status)
+    Ok(result)
 
   }
 

@@ -50,4 +50,11 @@ object LcpChecks {
   }
 
 
+  def updateLcpCheck(id:String, mps:String, name:String, interval:String, criticalThreshold:String,
+                  warningThreshold:String, waitDuration:String, status:String) = {
+    MonitorDb.updateLcpCheck(id, mps, name, interval, criticalThreshold, warningThreshold, waitDuration, status)
+    "ok"
+  }
+
+
 }

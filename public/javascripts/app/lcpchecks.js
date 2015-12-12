@@ -23,14 +23,15 @@ var LcpChecksData = function() {
 
     //data refresher which will run for lifetime of app
     setInterval(function() {
-        updateChecksData();
         if(GLOBALS.autoRefresh) {
-            resetData();
+            updateChecksData(true);
+
         }
     }, 10000);
 
 
     function resetData() {
+        console.log("reset data called");
         var mps = $('#lcp-check-current-mps').val();
         console.log("selectedMps=" + mps);
         $("#lcp-checks-heading1").html(mps.toUpperCase().replace(/\//g,' / '));
@@ -52,13 +53,134 @@ var LcpChecksData = function() {
         $('.lcp-check-edit').unbind('click');
         $('.lcp-check-edit').on('click', function(event){
             var elem = $(event.target);
-            console.log(elem.attr('mps') + " "  + elem.attr('id')  + "  " + elem.attr('cid'))
+            var data = {
+                "mps":elem.attr('mps'),
+                "id":elem.attr('id'),
+                "cid":elem.attr('cid')
+            };
+            console.log("Editing checks" + data)
+            showEditCheckPopUp(data);
         });
 
     }
 
+    function writeNewCheckData(mode) {
+        var newData = getNewCheckValues();
+        if(mode.toUpperCase() == "ALL") {
+            newData.mps = mode
+        }
 
-    function updateChecksData() {
+        $.when(ajax_writeNewCheckData(newData)).then(function(resp){
+            console.log(resp);
+            $('#lcp-checks-edit-popup').modal('hide');
+            updateChecksData(true);
+
+            if(mode.toUpperCase() == "ALL")
+                alertify.success("Check ID '" + newData.id + "' updated successfully for <b>ALL MPS</b>");
+            else
+                alertify.success("Check ID '" + newData.id + "' updated successfully for <b>" + newData.mps + "</b>")
+
+        })
+    }
+
+    function ajax_writeNewCheckData(params) {
+        console.log("Sending ajax_writeNewCheckData");
+        console.log(params);
+
+        var id = params.id;
+
+        return ($.ajax({
+            type: "GET",
+            url: "v1/api/checks/update/" +  id,
+            data: params
+        }))
+    }
+
+    function showEditCheckPopUp(data) {
+        var mode = data.mps == "default" ? "default" : "cust";
+        var id = data.mps == "default" ? data.cid : data.id;
+        $.when(ajax_getLcpChecksData(mode, id)).then(function (resp) {
+            if(resp.hasOwnProperty(mode)) {
+                var row = resp[mode][0];
+                populatePopUpData(row);
+            }
+        });
+
+        function populatePopUpData(row) {
+            var mps = row.mps;
+            var id = mps == "default" ? row.cid : row.id;
+            var name = row.desc;
+            var interval = row.interval;
+            var criticalThreshold = row.critical_threshold;
+            var warningThreshold = row.warning_threshold;
+            var waitDuration = row.wait_duration;
+            var status = row.status;
+
+            $('#lcp-checks-edit-popup').find(".check-mps").html(mps);
+            $('#lcp-checks-edit-popup').find(".check-id").val(id);
+            $('#lcp-checks-edit-popup').find(".check-name").val(name);
+            $('#lcp-checks-edit-popup').find(".check-interval").val(interval);
+            $('#lcp-checks-edit-popup').find(".check-critical-threshold").val(criticalThreshold);
+            $('#lcp-checks-edit-popup').find(".check-warning-threshold").val(warningThreshold);
+            $('#lcp-checks-edit-popup').find(".check-wait-duration").val(waitDuration);
+            $('#lcp-checks-edit-popup').find('input[name="check-status"][value="' + status + '"]').attr('checked',true);
+
+
+            $('#lcp-checks-edit-popup').modal('show');
+
+            if(row.mps == "default") {
+                $('#lcp-checks-edit-popup').find('.check-btn-change-all-mps').show();
+                $('#lcp-checks-edit-popup').find('.check-btn-change-default').show();
+                $('#lcp-checks-edit-popup').find('.check-btn-change-mps').hide();
+            } else {
+                $('#lcp-checks-edit-popup').find('.check-btn-change-all-mps').hide();
+                $('#lcp-checks-edit-popup').find('.check-btn-change-default').hide();
+                $('#lcp-checks-edit-popup').find('.check-btn-change-mps').show();
+            }
+
+            $('#lcp-checks-edit-popup').find('.check-btn-change-all-mps').unbind('click');
+            $('#lcp-checks-edit-popup').find('.check-btn-change-all-mps').on('click',function(){
+                writeNewCheckData("all");
+            });
+
+            $('#lcp-checks-edit-popup').find('.check-btn-change-default').unbind('click');
+            $('#lcp-checks-edit-popup').find('.check-btn-change-default').on('click',function(){
+                writeNewCheckData("default");
+            });
+
+            $('#lcp-checks-edit-popup').find('.check-btn-change-mps').unbind('click');
+            $('#lcp-checks-edit-popup').find('.check-btn-change-mps').on('click',function(){
+                writeNewCheckData("mps");
+            });
+        }
+    }
+
+
+    function getNewCheckValues() {
+
+        var id = $('#lcp-checks-edit-popup').find(".check-id").val();
+        var mps = $('#lcp-checks-edit-popup').find(".check-mps").html();
+        var name = $('#lcp-checks-edit-popup').find(".check-name").val();
+        var interval = $('#lcp-checks-edit-popup').find(".check-interval").val();
+        var criticalThreshold = $('#lcp-checks-edit-popup').find(".check-critical-threshold").val();
+        var warningThreshold = $('#lcp-checks-edit-popup').find(".check-warning-threshold").val();
+        var waitDuration = $('#lcp-checks-edit-popup').find(".check-wait-duration").val();
+        var status =  $('#lcp-checks-edit-popup').find('input[name="check-status"]:checked').val();
+
+        return {
+            "id":id,
+            "mps":mps,
+            "name":name,
+            "interval":interval,
+            "criticalThreshold":criticalThreshold,
+            "warningThreshold": warningThreshold,
+            "waitDuration":waitDuration,
+            "status":status
+        };
+
+    }
+
+    function updateChecksData(reset) {
 
         $.when(ajax_getLcpChecksData("all")).then(function(response) {
 
@@ -98,6 +220,8 @@ var LcpChecksData = function() {
                 });
 
             }
+
+            if(reset) resetData()
         })
 
     }
@@ -130,6 +254,7 @@ var LcpChecksData = function() {
             data: params
         }))
     }
+
 
 };
 
