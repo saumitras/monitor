@@ -8,7 +8,7 @@ object LcpChecks extends Controller {
   def getChecksInfo(mode:String, idList:Option[String]) = Action {
 
     def getDefault():List[Map[String, String]] = {
-      val defaultChecks = models.checks.LcpChecks.getDefaultLcpChecks(idList.getOrElse(""))
+      val defaultChecks = models.checks.Tasks.getDefaultLcpChecks(idList.getOrElse(""))
       val data = defaultChecks.map(c =>
         Map(
           "cid" -> c.cid,
@@ -26,7 +26,7 @@ object LcpChecks extends Controller {
     }
 
     def getCust():List[Map[String, String]] = {
-      val custChecks = models.checks.LcpChecks.getCustLcpChecks(idList.getOrElse(""))
+      val custChecks = models.checks.Tasks.getCustLcpChecks(idList.getOrElse(""))
 
       val data = custChecks.map(c =>
         Map(
@@ -67,7 +67,7 @@ object LcpChecks extends Controller {
   def updateCheck(id:String, mps:String, name:String, interval:String, criticalThreshold:String,
                   warningThreshold:String, waitDuration:String, status:String) = Action {
 
-    val result = models.checks.LcpChecks.updateLcpCheck(id, mps, name, interval, criticalThreshold, warningThreshold, waitDuration, status)
+    val result = models.checks.Tasks.updateLcpCheck(id, mps, name, interval, criticalThreshold, warningThreshold, waitDuration, status)
     Ok(result)
 
   }

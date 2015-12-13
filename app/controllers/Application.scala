@@ -22,10 +22,10 @@ object Application extends Controller {
     MonitorDb.initTables()
     Config.updateConfig()
 
-    models.checks.LcpChecks.init()
+    models.checks.Tasks.addCustChecksFromDefault()
     models.checks.Schedule.checkFilesStuckInSeen()
 
-    models.checks.Schedule.updateClients()
+    models.clients.Tasks.updateClients()
 
 
     Ok(views.html.index("Your new application is ready."))
@@ -65,7 +65,7 @@ object Application extends Controller {
   }
 
   def emailTest = Action {
-    models.checks.Notification.sendMailOld()
+    models.notification.Notification.sendMailOld()
     Ok("Sent")
   }
 

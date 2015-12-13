@@ -1,5 +1,4 @@
-package models.checks
-
+package models.notification
 
 import models.dao.Messages.LCPEvent
 import play.api.libs.mailer._
@@ -51,3 +50,4 @@ object Notification {
   }
 
 }
+

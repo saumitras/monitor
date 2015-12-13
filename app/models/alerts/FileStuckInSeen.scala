@@ -5,7 +5,7 @@ import models.dao.Messages.{LCPEvent, FileStuckInSeen, Check}
 import models.dao.MonitorDb
 import play.api.Logger
 
-import models.checks.Notification
+import models.notification.Notification
 
 object FileStuckInSeenAlert {
 

@@ -4,9 +4,12 @@ import models.Config
 import models.dao.{MonitorDb, LcpDb}
 import play.api.Logger
 
-object LcpChecks {
+object Tasks {
 
-  def init() = {
+  /**
+   * For each MPS, read all the checks from DEFAULT_LCP_CHECKS table and add them to LCP_CHECKS table
+   */
+  def addCustChecksFromDefault() = {
     val h2Hosts = Config.h2Hosts
     h2Hosts.foreach(insertNewChecks)
 
