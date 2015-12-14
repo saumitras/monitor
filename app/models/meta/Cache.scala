@@ -27,10 +27,6 @@ object Cache {
         //if not, add that mps and initialize it with 0 epoch
         c.get(mps) match {
           case Some(info) =>
-            val nowTs = System.currentTimeMillis / 1000
-            val existingData = LAST_RUNS_CACHE.getOrElse(checkId, Map[String, RunDetail]())
-            val newData = existingData ++ Map(mps -> RunDetail(nowTs))
-            LAST_RUNS_CACHE += (checkId -> newData)
             info.lastRunEpoch
           case None =>
             val existingData = LAST_RUNS_CACHE.getOrElse(checkId, Map[String, RunDetail]())
@@ -42,5 +38,13 @@ object Cache {
         LAST_RUNS_CACHE += (checkId -> Map())
         getLastRunInfo(checkId, mps)
     }
+  }
+
+  def setLastRunInfo(checkId:String, mps:String) = {
+    println(s"Setting last run info for checkId=$checkId mps=$mps")
+    val nowTs = System.currentTimeMillis / 1000
+    val existingData = LAST_RUNS_CACHE.getOrElse(checkId, Map[String, RunDetail]())
+    val newData = existingData ++ Map(mps -> RunDetail(nowTs))
+    LAST_RUNS_CACHE += (checkId -> newData)
   }
 }

@@ -33,6 +33,7 @@ object FileChecks {
 
           if(nowTs - lastRunTs > interval) {
             println(s"Proceeding with check. lastRun = $lastRunTs and interval = $interval")
+            models.meta.Cache.setLastRunInfo(cid,mps)
             val matchingFiles:List[FileStuckInSeen] = lcpDao.getFilesStuckInSeen(mps, criticalThreshold.toLong)
             if(matchingFiles.nonEmpty) {
               models.alerts.FileStuckInSeenAlert.generateAlert(h2, mps, check, matchingFiles)

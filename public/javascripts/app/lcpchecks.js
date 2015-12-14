@@ -123,7 +123,7 @@ var LcpChecksData = function() {
             $('#lcp-checks-edit-popup').find(".check-critical-threshold").val(criticalThreshold);
             $('#lcp-checks-edit-popup').find(".check-warning-threshold").val(warningThreshold);
             $('#lcp-checks-edit-popup').find(".check-wait-duration").val(waitDuration);
-            $('#lcp-checks-edit-popup').find('input[name="check-status"][value="' + status + '"]').attr('checked',true);
+            $('#lcp-checks-edit-popup').find('input[name="check-status"][value="' + status + '"]').prop('checked',true);
 
 
             $('#lcp-checks-edit-popup').modal('show');

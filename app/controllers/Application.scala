@@ -17,7 +17,6 @@ object Application extends Controller {
     //sendMail()
     //Ok(IOUtils.toString(Play.application.resourceAsStream("routes").get))
 
-    models.meta.Init.init()
 
     Ok(views.html.index("Your new application is ready."))
 
