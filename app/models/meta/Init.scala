@@ -17,9 +17,13 @@ object Init {
     MonitorDb.createTables()
     MonitorDb.initTables()
 
-    val INTERVAL = 20
-    Logger.info(s"Setting up checks scheduler with interval = $INTERVAL seconds")
-    Akka.system.scheduler.schedule(0 seconds, INTERVAL seconds)(models.checks.Schedule.runAllChecks)
+    val CHECKS_HEARTBEAT = 10
+    Logger.info(s"Setting up checks scheduler with interval = $CHECKS_HEARTBEAT seconds")
+    Akka.system.scheduler.schedule(0 seconds, CHECKS_HEARTBEAT seconds)(models.checks.Schedule.runAllChecks)
+
+    val EMAIL_HEARTBEAT = 10
+    Logger.info(s"Setting up email scheduler with interval = $EMAIL_HEARTBEAT seconds")
+    Akka.system.scheduler.schedule(0 seconds, EMAIL_HEARTBEAT seconds)(models.notification.SendMail.sendAllMails)
 
 
   }

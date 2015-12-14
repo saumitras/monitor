@@ -20,8 +20,6 @@ object Messages {
   case class EmailEvent(id:Option[Long], eventId:Long, mps:String, title:String, recipient:String, sentCount:Int, body:String )
   case class EmailOps(id:Option[Long], group:String, title:String, recipient:String, sentCount:Int, body:String)
 
-
-
 }
 
 

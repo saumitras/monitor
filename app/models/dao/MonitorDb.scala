@@ -318,6 +318,34 @@ object MonitorDb {
     }
   }
 
+  def updateMailSentCount(category:String, id:Long) = emailDbConn withDynSession {
+    category.toUpperCase match {
+      case "EVENT" =>
+        val count = emailEvent.filter(_.id === id).map(r => r.sentCount).first + 1
+        emailEvent.filter(_.id === id).map(r => r.sentCount).update(count)
+
+      case "OPS" =>
+        val count = emailEvent.filter(_.id === id).map(r => r.sentCount).first + 1
+        emailOps.filter(_.id === id).map(r => r.sentCount).update(count)
+    }
+
+  }
+
+  def getUnsentEmail(category:String) = {
+    emailDbConn withDynSession {
+      category.toUpperCase match {
+        case "EVENT" =>
+          emailEvent.filter(_.sentCount === 0)
+            .map(r => (r.id.get, r.recipient, r.title, r.body)).list
+
+        case "OPS" =>
+          emailOps.filter(_.sentCount === 0)
+            .map(r => (r.id.get, r.recipient, r.title, r.body)).list
+
+      }
+    }
+  }
+
 }
 
 
