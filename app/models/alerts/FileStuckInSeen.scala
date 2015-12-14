@@ -41,7 +41,12 @@ object FileStuckInSeenAlert {
     val title = s"[${event.mps}] ${event.name} [${event.escalationLevel}] "
 
     val MAX_LOAD_ID_TO_DISPLAY = 20
-    val borderStyle = " style='border: 1px solid #e9e9e9;'"
+    val borderStyleTable =  " style='border: 1px solid #000; border-collapse:collapse;'"
+    val borderStyleHeader = " style='border: 1px solid #000; background-color: #333; color:#e7e7e7; font-weight: bold;'"
+    val borderStyleAlt1  =  " style='border: 1px solid #000; background-color: #FFF; color:#000;'"
+    val borderStyleAlt2  =  " style='border: 1px solid #000; background-color: #e7e7e7; color:#000;'"
+
+
     println("sending email...")
 
     val count = files.size
@@ -58,27 +63,31 @@ object FileStuckInSeenAlert {
 
     body += "<br><br><h4>List of files stuck in seen stage </h4> <br>"
 
-    body += "<table>" +
-      "<tr>" +
-      //s"<th $borderStyle>MPS</th>" +
-      s"<th $borderStyle>LoadId</th>" +
-      s"<th $borderStyle>Node</th>" +
-      s"<th $borderStyle>TS</th>" +
-      s"<th $borderStyle>ObsTs</th>" +
-      s"<th $borderStyle>Seen</th>" +
-      s"<th $borderStyle>FileType</th>" +
-      s"<th $borderStyle>Name</th></tr>";
+    body += s"<table $borderStyleTable>";
 
+    body +=  "<tr>" +
+      s"<th $borderStyleHeader>#</th>" +
+      s"<th $borderStyleHeader>LoadId</th>" +
+      s"<th $borderStyleHeader>Node</th>" +
+      s"<th $borderStyleHeader>TS</th>" +
+      s"<th $borderStyleHeader>ObsTs</th>" +
+      s"<th $borderStyleHeader>Seen</th>" +
+      s"<th $borderStyleHeader>FileType</th>" +
+      s"<th $borderStyleHeader>Name</th></tr>";
+
+    var counter = 0;
     for(f <- files.take(50)) {
+      counter += 1
+      val selectedStyle = if(counter % 2 == 0) borderStyleAlt1 else borderStyleAlt2
       body += "<tr>" +
-        //s"<td $borderStyle>" + f.mps + "</td>" +
-        s"<td $borderStyle>" + f.loadId + "</td>" +
-        s"<td $borderStyle>" + f.node + "</td>" +
-        s"<td $borderStyle>" + f.ts + "</td>" +
-        s"<td $borderStyle>" + f.obs_ts + "</td>" +
-        s"<td $borderStyle>" + f.seen + "</td>" +
-        s"<td $borderStyle>" + f.fileType + "</td>" +
-        s"<td $borderStyle>" + f.name + "</td>" +
+        s"<td $selectedStyle>" + counter + "</td>" +
+        s"<td $selectedStyle>" + f.loadId + "</td>" +
+        s"<td $selectedStyle>" + f.node + "</td>" +
+        s"<td $selectedStyle>" + f.ts + "</td>" +
+        s"<td $selectedStyle>" + f.obs_ts + "</td>" +
+        s"<td $selectedStyle>" + f.seen + "</td>" +
+        s"<td $selectedStyle>" + f.fileType + "</td>" +
+        s"<td $selectedStyle>" + f.name + "</td>" +
         "</tr>"
     }
 

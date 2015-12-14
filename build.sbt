@@ -23,7 +23,8 @@ libraryDependencies ++= Seq(
   "org.slf4j" % "slf4j-nop" % "1.6.4" withSources(),
   "com.h2database" % "h2" % "1.3.176" withSources(),
   "com.mchange" % "c3p0" % "0.9.5"  withSources() withJavadoc(),
-  "com.typesafe.akka" % "akka-actor_2.11" % "2.3.9"  withSources() withJavadoc()
+  "com.typesafe.akka" % "akka-actor_2.11" % "2.3.9"  withSources() withJavadoc(),
+  "com.typesafe.akka" %% "akka-remote" % "2.3.9"  withSources() withJavadoc()
 )
 
 unmanagedResourceDirectories in Test <+=  baseDirectory ( _ /"target/web/public/test" )
