@@ -25,12 +25,22 @@ object FileChecks {
           Logger.info("check= " + check)
 
           val warningThreshold = check.warning_threshold
-          val criticalThredhold = check.critical_threshold
+          val criticalThreshold = check.critical_threshold
+          val interval = check.interval.toLong
 
-          val matchingFiles:List[FileStuckInSeen] = lcpDao.getFilesStuckInSeen(mps, criticalThredhold.toLong)
-          if(matchingFiles.nonEmpty) {
-            models.alerts.FileStuckInSeenAlert.generateAlert(h2, mps, check, matchingFiles)
+          val lastRunTs = models.meta.Cache.getLastRunInfo(cid,mps)
+          val nowTs = System.currentTimeMillis / 1000
+
+          if(nowTs - lastRunTs > interval) {
+            println(s"Proceeding with check. lastRun = $lastRunTs and interval = $interval")
+            val matchingFiles:List[FileStuckInSeen] = lcpDao.getFilesStuckInSeen(mps, criticalThreshold.toLong)
+            if(matchingFiles.nonEmpty) {
+              models.alerts.FileStuckInSeenAlert.generateAlert(h2, mps, check, matchingFiles)
+            }
+          } else {
+            println("Not proceeding with check.")
           }
+
         }
       }
     }

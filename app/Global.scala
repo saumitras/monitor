@@ -12,4 +12,5 @@ object Global extends GlobalSettings {
     Logger.info("Config " + Config.config)
   }
 
+
 }

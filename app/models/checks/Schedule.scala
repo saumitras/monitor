@@ -1,5 +1,7 @@
 package models.checks
 
+import models.dao.MonitorDb
+
 object Schedule {
 
   val CHECK_ID = Map(
@@ -9,7 +11,6 @@ object Schedule {
   def checkFilesStuckInSeen(): Unit = {
     models.checks.lcp.FileChecks.checkFilesStuckInSeen(CHECK_ID("FILE_STUCK_IN_SEEN"))
   }
-
 
 
 }

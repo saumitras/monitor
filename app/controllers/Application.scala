@@ -17,16 +17,7 @@ object Application extends Controller {
     //sendMail()
     //Ok(IOUtils.toString(Play.application.resourceAsStream("routes").get))
 
-    Logger.info("Initializing monitor db...")
-    MonitorDb.createTables()
-    MonitorDb.initTables()
-    Config.updateConfig()
-
-    models.checks.Tasks.addCustChecksFromDefault()
-    models.checks.Schedule.checkFilesStuckInSeen()
-
-    models.clients.Tasks.updateClients()
-
+    models.meta.Init.init()
 
     Ok(views.html.index("Your new application is ready."))
 
