@@ -20,16 +20,16 @@ object FileStuckInSeenAlert {
       Logger.info(s"Adding new open event with signature=$signature h2=$h2 mps=$mps cid=${check.cid}")
       val loadIds = files.map(f => f.loadId).take(10).mkString(",")
       val sources = files.map(f => f.node).distinct.take(10).mkString(",")
-      val event = LCPEvent(None, signature, "open", check.description, mps, h2, loadIds, sources, new Timestamp(System.currentTimeMillis), "none",
+      val event = LCPEvent(None, check.id.getOrElse(0), check.cid, signature, "open", check.description, mps, h2, loadIds, sources, new Timestamp(System.currentTimeMillis), "none",
         "L3", "NA", "NA",  new Timestamp(System.currentTimeMillis), "NA", "NA")
 
       val newEventId = MonitorDb.insertLcpEvent(event)
       println("New event id " + newEventId)
 
       val (title, body) = getEmailBody(files, event)
-      val recipient = models.config.CustomerConfig.get(mps,"internalEmailRecipients").split(",").toSeq
+      val recipient = models.config.CustomerConfig.get(mps,"internalEmailRecipients")
 
-      //Notification.sendMail(recipient,title,body)
+      Notification.addEventNotification(newEventId, mps, recipient,title,body)
 
 
     }

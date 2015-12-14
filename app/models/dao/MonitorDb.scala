@@ -1,6 +1,5 @@
 package models.dao
 
-
 import java.sql.Timestamp
 
 import play.Logger
@@ -12,7 +11,6 @@ import scala.slick.lifted.TableQuery
 import scala.slick.driver.H2Driver.backend.DatabaseDef
 
 import models.dao.Messages._
-import models.Config
 
 object MonitorDb {
 
@@ -63,6 +61,8 @@ object MonitorDb {
 
   class LcpEventT(tag:Tag) extends Table[LCPEvent](tag, "LCP_EVENT") {
     def id = column[Option[Long]]("id",O.PrimaryKey, O.AutoInc)
+    def parentCheckId = column[Long]("parent_checkid")
+    def sourceCheckId = column[String]("source_checkid")
     def signature = column[String]("signature")
     def status = column[String]("status")  //open or close
     def name = column[String]("name")
@@ -79,7 +79,7 @@ object MonitorDb {
     def resolution = column[String]("resolution")
     def kb = column[String]("kb")
 
-    def * = (id, signature, status, name, mps, h2, loadId, source, occurredAt, owner, escalationLevel, bug, component,
+    def * = (id, parentCheckId, sourceCheckId, signature, status, name, mps, h2, loadId, source, occurredAt, owner, escalationLevel, bug, component,
               closedAt, resolution, kb)  <> (LCPEvent.tupled, LCPEvent.unapply)
   }
   val lcpEvent = TableQuery[LcpEventT]
@@ -105,27 +105,41 @@ object MonitorDb {
   }
   val emailDbConn:DatabaseDef = Connections.getH2(emailH2)
 
-  class EmailT(tag:Tag) extends Table[Email](tag, "EMAIL") {
+  class EmailEventT(tag:Tag) extends Table[EmailEvent](tag, "EMAIL_EVENT") {
     def id = column[Option[Long]]("ID",O.PrimaryKey, O.AutoInc)
     def eventId = column[Long]("EVENT_ID")
+    def mps = column[String]("MPS")
     def title = column[String]("TITLE")
     def recipient = column[String]("RECIPIENT")
+    def sentCount = column[Int]("SENT_COUNT")
     def body = column[String]("BODY")
 
-    def * = (id, eventId, title, recipient, body)  <> (Email.tupled, Email.unapply)
+    def * = (id, eventId, mps, title, recipient, sentCount, body)  <> (EmailEvent.tupled, EmailEvent.unapply)
   }
+  val emailEvent = TableQuery[EmailEventT]
 
-  val email = TableQuery[EmailT]
+
+  class EmailOpsT(tag:Tag) extends Table[EmailOps](tag, "EMAIL_OPS") {
+    def id = column[Option[Long]]("ID",O.PrimaryKey, O.AutoInc)
+    def group = column[String]("GROUP")
+    def title = column[String]("TITLE")
+    def recipient = column[String]("RECIPIENT")
+    def sentCount = column[Int]("SENT_COUNT")
+    def body = column[String]("BODY")
+
+    def * = (id, group, title, recipient, sentCount, body)  <> (EmailOps.tupled, EmailOps.unapply)
+  }
+  val emailOps = TableQuery[EmailOpsT]
 
 
   def createTables() = {
-    val tables = List(lcpDefaultChecks, lcpChecks, monitorConfig, lcpEvent, clients, email)
+    val tables = List(lcpDefaultChecks, lcpChecks, monitorConfig, lcpEvent, clients, emailEvent, emailOps)
     tables.foreach(t =>
       try {
         val tableName = t.baseTableRow.tableName
         Logger.info(s"Creating monitordb table: $tableName")
 
-        if(tableName == "EMAIL") {
+        if(tableName.startsWith("EMAIL")) {
           emailDbConn withDynSession {  t.ddl.create }
         } else {
           dbConn withDynSession {  t.ddl.create }
@@ -296,6 +310,13 @@ object MonitorDb {
     }
   }
 
+
+
+  def insertEventEmail(row:EmailEvent) = {
+    emailDbConn withDynSession {
+      emailEvent.insert(row)
+    }
+  }
 
 }
 
