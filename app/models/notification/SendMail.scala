@@ -4,7 +4,7 @@ import models.dao.MonitorDb
 import play.api.libs.mailer.MailerPlugin
 import play.api.libs.mailer._
 import play.api.Play.current
-
+import play.api.Logger
 
 object SendMail {
 
@@ -16,10 +16,11 @@ object SendMail {
   }
 
   def sendUnsentMail(category:String) = {
+    Logger.info("Inside sendUnsentMail")
     val unsentEmails = MonitorDb.getUnsentEmail(category)
     for(mail <- unsentEmails) {
       //println("Sending mail. Details" + mail)
-      println(s"Sending mail. Type = $category, id=" + mail._1)
+      Logger.info(s"Sending mail. Type = $category, id=" + mail._1)
       MonitorDb.updateMailSentCount(category,mail._1)
       sendMail(mail._2.split(",").toSeq, mail._3, mail._4)
     }

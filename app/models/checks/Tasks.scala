@@ -26,11 +26,11 @@ object Tasks {
       for (mps: String <- mpsList) {
         //get all registered checks for a MPS
         val mpsChecks = customerLcpChecks.filter(_.mps == mps).map(x => x.cid)
-        Logger.info("Mps checks= " + mpsChecks)
+        //Logger.info("Mps checks= " + mpsChecks)
 
         //get all default checks which are not registered for this MPS
         val newChecks = dfltCheckIds.filterNot(mpsChecks.contains)
-        Logger.info(s"Mps=$mps NewChecks=" + newChecks)
+        //Logger.info(s"Mps=$mps NewChecks=" + newChecks)
 
         newChecks.foreach(cid => MonitorDb.insertCheck(mps, defaultLcpChecks.filter(_.cid == cid).head))
 

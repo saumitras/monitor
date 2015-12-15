@@ -15,7 +15,7 @@ object Init {
 
   def init() = {
 
-    val actorSystem = models.agents.ActorSupervisor.monitorActorSystem
+    //val actorSystem = models.agents.ActorSupervisor.monitorActorSystem
 
     Logger.info("Initializing monitor db...")
     MonitorDb.createTables()
@@ -23,11 +23,11 @@ object Init {
 
     val CHECKS_HEARTBEAT = 30
     Logger.info(s"Setting up checks scheduler with interval = $CHECKS_HEARTBEAT seconds")
-    actorSystem.scheduler.schedule(0 seconds, CHECKS_HEARTBEAT seconds)(models.checks.Schedule.runAllChecks)
+    Akka.system.scheduler.schedule(0 seconds, CHECKS_HEARTBEAT seconds)(models.checks.Schedule.runAllChecks)
 
     val EMAIL_HEARTBEAT = 30
     Logger.info(s"Setting up email scheduler with interval = $EMAIL_HEARTBEAT seconds")
-    actorSystem.scheduler.schedule(0 seconds, EMAIL_HEARTBEAT seconds)(models.notification.SendMail.sendAllMails)
+    Akka.system.scheduler.schedule(0 seconds, EMAIL_HEARTBEAT seconds)(models.notification.SendMail.sendAllMails)
 
   }
 
