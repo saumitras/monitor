@@ -21,11 +21,11 @@ object Init {
     MonitorDb.createTables()
     MonitorDb.initTables()
 
-    val CHECKS_HEARTBEAT = 10
+    val CHECKS_HEARTBEAT = 30
     Logger.info(s"Setting up checks scheduler with interval = $CHECKS_HEARTBEAT seconds")
     actorSystem.scheduler.schedule(0 seconds, CHECKS_HEARTBEAT seconds)(models.checks.Schedule.runAllChecks)
 
-    val EMAIL_HEARTBEAT = 10
+    val EMAIL_HEARTBEAT = 30
     Logger.info(s"Setting up email scheduler with interval = $EMAIL_HEARTBEAT seconds")
     actorSystem.scheduler.schedule(0 seconds, EMAIL_HEARTBEAT seconds)(models.notification.SendMail.sendAllMails)
 

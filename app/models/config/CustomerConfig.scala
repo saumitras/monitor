@@ -10,6 +10,12 @@ object CustomerConfig {
         "mandatoryEmailRecipients" -> "saumitra.srivastav7@gmail.com",
         "ignoreLoadId" -> ""
       ),
+      "vce/vce/pod" -> Map(
+        "externalEmailRecipients" -> "saumitra.srivastav7@gmail.com",
+        "internalEmailRecipients" -> "saumitra.srivastav7@gmail.com,saumitra.srivastav@glassbeam.com",
+        "mandatoryEmailRecipients" -> "saumitra.srivastav7@gmail.com",
+        "ignoreLoadId" -> ""
+      ),
       "storvisor/storvisor/storvisor_pod" -> Map(
         "externalEmailRecipients" -> "saumitra.srivastav7@gmail.com",
         "internalEmailRecipients" -> "saumitra.srivastav7@gmail.com,saumitra.srivastav@glassbeam.com",
