@@ -1,17 +1,15 @@
 package models.alerts
 
 import java.sql.Timestamp
-import models.dao.Messages.{LCPEvent, FileStuckInSeen, Check}
+
+import models.dao.Messages._
 import models.dao.MonitorDb
+import models.notification.Notification
 import play.api.Logger
 
-import models.notification.Notification
+object FileStuckInParseAlert extends App {
 
-object FileStuckInSeenAlert {
-
-  var alertsFilesStuckInSeen = ""
-
-  def generateAlert(h2:String, mps:String, check:Check, files:List[FileStuckInSeen]) = {
+  def generateAlert(h2:String, mps:String, check:Check, files:List[FileStuckInParse]) = {
     Logger.info("Raising alert for check: " + check)
     val signature = models.utils.Util.md5Hash(h2 + mps + check.cid + files.map(x => x.loadId).mkString(","))
     if(MonitorDb.getOpenLcpEvents().exists(_.signature == signature)) {
@@ -31,12 +29,11 @@ object FileStuckInSeenAlert {
 
       Notification.addEventNotification(newEventId, mps, recipient,title,body)
 
-
     }
   }
-//case class FileStuckInSeen(mps:String, loadId:Long, node:String, ts:Timestamp, obs_ts:Timestamp,
-//                           seen:Timestamp, fileType:Byte, name:String)
-  def getEmailBody(files:List[FileStuckInSeen], event:LCPEvent):(String,String) = {
+  //case class FileStuckInSeen(mps:String, loadId:Long, node:String, ts:Timestamp, obs_ts:Timestamp,
+  //                           seen:Timestamp, fileType:Byte, name:String)
+  def getEmailBody(files:List[FileStuckInParse], event:LCPEvent):(String,String) = {
 
     val title = s"[${event.mps}] ${event.name} [${event.escalationLevel}] "
 
@@ -46,13 +43,12 @@ object FileStuckInSeenAlert {
     val borderStyleAlt1  =  " style='border: 1px solid #000; background-color: #FFF; color:#000;'"
     val borderStyleAlt2  =  " style='border: 1px solid #000; background-color: #e7e7e7; color:#000;'"
 
-
     println("sending email...")
 
     val count = files.size
     val loadIds = files.map(f => f.loadId).distinct
 
-    var body = s"<p>Number of files stuck in seen: <b>$count</b><br><br>" +
+    var body = s"<p>Number of files stuck in parsing: <b>$count</b><br><br>" +
       "Total LoadID(s) = <b>" + loadIds.size + "</b><br><br>" +
       "LoadID(s)= " + loadIds.take(MAX_LOAD_ID_TO_DISPLAY).mkString(",")
 
@@ -61,14 +57,15 @@ object FileStuckInSeenAlert {
       body += s" <b>and $diff more</b>"
     }
 
-    body += "<br><br><h4>List of files stuck in seen stage </h4> <br>"
+    body += "<br><br><h4>List of files stuck in parsing stage </h4> <br>"
 
-    body += s"<table $borderStyleTable>";
+    body += s"<table $borderStyleTable>"
 
     body +=  "<tr>" +
       s"<th $borderStyleHeader>#</th>" +
       s"<th $borderStyleHeader>LoadId</th>" +
       s"<th $borderStyleHeader>Node</th>" +
+      s"<th $borderStyleHeader>Parser</th>" +
       s"<th $borderStyleHeader>TS</th>" +
       s"<th $borderStyleHeader>ObsTs</th>" +
       s"<th $borderStyleHeader>Seen</th>" +
@@ -83,6 +80,7 @@ object FileStuckInSeenAlert {
         s"<td $selectedStyle>" + counter + "</td>" +
         s"<td $selectedStyle>" + f.loadId + "</td>" +
         s"<td $selectedStyle>" + f.node + "</td>" +
+        s"<td $selectedStyle>" + f.parser.getOrElse("NA") + "</td>" +
         s"<td $selectedStyle>" + f.ts + "</td>" +
         s"<td $selectedStyle>" + f.obs_ts + "</td>" +
         s"<td $selectedStyle>" + f.seen + "</td>" +
@@ -97,4 +95,3 @@ object FileStuckInSeenAlert {
     (title, body)
   }
 }
-

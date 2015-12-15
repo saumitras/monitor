@@ -10,7 +10,6 @@ object ActorSupervisor {
   var actorRefs = Map[String, ActorRef]()
 
   def getActor(name:String) = {
-    if(actorRefs.contains())
   }
 
 
