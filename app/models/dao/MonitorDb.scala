@@ -164,7 +164,8 @@ object MonitorDb {
 
     def initLcpDefaultChecks = {
       val rows = List(
-        DefaultCheck("lcp-c01", "default", "File stuck in seen", "300", "900", "300", "time", "0", "enabled")
+        DefaultCheck("lcp-c01", "default", "File stuck in seen", "300", "900", "300", "time", "0", "enabled"),
+        DefaultCheck("lcp-c02", "default", "File stuck in parsing", "300", "900", "300", "time", "0", "enabled")
       )
       rows.foreach(r =>
         try {
