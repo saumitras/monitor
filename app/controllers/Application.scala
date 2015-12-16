@@ -54,6 +54,11 @@ object Application extends Controller {
     Ok(views.html.kb(""))
   }
 
+  def email = Action {
+    Ok(views.html.email(""))
+  }
+
+
   def emailTest = Action {
     models.notification.SendMail.sendMailOld()
     Ok("Sent")

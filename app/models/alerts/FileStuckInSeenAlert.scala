@@ -26,7 +26,7 @@ object FileStuckInSeenAlert {
       val newEventId = MonitorDb.insertLcpEvent(event)
       println("New event id " + newEventId)
 
-      val (title, body) = getEmailBody(files, event)
+      val (title, body) = getEmailBody(newEventId, files, event)
       val recipient = models.config.CustomerConfig.get(mps,"internalEmailRecipients")
 
       Notification.addEventNotification(newEventId, mps, recipient,title,body)
@@ -36,18 +36,12 @@ object FileStuckInSeenAlert {
   }
 //case class FileStuckInSeen(mps:String, loadId:Long, node:String, ts:Timestamp, obs_ts:Timestamp,
 //                           seen:Timestamp, fileType:Byte, name:String)
-  def getEmailBody(files:List[FileStuckInSeen], event:LCPEvent):(String,String) = {
+  def getEmailBody(eventId:Long, files:List[FileStuckInSeen], event:LCPEvent):(String,String) = {
 
-    val title = s"[${event.mps}] ${event.name} [${event.escalationLevel}] "
+    val title = s"E-$eventId [${event.mps}] ${event.name} [${event.escalationLevel}] "
 
     val MAX_LOAD_ID_TO_DISPLAY = 20
-    val borderStyleTable =  " style='border: 1px solid #000; border-collapse:collapse;'"
-    val borderStyleHeader = " style='border: 1px solid #000; background-color: #333; color:#e7e7e7; font-weight: bold;'"
-    val borderStyleAlt1  =  " style='border: 1px solid #000; background-color: #FFF; color:#000;'"
-    val borderStyleAlt2  =  " style='border: 1px solid #000; background-color: #e7e7e7; color:#000;'"
-
-
-    println("sending email...")
+    val MAX_ROWS_TO_DISPLAY_IN_TABLE = 50
 
     val count = files.size
     val loadIds = files.map(f => f.loadId).distinct
@@ -63,37 +57,16 @@ object FileStuckInSeenAlert {
 
     body += "<br><br><h4>List of files stuck in seen stage </h4> <br>"
 
-    body += s"<table $borderStyleTable>";
+    val tableContent = models.utils.Util.emailColsToTableRows(
+      List("LoadId", "Node", "TS", "ObsTs", "Seen", "FileType", "Name"),
+      files.take(MAX_ROWS_TO_DISPLAY_IN_TABLE).map(x =>
+        List(x.loadId.toString, x.node, x.ts.toString, x.obs_ts.toString, x.seen.toString,
+          x.fileType.toString, x.name)
+      )
+    )
 
-    body +=  "<tr>" +
-      s"<th $borderStyleHeader>#</th>" +
-      s"<th $borderStyleHeader>LoadId</th>" +
-      s"<th $borderStyleHeader>Node</th>" +
-      s"<th $borderStyleHeader>TS</th>" +
-      s"<th $borderStyleHeader>ObsTs</th>" +
-      s"<th $borderStyleHeader>Seen</th>" +
-      s"<th $borderStyleHeader>FileType</th>" +
-      s"<th $borderStyleHeader>Name</th></tr>";
+    body += tableContent
 
-    var counter = 0
-    for(f <- files.take(50)) {
-      counter += 1
-      val selectedStyle = if(counter % 2 == 0) borderStyleAlt1 else borderStyleAlt2
-      body += "<tr>" +
-        s"<td $selectedStyle>" + counter + "</td>" +
-        s"<td $selectedStyle>" + f.loadId + "</td>" +
-        s"<td $selectedStyle>" + f.node + "</td>" +
-        s"<td $selectedStyle>" + f.ts + "</td>" +
-        s"<td $selectedStyle>" + f.obs_ts + "</td>" +
-        s"<td $selectedStyle>" + f.seen + "</td>" +
-        s"<td $selectedStyle>" + f.fileType + "</td>" +
-        s"<td $selectedStyle>" + f.name + "</td>" +
-        "</tr>"
-    }
-
-    body += "</table>"
-
-    //println(body)
     (title, body)
   }
 }

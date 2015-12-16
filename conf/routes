@@ -10,6 +10,7 @@ GET        /solrchecks                                  controllers.Application.
 GET        /reports                                     controllers.Application.reports
 GET        /admin                                       controllers.Application.admin
 GET        /kb                                          controllers.Application.kb
+GET        /email                                          controllers.Application.email
 
 GET        /v1/solr/cluster/explorer/healthcheck        controllers.SolrStats.getExplorerClusterHealth(sensu:Option[Boolean])
 GET        /v1/solr/cluster/logvault/healthcheck        controllers.SolrStats.getLogvaultClusterHealth(sensu:Option[Boolean])
@@ -27,7 +28,7 @@ GET        /v1/api/client/info/single                   controllers.Client.getSi
 
 #checks tab API
 GET        /v1/api/checks/info/:mode                    controllers.LcpChecks.getChecksInfo(mode:String, id:Option[String])
-GET        /v1/api/checks/update/:id               controllers.LcpChecks.updateCheck(id:String, mps:String, name:String, interval:String, criticalThreshold:String, warningThreshold: String, waitDuration:String, status:String)
+GET        /v1/api/checks/update/:id                    controllers.LcpChecks.updateCheck(id:String, mps:String, name:String, interval:String, criticalThreshold:String, warningThreshold: String, waitDuration:String, status:String)
 
 
 #test apis
