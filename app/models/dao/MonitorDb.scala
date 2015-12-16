@@ -28,56 +28,59 @@ object MonitorDb {
   val monitorConfig = TableQuery[MonitorConfig]
 
   class LcpDefaultChecksT(tag: Tag) extends Table[DefaultCheck](tag, "LCP_DEFAULT_CHECKS") {
-    def cid = column[String]("cid", O.PrimaryKey)
-    def mps = column[String]("mps")
-    def description = column[String]("description")
-    def interval = column[String]("interval")
-    def critical_threshold = column[String]("critical_threshold")
-    def warning_threshold = column[String]("warning_threshold")
-    def threshold_unit = column[String]("threshold_unit")
-    def wait_duration = column[String]("wait_duration")
-    def status = column[String]("status")
+    def cid = column[String]("CID", O.PrimaryKey)
+    def mps = column[String]("MPS")
+    def description = column[String]("DESCRIPTION")
+    def interval = column[String]("INTERVAL")
+    def critical_threshold = column[String]("CRITICAL_THRSHOLD")
+    def warning_threshold = column[String]("WARNING_THRESHOLD")
+    def threshold_unit = column[String]("THRESHOLD_UNIT")
+    def wait_duration = column[String]("WAIT_DURATION")
+    def status = column[String]("STATUS")
+    def emailExternal = column[String]("EMAIL_EXTERNAL")
 
-    def * = (cid, mps, description, interval, critical_threshold, warning_threshold, threshold_unit, wait_duration, status) <> (DefaultCheck.tupled, DefaultCheck.unapply)
+    def * = (cid, mps, description, interval, critical_threshold, warning_threshold, threshold_unit,
+      wait_duration, status, emailExternal) <> (DefaultCheck.tupled, DefaultCheck.unapply)
   }
   val lcpDefaultChecks = TableQuery[LcpDefaultChecksT]
 
   class LcpChecksT(tag: Tag) extends Table[Check](tag, "LCP_CHECKS") {
-    def id = column[Option[Long]]("id", O.PrimaryKey, O.AutoInc)
-    def cid = column[String]("cid")
-    def mps = column[String]("mps")
-    def description = column[String]("description")
-    def interval = column[String]("interval")
-    def critical_threshold = column[String]("critical_threshold")
-    def warning_threshold = column[String]("warning_threshold")
-    def threshold_unit = column[String]("threshold_unit")
-    def wait_duration = column[String]("wait_duration")
-    def status = column[String]("status")
+    def id = column[Option[Long]]("ID", O.PrimaryKey, O.AutoInc)
+    def cid = column[String]("CID")
+    def mps = column[String]("MPS")
+    def description = column[String]("DESCRIPTION")
+    def interval = column[String]("INTERVAL")
+    def critical_threshold = column[String]("CRITICAL_THRSHOLD")
+    def warning_threshold = column[String]("WARNING_THRESHOLD")
+    def threshold_unit = column[String]("THRESHOLD_UNIT")
+    def wait_duration = column[String]("WAIT_DURATION")
+    def status = column[String]("STATUS")
+    def emailExternal = column[String]("EMAIL_EXTERNAL")
 
     def * = (id, cid, mps, description, interval, critical_threshold, warning_threshold, threshold_unit,
-            wait_duration, status) <> (Check.tupled, Check.unapply)
+            wait_duration, status, emailExternal) <> (Check.tupled, Check.unapply)
   }
   val lcpChecks = TableQuery[LcpChecksT]
 
   class LcpEventT(tag:Tag) extends Table[LCPEvent](tag, "LCP_EVENT") {
-    def id = column[Option[Long]]("id",O.PrimaryKey, O.AutoInc)
-    def parentCheckId = column[Long]("parent_checkid")
-    def sourceCheckId = column[String]("source_checkid")
-    def signature = column[String]("signature")
-    def status = column[String]("status")  //open or close
-    def name = column[String]("name")
-    def mps = column[String]("mps")
-    def h2 = column[String]("h2")
-    def loadId = column[String]("load_id")
-    def source = column[String]("source")
-    def occurredAt = column[Timestamp]("occurred_at")
-    def owner = column[String]("owner")
-    def escalationLevel = column[String]("escalation_level")
-    def bug = column[String]("bug")
-    def component = column[String]("component")
-    def closedAt = column[Timestamp]("closed_at")
-    def resolution = column[String]("resolution")
-    def kb = column[String]("kb")
+    def id = column[Option[Long]]("ID",O.PrimaryKey, O.AutoInc)
+    def parentCheckId = column[Long]("PARENT_CHECKID")
+    def sourceCheckId = column[String]("SOURCE_CHECKID")
+    def signature = column[String]("SIGNATURE")
+    def status = column[String]("STATUS")  //open or close
+    def name = column[String]("NAME")
+    def mps = column[String]("MPS")
+    def h2 = column[String]("H2")
+    def loadId = column[String]("LOAD_ID")
+    def source = column[String]("SOURCE")
+    def occurredAt = column[Timestamp]("OCCURRED_AT")
+    def owner = column[String]("OWNER")
+    def escalationLevel = column[String]("ESCALATION_LEVEL")
+    def bug = column[String]("BUG")
+    def component = column[String]("COMPONENT")
+    def closedAt = column[Timestamp]("CLOSED_AT")
+    def resolution = column[String]("RESOLUTION")
+    def kb = column[String]("KB")
 
     def * = (id, parentCheckId, sourceCheckId, signature, status, name, mps, h2, loadId, source, occurredAt, owner, escalationLevel, bug, component,
               closedAt, resolution, kb)  <> (LCPEvent.tupled, LCPEvent.unapply)
@@ -85,18 +88,32 @@ object MonitorDb {
   val lcpEvent = TableQuery[LcpEventT]
 
   class ClientT(tag:Tag) extends Table[Client](tag, "CLIENTS") {
-    def name = column[String]("name",O.PrimaryKey)
-    def group = column[String]("group")
-    def status = column[String]("status")
-    def health = column[String]("health")
-    def stashedMps = column[String]("stashed_mps")
-    def stashDuration = column[Long]("stash_duration")
+    def name = column[String]("NAME",O.PrimaryKey)
+    def group = column[String]("GROUP")
+    def status = column[String]("STATUS")
+    def health = column[String]("HEALTH")
+    def stashedMps = column[String]("STASHED_MPS")
+    def stashDuration = column[Long]("STASH_DURATION")
 
     def * = (name, group, status, health, stashedMps, stashDuration) <> (Client.tupled, Client.unapply)
   }
   val clients = TableQuery[ClientT]
 
 
+  case class CustConfig(id:Option[Long], emailMandatory:String, mps:String, emailInternal:String, emailExternal:String, skipEmailRules:String)
+  class CustConfigT(tag:Tag) extends Table[CustConfig](tag, "CUST_CONFIG") {
+    def id = column[Option[Long]]("ID", O.PrimaryKey, O.AutoInc)
+    def mps = column[String]("MPS")
+    def emailMandatory = column[String]("EMAIL_MANDATORY")
+    def emailInternal = column[String]("EMAIL_INTERNAL")
+    def emailExternal = column[String]("EMAIL_EXTERNAL")
+    def skipEmailRules = column[String]("SKIP_EMAIL_RULES")
+
+    def * = (id, mps, emailMandatory, emailInternal, emailExternal, skipEmailRules) <> (CustConfig.tupled, CustConfig.unapply)
+  }
+  val custConfig = TableQuery[CustConfigT]
+
+/*
 
   //separate Db for emails...move to to FS later
   val emailH2 = Play.current.configuration.getString("monitor_email_h2_host") match {
@@ -104,6 +121,7 @@ object MonitorDb {
     case None => Constants.DEFAULT_EMAIL_DB
   }
   val emailDbConn:DatabaseDef = Connections.getH2(emailH2)
+*/
 
   class EmailEventT(tag:Tag) extends Table[EmailEvent](tag, "EMAIL_EVENT") {
     def id = column[Option[Long]]("ID",O.PrimaryKey, O.AutoInc)
@@ -133,17 +151,13 @@ object MonitorDb {
 
 
   def createTables() = {
-    val tables = List(lcpDefaultChecks, lcpChecks, monitorConfig, lcpEvent, clients, emailEvent, emailOps)
+    val tables = List(lcpDefaultChecks, lcpChecks, monitorConfig, lcpEvent, clients, emailEvent, emailOps, custConfig)
     tables.foreach(t =>
       try {
         val tableName = t.baseTableRow.tableName
         Logger.info(s"Creating monitordb table: $tableName")
 
-        if(tableName.startsWith("EMAIL")) {
-          emailDbConn withDynSession {  t.ddl.create }
-        } else {
-          dbConn withDynSession {  t.ddl.create }
-        }
+        dbConn withDynSession {  t.ddl.create }
 
       } catch  {
         case e:Exception =>
@@ -164,8 +178,8 @@ object MonitorDb {
 
     def initLcpDefaultChecks = {
       val rows = List(
-        DefaultCheck("lcp-c01", "default", "File stuck in seen", "300", "900", "300", "time", "0", "enabled"),
-        DefaultCheck("lcp-c02", "default", "File stuck in parsing", "300", "900", "300", "time", "0", "enabled")
+        DefaultCheck("lcp-c01", "default", "File stuck in seen", "300", "900", "300", "time", "0", "enabled", "0"),
+        DefaultCheck("lcp-c02", "default", "File stuck in parsing", "300", "900", "300", "time", "0", "enabled", "0")
       )
       rows.foreach(r =>
         try {
@@ -231,36 +245,36 @@ object MonitorDb {
   }
 
   def updateLcpCheck(id:String, mps:String, name:String, interval:String, criticalThreshold:String,
-                     warningThreshold:String, waitDuration:String, status:String) = dbConn withDynSession {
+                     warningThreshold:String, waitDuration:String, status:String, emailExternal:String) = dbConn withDynSession {
     mps.toUpperCase match {
       case "DEFAULT" =>
         //this will only update default checks so that only future checks see updated values. existing checks will work with existing
         lcpDefaultChecks.filter(_.cid === id)
-          .map(r => (r.description, r.interval, r.critical_threshold, r.warning_threshold, r.wait_duration, r.status))
-          .update(name, interval, criticalThreshold, warningThreshold, waitDuration, status)
+          .map(r => (r.description, r.interval, r.critical_threshold, r.warning_threshold, r.wait_duration, r.status, r.emailExternal))
+          .update(name, interval, criticalThreshold, warningThreshold, waitDuration, status, emailExternal)
 
       case "ALL" =>
         //this update all default + MPS checks
         lcpDefaultChecks.filter(_.cid === id)
-          .map(r => (r.description, r.interval, r.critical_threshold, r.warning_threshold, r.wait_duration, r.status))
-          .update(name, interval, criticalThreshold, warningThreshold, waitDuration, status)
+          .map(r => (r.description, r.interval, r.critical_threshold, r.warning_threshold, r.wait_duration, r.status, r.emailExternal))
+          .update(name, interval, criticalThreshold, warningThreshold, waitDuration, status, emailExternal)
 
         lcpChecks.filter(_.cid === id)
-          .map(r => (r.description, r.interval, r.critical_threshold, r.warning_threshold, r.wait_duration, r.status))
-          .update(name, interval, criticalThreshold, warningThreshold, waitDuration, status)
+          .map(r => (r.description, r.interval, r.critical_threshold, r.warning_threshold, r.wait_duration, r.status, r.emailExternal))
+          .update(name, interval, criticalThreshold, warningThreshold, waitDuration, status, emailExternal)
 
       case _ =>
         //this case updates a single MPS
         lcpChecks.filter(_.id === id.toLong)
-          .map(r => (r.description, r.interval, r.critical_threshold, r.warning_threshold, r.wait_duration, r.status))
-          .update(name, interval, criticalThreshold, warningThreshold, waitDuration, status)
+          .map(r => (r.description, r.interval, r.critical_threshold, r.warning_threshold, r.wait_duration, r.status, r.emailExternal))
+          .update(name, interval, criticalThreshold, warningThreshold, waitDuration, status, emailExternal)
     }
   }
 
 
   def insertCheck(mps:String, dc:DefaultCheck) = dbConn withDynSession {
     val c = Check(None, dc.cid, mps, dc.description, dc.interval, dc.critical_threshold, dc.warning_threshold,
-      dc.threshold_unit, dc.wait_duration, dc.status)
+      dc.threshold_unit, dc.wait_duration, dc.status, dc.emailExternal)
     lcpChecks.insert(c)
   }
 
@@ -314,12 +328,12 @@ object MonitorDb {
 
 
   def insertEventEmail(row:EmailEvent) = {
-    emailDbConn withDynSession {
+    dbConn withDynSession {
       emailEvent.insert(row)
     }
   }
 
-  def updateMailSentCount(category:String, id:Long) = emailDbConn withDynSession {
+  def updateMailSentCount(category:String, id:Long) = dbConn withDynSession {
     category.toUpperCase match {
       case "EVENT" =>
         val count = emailEvent.filter(_.id === id).map(r => r.sentCount).first + 1
@@ -333,7 +347,7 @@ object MonitorDb {
   }
 
   def getUnsentEmail(category:String) = {
-    emailDbConn withDynSession {
+    dbConn withDynSession {
       category.toUpperCase match {
         case "EVENT" =>
           emailEvent.filter(_.sentCount === 0)

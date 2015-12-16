@@ -26,7 +26,7 @@ object Init {
     Akka.system.scheduler.schedule(0 seconds, CHECKS_HEARTBEAT seconds)(models.checks.Schedule.runAllChecks)
 
     val EMAIL_HEARTBEAT = 10
-    Logger.info(s"Setting up email scheduler with interval = $EMAIL_HEARTBEAT seconds")
+    Logger.info(s"Setting up custconfig scheduler with interval = $EMAIL_HEARTBEAT seconds")
     Akka.system.scheduler.schedule(0 seconds, EMAIL_HEARTBEAT seconds)(models.notification.SendMail.sendAllMails)
 
   }

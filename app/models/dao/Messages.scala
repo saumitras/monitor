@@ -4,10 +4,11 @@ import java.sql.Timestamp
 
 object Messages {
   case class DefaultCheck(cid:String, mps:String, description:String, interval:String, critical_threshold:String,
-                          warning_threshold:String, threshold_unit:String, wait_duration:String, status:String)
+                          warning_threshold:String, threshold_unit:String, wait_duration:String, status:String,
+                          emailExternal:String)
   case class Check(id:Option[Long], cid:String, mps:String, description:String, interval:String,
                    critical_threshold:String, warning_threshold:String, threshold_unit:String,
-                   wait_duration:String, status:String)
+                   wait_duration:String, status:String, emailExternal:String)
   case class FileStuckInSeen(mps:String, loadId:Long, node:String, ts:Timestamp, obs_ts:Timestamp,
                              seen:Timestamp, fileType:Byte, name:String)
   case class FileStuckInParse(mps:String, loadId:Long, node:String, ts:Timestamp, obs_ts:Timestamp,

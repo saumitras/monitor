@@ -54,8 +54,8 @@ object Application extends Controller {
     Ok(views.html.kb(""))
   }
 
-  def email = Action {
-    Ok(views.html.email(""))
+  def custconfig = Action {
+    Ok(views.html.custconfig(""))
   }
 
 
@@ -68,8 +68,8 @@ object Application extends Controller {
   def sendMail() = {
     import play.api.libs.mailer._
 
-    val email = Email(
-      "Simple email",
+    val custconfig = Email(
+      "Simple custconfig",
       "saumitra.srivastav7@gmail.com",
       Seq("saumitra.srivastav7@gmail.com","saumitra.srivastav@glassbeam.com"),
       // adds attachment
@@ -86,7 +86,7 @@ object Application extends Controller {
         "</body>" +
         "</html>")
     )
-    MailerPlugin.send(email)
+    MailerPlugin.send(custconfig)
   }
 */
 }

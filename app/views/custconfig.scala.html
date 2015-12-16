@@ -7,7 +7,7 @@
     @snip_headerbar()
 
     <script>
-       $('#header-tab-email').addClass("active");
+       $('#header-tab-custconfig').addClass("active");
     </script>
 
 
@@ -20,8 +20,8 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="form-group form-inline">
-                            <label for="lcp-email-current-mps">Select Customer</label>
-                            <select class="form-control" id="lcp-email-current-mps">
+                            <label for="lcp-custconfig-current-mps">Select Customer</label>
+                            <select class="form-control" id="lcp-custconfig-current-mps">
                                 <option value="default" selected="selected">Default</option>
                             </select>
                         </div>
@@ -30,13 +30,13 @@
 
                 <hr>
 
-                <h4><span class="style2" id="lcp-email-heading1">Default</span></h4>
+                <h4><span class="style2" id="lcp-custconfig-heading1">Default</span></h4>
 
                 <div class="row">
                     <div class="col-md-12">
 
                         <div class="parent-l1">
-                            <table id="lcp-email-table-custconfig"
+                            <table id="lcp-custconfig-table-custconfig"
                             data-sort-name="config"
                             data-sort-order="desc"
                             data-search="true"
@@ -63,7 +63,7 @@
 
 
 
-    <div class="modal" id="lcp-email-edit-popup1" event-id="0" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
+    <div class="modal" id="lcp-custconfig-edit-popup1" event-id="0" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -145,6 +145,6 @@
 
     </div>
 
-    <script src="@routes.Assets.at("javascripts/app/email.js")" type="text/javascript"></script>
+    <script src="@routes.Assets.at("javascripts/app/custconfig.js")" type="text/javascript"></script>
 
 }

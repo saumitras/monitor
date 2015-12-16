@@ -8,7 +8,7 @@ import play.api.Logger
 
 object SendMail {
 
-  //get all unsent email from EMail_event and email_ops table and send it
+  //get all unsent custconfig from EMail_event and email_ops table and send it
 
   def sendAllMails() = {
     sendUnsentMail("event")
@@ -27,7 +27,7 @@ object SendMail {
   }
 
   def sendMail(recipients:Seq[String], title:String, body:String):String = {
-    println("Sending email to " + recipients)
+    println("Sending custconfig to " + recipients)
     //println("Title:\n" + title + "\nBody\n" + body)
     //return ""
     val email = Email(
@@ -44,7 +44,7 @@ object SendMail {
   def sendMailOld() = {
 
     val email = Email(
-      "Simple email",
+      "Simple custconfig",
       "saumitra.srivastav7@gmail.com",
       Seq("saumitra.srivastav7@gmail.com","saumitra.srivastav@glassbeam.com"),
       // adds attachment

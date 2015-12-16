@@ -19,6 +19,7 @@ object LcpChecks extends Controller {
           "warning_threshold" -> c.warning_threshold,
           "threshold_unit" -> c.threshold_unit,
           "wait_duration" -> c.wait_duration,
+          "emailExternal" -> c.emailExternal,
           "status" -> c.status
         )
       )
@@ -39,6 +40,7 @@ object LcpChecks extends Controller {
           "warning_threshold" -> c.warning_threshold,
           "threshold_unit" -> c.threshold_unit,
           "wait_duration" -> c.wait_duration,
+          "emailExternal" -> c.emailExternal,
           "status" -> c.status
         )
       )
@@ -65,9 +67,9 @@ object LcpChecks extends Controller {
 
 
   def updateCheck(id:String, mps:String, name:String, interval:String, criticalThreshold:String,
-                  warningThreshold:String, waitDuration:String, status:String) = Action {
+                  warningThreshold:String, waitDuration:String, status:String, emailExternal:String) = Action {
 
-    val result = models.checks.Tasks.updateLcpCheck(id, mps, name, interval, criticalThreshold, warningThreshold, waitDuration, status)
+    val result = models.checks.Tasks.updateLcpCheck(id, mps, name, interval, criticalThreshold, warningThreshold, waitDuration, status, emailExternal)
     Ok(result)
 
   }

@@ -115,6 +115,7 @@ var LcpChecksData = function() {
             var warningThreshold = row.warning_threshold;
             var waitDuration = row.wait_duration;
             var status = row.status;
+            var emailExternal = row.emailExternal;
 
             $('#lcp-checks-edit-popup').find(".check-mps").html(mps);
             $('#lcp-checks-edit-popup').find(".check-id").val(id);
@@ -124,6 +125,7 @@ var LcpChecksData = function() {
             $('#lcp-checks-edit-popup').find(".check-warning-threshold").val(warningThreshold);
             $('#lcp-checks-edit-popup').find(".check-wait-duration").val(waitDuration);
             $('#lcp-checks-edit-popup').find('input[name="check-status"][value="' + status + '"]').prop('checked',true);
+            $('#lcp-checks-edit-popup').find('input[name="check-external-email"][value="' + emailExternal + '"]').prop('checked',true);
 
 
             $('#lcp-checks-edit-popup').modal('show');
@@ -166,6 +168,8 @@ var LcpChecksData = function() {
         var warningThreshold = $('#lcp-checks-edit-popup').find(".check-warning-threshold").val();
         var waitDuration = $('#lcp-checks-edit-popup').find(".check-wait-duration").val();
         var status =  $('#lcp-checks-edit-popup').find('input[name="check-status"]:checked').val();
+        var emailExternal =  $('#lcp-checks-edit-popup').find('input[name="check-external-email"]:checked').val();
+
 
         return {
             "id":id,
@@ -175,7 +179,8 @@ var LcpChecksData = function() {
             "criticalThreshold":criticalThreshold,
             "warningThreshold": warningThreshold,
             "waitDuration":waitDuration,
-            "status":status
+            "status":status,
+            "emailExternal":emailExternal
         };
 
     }
@@ -210,6 +215,7 @@ var LcpChecksData = function() {
                         "warning_threshold":value['warning_threshold'],
                         "wait_duration": value['wait_duration'],
                         "threshold_unit":value['threshold_unit'],
+                        "emailExternal":value['emailExternal'],
                         "status":value['status'],
                         "actions":"<a href='#' mps='" + mps  +"' id='" + value['id'] + "' cid='" + value['cid'] + "' " +
                                     " class='lcp-check-edit'>Edit</a>"

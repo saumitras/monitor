@@ -46,11 +46,12 @@
                                     <tr>
                                         <th data-field="cid" data-sortable="true">ID</th>
                                         <th data-field="name" data-sortable="true">Name</th>
-                                        <th data-field="interval" data-sortable="true">Check Interval(seconds)</th>
+                                        <th data-field="interval" data-sortable="true">Check Interval</th>
                                         <th data-field="critical_threshold" data-sortable="true">Critical Threshold</th>
                                         <th data-field="warning_threshold" data-sortable="true">Warning Threshold</th>
-                                        <th data-field="wait_duration" data-sortable="true">Wait Duration(seconds)</th>
+                                        <th data-field="wait_duration" data-sortable="true">Wait Duration</th>
                                         <th data-field="threshold_unit" data-sortable="true">Threshold Unit</th>
+                                        <th data-field="emailExternal" data-sortable="true">Allow External Email</th>
                                         <th data-field="status" data-sortable="true">Status</th>
                                         <th data-field="actions" data-sortable="true">Actions</th>
                                     </tr>
@@ -70,11 +71,12 @@
                                         <th data-field="id" data-sortable="true">ID</th>
                                         <th data-field="cid" data-sortable="true">Parent CheckID</th>
                                         <th data-field="name" data-sortable="true">Name</th>
-                                        <th data-field="interval" data-sortable="true">Check Interval(seconds)</th>
+                                        <th data-field="interval" data-sortable="true">Check Interval</th>
                                         <th data-field="critical_threshold" data-sortable="true">Critical Threshold</th>
                                         <th data-field="warning_threshold" data-sortable="true">Warning Threshold</th>
-                                        <th data-field="wait_duration" data-sortable="true">Wait Duration(seconds)</th>
+                                        <th data-field="wait_duration" data-sortable="true">Wait Duration</th>
                                         <th data-field="threshold_unit" data-sortable="true">Threshold Unit</th>
+                                        <th data-field="emailExternal" data-sortable="true">Allow External Email</th>
                                         <th data-field="status" data-sortable="true">Status</th>
                                         <th data-field="actions" data-sortable="true">Actions</th>
                                     </tr>
@@ -144,6 +146,14 @@
                             <label class="col-sm-4 control-label">Wait Duration</label>
                             <div class="col-sm-6">
                                 <input class="form-control input-sm check-wait-duration" type="text"   />
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">Enable External Email</label>
+                            <div class="col-sm-6">
+                                <label class="radio-inline"> <input type="radio" name="check-external-email" value="1">Yes</label>
+                                <label class="radio-inline"> <input type="radio" name="check-external-email" value="0">No</label>
                             </div>
                         </div>
 
