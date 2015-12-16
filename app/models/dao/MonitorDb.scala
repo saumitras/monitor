@@ -100,7 +100,6 @@ object MonitorDb {
   val clients = TableQuery[ClientT]
 
 
-  case class CustConfig(id:Option[Long], emailMandatory:String, mps:String, emailInternal:String, emailExternal:String, skipEmailRules:String)
   class CustConfigT(tag:Tag) extends Table[CustConfig](tag, "CUST_CONFIG") {
     def id = column[Option[Long]]("ID", O.PrimaryKey, O.AutoInc)
     def mps = column[String]("MPS")
@@ -121,18 +120,27 @@ object MonitorDb {
     case None => Constants.DEFAULT_EMAIL_DB
   }
   val emailDbConn:DatabaseDef = Connections.getH2(emailH2)
+   case class EmailEvent(id:Option[Long], eventId:Long, mps:String, titleInternal:String, titleExternal:String,
+                        emailMandatory:String, emailInternal:String, emailExternal:String, sentCount:Int,
+                        bodyInternal:String, bodyExternal:String)
+
 */
 
   class EmailEventT(tag:Tag) extends Table[EmailEvent](tag, "EMAIL_EVENT") {
     def id = column[Option[Long]]("ID",O.PrimaryKey, O.AutoInc)
     def eventId = column[Long]("EVENT_ID")
     def mps = column[String]("MPS")
-    def title = column[String]("TITLE")
-    def recipient = column[String]("RECIPIENT")
+    def titleInternal = column[String]("TITLE_INTERNAL")
+    def titleExternal = column[String]("TITLE_EXTERNAL")
+    def emailMandatory = column[String]("EMAIL_MANDATORY")
+    def emailInternal = column[String]("EMAIL_INTERNAL")
+    def emailExternal = column[String]("EMAIL_EXTERNAL")
     def sentCount = column[Int]("SENT_COUNT")
-    def body = column[String]("BODY")
+    def bodyInternal = column[String]("BODY_INTERNAL")
+    def bodyExternal = column[String]("BODY_EXTERNAL")
 
-    def * = (id, eventId, mps, title, recipient, sentCount, body)  <> (EmailEvent.tupled, EmailEvent.unapply)
+    def * = (id, eventId, mps, titleInternal, titleExternal, emailMandatory, emailInternal, emailExternal,
+      sentCount, bodyInternal, bodyExternal)  <> (EmailEvent.tupled, EmailEvent.unapply)
   }
   val emailEvent = TableQuery[EmailEventT]
 
@@ -185,6 +193,22 @@ object MonitorDb {
         try {
           dbConn withDynSession {
             lcpDefaultChecks.insert(r)
+          }.run
+        } catch {
+          case ex:org.h2.jdbc.JdbcSQLException =>
+            Logger.warn(ex.getMessage)
+        }
+      )
+    }
+
+    def initCustomerConfig = {
+      val rows = List(
+        CustConfig(None, "storvisor/storvisor/storvisor_pod","saumitra.srivastav7@gmail.com","saumitra.srivastav@glassbeam.com","gbmonitor1@gmail.com", "load_id=2131 OR mailVelocity>10 with window=3600s")
+      )
+      rows.foreach(r =>
+        try {
+          dbConn withDynSession {
+            custConfig.insert(r)
           }.run
         } catch {
           case ex:org.h2.jdbc.JdbcSQLException =>
@@ -351,7 +375,7 @@ object MonitorDb {
       category.toUpperCase match {
         case "EVENT" =>
           emailEvent.filter(_.sentCount === 0)
-            .map(r => (r.id.get, r.recipient, r.title, r.body)).list
+            .map(r => (r.id.get, r.emailMandatory, r.titleInternal, r.bodyInternal)).list
 
         case "OPS" =>
           emailOps.filter(_.sentCount === 0)
@@ -360,6 +384,13 @@ object MonitorDb {
       }
     }
   }
+
+
+
+  def getCustomerConfig() = dbConn withDynSession {
+    custConfig.list
+  }
+
 
 }
 

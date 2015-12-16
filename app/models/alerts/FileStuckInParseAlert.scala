@@ -25,9 +25,9 @@ object FileStuckInParseAlert extends App {
       println("New event id " + newEventId)
 
       val (title, body) = getEmailBody(newEventId, files, event)
-      val recipient = models.config.CustomerConfig.get(mps,"internalEmailRecipients")
 
-      Notification.addEventNotification(newEventId, mps, recipient,title,body)
+      val isExternalAllowed = check.emailExternal == "1"
+      Notification.addEventNotification(newEventId, mps, title, title, body, body, isExternalAllowed)
 
     }
   }

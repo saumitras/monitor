@@ -1,15 +1,31 @@
 package models.notification
 
-import models.dao.Messages.{EmailEvent, LCPEvent}
+import models.dao.Messages.{EmailRecipient, EmailEvent, LCPEvent}
 import play.api.libs.mailer._
 import play.api.Play.current
 import models.dao.MonitorDb
 
 object Notification {
 
-  def addEventNotification(eventId:Long, mps:String, recipients:String, title:String, content:String) = {
+  def addEventNotification(eventId:Long, mps:String, titleInternal:String, titleExternal:String,
+                           bodyInternal:String, bodyExternal:String, isExternalAllowed:Boolean) = {
     println(s"Adding new event notification for eventId: $eventId")
-    MonitorDb.insertEventEmail(EmailEvent(None, eventId, mps, title,recipients, 0, content))
+    val recipient = models.config.CustomerConfig.getEmailRecipient(mps)
+
+
+    /*
+
+  case class EmailEvent(id:Option[Long], eventId:Long, mps:String, titleInternal:String, titleExternal:String,
+                        emailMandatory:String, emailInternal:String, emailExternal:String, sentCount:Int,
+                        bodyInternal:String, bodyExternal:String)
+     */
+
+    val externalRecipient = if(isExternalAllowed) recipient.external else ""
+
+    MonitorDb.insertEventEmail(
+      EmailEvent(None, eventId, mps, titleInternal, titleExternal, recipient.mandatory, recipient.internal,
+        externalRecipient, 0, bodyInternal, bodyExternal))
+
   }
 
 }
