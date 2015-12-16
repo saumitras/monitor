@@ -48,8 +48,6 @@ object FileChecks {
   }
 
 
-
-
   def checkFilesStuckInParse(cid:String): Unit = {
     //get all H2
     //get all customer checks
