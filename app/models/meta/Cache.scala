@@ -20,6 +20,7 @@ object Cache {
     data
   }
 
+
   def updateMpsList() = {
     for(h2 <- MonitorConfig.h2Hosts) {
       val lcpDao = LcpDb.get(h2)
@@ -29,7 +30,7 @@ object Cache {
         MPS_LIST += (h2 -> newMps)
         val toBeAdded = newMps.diff(curMps)
         toBeAdded.foreach(models.config.CustomerConfig.addDefaultCustomerConfigEntry)
-        models.config.CustomerConfig.updateCustomerConfig()
+        models.config.CustomerConfig.refreshCustomerConfig()
       }
     }
   }

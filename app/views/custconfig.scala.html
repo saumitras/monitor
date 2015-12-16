@@ -17,7 +17,7 @@
 
             <div class="col-md-12">
 
-                <div class="row">
+                @*<div class="row">
                     <div class="col-md-12">
                         <div class="form-group form-inline">
                             <label for="lcp-custconfig-current-mps">Select Customer</label>
@@ -27,25 +27,29 @@
                         </div>
                     </div>
                 </div>
-
+*@
                 <hr>
 
-                <h4><span class="style2" id="lcp-custconfig-heading1">Default</span></h4>
+                <h4><span class="style2" id="lcp-custconfig-heading1">Customer specific configuration</span></h4>
 
                 <div class="row">
                     <div class="col-md-12">
 
                         <div class="parent-l1">
-                            <table id="lcp-custconfig-table-custconfig"
-                            data-sort-name="config"
-                            data-sort-order="desc"
+                            <table id="lcp-custconfig-config-table"
+                            data-sort-name="mps"
+                            data-sort-order="asc"
                             data-search="true"
                             data-show-columns="true"
                             data-height="400">
                                 <thead>
                                     <tr>
-                                        <th data-field="config" data-sortable="true">Config</th>
-                                        <th data-field="value" data-sortable="true">Value</th>
+                                        <th data-field="mps" data-sortable="true">MPS</th>
+                                        <th data-field="emailMandatory" data-sortable="true">Mandatory Email</th>
+                                        <th data-field="emailInternal" data-sortable="true">Internal Email</th>
+                                        <th data-field="emailExternal" data-sortable="true">External Email</th>
+                                        <th data-field="skipEmailRules" data-sortable="true">Skip Email Rules</th>
+                                        <th data-field="action" data-sortable="true">Action</th>
                                     </tr>
                                 </thead>
                             </table>
@@ -63,66 +67,50 @@
 
 
 
-    <div class="modal" id="lcp-custconfig-edit-popup1" event-id="0" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
+    <div class="modal" id="lcp-custconfig-edit-popup"  tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title">Editing <span class="check-mps"></span> check</h4>
+                    <h4 class="modal-title">Editing config of <span class="custconfig-mps"></span></h4>
                 </div>
                 <div class="modal-body">
 
                     <form class="form-horizontal" role="form">
 
                         <div class="form-group">
-                            <label class="col-sm-4 control-label">Check Id</label>
-                            <div class="col-sm-6">
-                                <input class="form-control input-sm check-id" type="text"  readonly  />
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label class="col-sm-4 control-label">Name</label>
-                            <div class="col-sm-6">
-                                <input class="form-control input-sm check-name" type="text"   />
+                            <label class="col-sm-4 control-label">Mandatory Email Recipients</label>
+                            <div class="col-sm-8">
+                                <textarea class="form-control custom-control input-sm email-mandatory" rows="3" style="resize:none">
+                                </textarea>
                             </div>
                         </div>
 
 
                         <div class="form-group">
-                            <label class="col-sm-4 control-label">Check Interval</label>
-                            <div class="col-sm-6">
-                                <input class="form-control input-sm check-interval" type="text"   />
+                            <label class="col-sm-4 control-label">Internal Email Recipients</label>
+                            <div class="col-sm-8">
+                                <textarea class="form-control custom-control input-sm email-internal" rows="3" style="resize:none">
+                                </textarea>
                             </div>
                         </div>
 
+
                         <div class="form-group">
-                            <label class="col-sm-4 control-label">Critical Threshold</label>
-                            <div class="col-sm-6">
-                                <input class="form-control input-sm check-critical-threshold" type="text"   />
+                            <label class="col-sm-4 control-label">External Email Recipients</label>
+                            <div class="col-sm-8">
+                                <textarea class="form-control custom-control input-sm email-external" rows="3" style="resize:none">
+                                </textarea>
                             </div>
                         </div>
 
+
                         <div class="form-group">
-                            <label class="col-sm-4 control-label">Warning Threshold</label>
-                            <div class="col-sm-6">
-                                <input class="form-control input-sm check-warning-threshold" type="text"   />
+                            <label class="col-sm-4 control-label">Skip Email Rules</label>
+                            <div class="col-sm-8">
+                                <input class="form-control input-sm skip-email-rules" type="text"   />
                             </div>
                         </div>
 
-                        <div class="form-group">
-                            <label class="col-sm-4 control-label">Wait Duration</label>
-                            <div class="col-sm-6">
-                                <input class="form-control input-sm check-wait-duration" type="text"   />
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label class="col-sm-4 control-label">Status</label>
-                            <div class="col-sm-6">
-                                <label class="radio-inline"> <input type="radio" name="check-status" value="enabled">Enabled</label>
-                                <label class="radio-inline"> <input type="radio" name="check-status" value="disabled">Disabled</label>
-                            </div>
-                        </div>
 
                     </form>
 
@@ -130,9 +118,7 @@
                 </div> <!-- body ends -->
 
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default check-btn-change-all-mps">Change All MPS</button>
-                    <button type="button" class="btn btn-default check-btn-change-default">Change Defaults</button>
-                    <button type="button" class="btn btn-default check-btn-change-mps">Apply Change</button>
+                    <button type="button" class="btn btn-default custconfig-btn-apply-change">Apply Change</button>
                     <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
                 </div>
             </div>

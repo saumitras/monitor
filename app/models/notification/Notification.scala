@@ -4,12 +4,13 @@ import models.dao.Messages.{EmailRecipient, EmailEvent, LCPEvent}
 import play.api.libs.mailer._
 import play.api.Play.current
 import models.dao.MonitorDb
+import  play.api.Logger
 
 object Notification {
 
   def addEventNotification(eventId:Long, mps:String, titleInternal:String, titleExternal:String,
                            bodyInternal:String, bodyExternal:String, isExternalAllowed:Boolean) = {
-    println(s"Adding new event notification for eventId: $eventId")
+    Logger.info(s"Adding new event notification for eventId: $eventId")
     val recipient = models.config.CustomerConfig.getEmailRecipient(mps)
 
 
