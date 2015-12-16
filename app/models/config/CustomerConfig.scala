@@ -1,7 +1,9 @@
 package models.config
 
-import models.dao.Messages.EmailRecipient
+import models.MonitorConfig
 import models.dao.MonitorDb
+import models.dao.Messages._
+
 import play.api.Logger
 
 object CustomerConfig {
@@ -15,8 +17,8 @@ object CustomerConfig {
   }
 
   def get(mps:String, key:String):String = {
-    val config = getMpsConfig(mps)
-    config.getOrElse(key,"")
+    val data = getMpsConfig(mps)
+    data.getOrElse(key,"")
   }
 
   def getEmailRecipient(mps:String):EmailRecipient = {
@@ -28,16 +30,24 @@ object CustomerConfig {
     val data = MonitorDb.getCustomerConfig()
     if(data.nonEmpty) {
       val newConfig = data.map(r => Map(r.mps -> Map(
-        "id" -> r.id.get.toString,
         "emailMandatory" -> r.emailMandatory,
         "emailInternal" -> r.emailInternal,
         "emailExternal" -> r.emailExternal,
         "skipEmailRules" -> r.skipEmailRules
       ))).reduce(_ ++ _)
       config = newConfig
-      Logger.info("Customer Config = " + config)
+      //Logger.info("Customer Config = " + config)
     }
 
+  }
+
+
+  def addDefaultCustomerConfigEntry(mps:String) = {
+    val defaultInternalEmail = MonitorConfig.defaultInternalEmail
+    val defaultMandatoryEmail = MonitorConfig.defaultMandatoryEmail
+
+    val row = CustConfig(mps, defaultMandatoryEmail, defaultInternalEmail, "", "")
+    MonitorDb.insertCustomerConfig(row)
   }
 
 }

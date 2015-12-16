@@ -9,7 +9,7 @@ object Global extends GlobalSettings {
   override def onStart(app: Application) {
     Logger.info("GBMonitor is starting")
 
-    Logger.info("Config " + Config.config)
+    Logger.info("Config " + MonitorConfig.config)
 
     models.meta.Init.init()
 

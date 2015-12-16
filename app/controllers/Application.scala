@@ -6,7 +6,7 @@ import play.api._
 import play.api.mvc._
 import play.api.Play.current
 import org.apache.commons.io.IOUtils
-import models.Config
+import models.MonitorConfig
 
 object Application extends Controller {
 

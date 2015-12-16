@@ -24,7 +24,7 @@ object Messages {
                         emailMandatory:String, emailInternal:String, emailExternal:String, sentCount:Int,
                         bodyInternal:String, bodyExternal:String)
   case class EmailOps(id:Option[Long], group:String, title:String, recipient:String, sentCount:Int, body:String)
-  case class CustConfig(id:Option[Long], mps:String, emailMandatory:String, emailInternal:String, emailExternal:String, skipEmailRules:String)
+  case class CustConfig(mps:String, emailMandatory:String, emailInternal:String, emailExternal:String, skipEmailRules:String)
 
 
 

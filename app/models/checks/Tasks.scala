@@ -1,6 +1,6 @@
 package models.checks
 
-import models.Config
+import models.MonitorConfig
 import models.dao.{MonitorDb, LcpDb}
 import play.api.Logger
 
@@ -10,7 +10,7 @@ object Tasks {
    * For each MPS, read all the checks from DEFAULT_LCP_CHECKS table and add them to LCP_CHECKS table
    */
   def addCustChecksFromDefault() = {
-    val h2Hosts = Config.h2Hosts
+    val h2Hosts = MonitorConfig.h2Hosts
     h2Hosts.foreach(insertNewChecks)
 
     def insertNewChecks(h2Url:String) = {
@@ -22,7 +22,7 @@ object Tasks {
 
       //get all default checks
       val dfltCheckIds = defaultLcpChecks.map(x => x.cid).toList
-      Logger.info("Default checks " + defaultLcpChecks)
+      //Logger.info("Default checks " + defaultLcpChecks)
       for (mps: String <- mpsList) {
         //get all registered checks for a MPS
         val mpsChecks = customerLcpChecks.filter(_.mps == mps).map(x => x.cid)

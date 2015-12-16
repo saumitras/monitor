@@ -2,7 +2,7 @@ package models.meta
 
 import akka.actor.ActorSystem
 import com.typesafe.config.ConfigFactory
-import models.Config
+import models.MonitorConfig
 import models.dao.MonitorDb
 import play.api.Logger
 
@@ -21,14 +21,26 @@ object Init {
     MonitorDb.createTables()
     MonitorDb.initTables()
 
-    val CHECKS_HEARTBEAT = 10
-    Logger.info(s"Setting up checks scheduler with interval = $CHECKS_HEARTBEAT seconds")
-    Akka.system.scheduler.schedule(0 seconds, CHECKS_HEARTBEAT seconds)(models.checks.Schedule.runAllChecks)
-    Akka.system.scheduler.schedule(0 seconds, CHECKS_HEARTBEAT seconds)(models.config.CustomerConfig.updateCustomerConfig())
+    val CHECKS_HEARTBEAT = 20
+    val EMAIL_HEARTBEAT = 20
+    val CACHE_UPDATE_HEARTBEAT = 10
 
-    val EMAIL_HEARTBEAT = 10
-    Logger.info(s"Setting up custconfig scheduler with interval = $EMAIL_HEARTBEAT seconds")
-    Akka.system.scheduler.schedule(0 seconds, EMAIL_HEARTBEAT seconds)(models.notification.SendMail.sendAllMails)
+    Logger.info(s"Setting up monitor-db cache update scheduler with interval = $CACHE_UPDATE_HEARTBEAT seconds")
+    Akka.system.scheduler.schedule(0 seconds, CACHE_UPDATE_HEARTBEAT seconds)(models.MonitorConfig.updateConfig)
+    Akka.system.scheduler.schedule(0 seconds, CACHE_UPDATE_HEARTBEAT seconds)(models.meta.Cache.updateMpsList)
+    Akka.system.scheduler.schedule(0 seconds, CACHE_UPDATE_HEARTBEAT seconds)(models.config.CustomerConfig.updateCustomerConfig)
+    Akka.system.scheduler.schedule(0 seconds, CACHE_UPDATE_HEARTBEAT seconds)(models.checks.Tasks.addCustChecksFromDefault)
+    Akka.system.scheduler.schedule(0 seconds, CACHE_UPDATE_HEARTBEAT seconds)(models.clients.Tasks.updateClients)
+
+    Logger.info(s"Setting up checks scheduler with interval = $CHECKS_HEARTBEAT seconds")
+
+    Akka.system.scheduler.schedule(30 seconds, CHECKS_HEARTBEAT seconds)(models.checks.Schedule.runAllChecks)
+
+
+
+    Logger.info(s"Setting up email scheduler with interval = $EMAIL_HEARTBEAT seconds")
+    Akka.system.scheduler.schedule(20 seconds, EMAIL_HEARTBEAT seconds)(models.notification.SendMail.sendAllMails)
+
 
 
 

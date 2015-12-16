@@ -125,7 +125,7 @@ class LcpH2Model(dbConn:DatabaseDef) {
   private val ContextTable = TableQuery[ContextTable]
 
   def getMps(): List[String] = dbConn withDynSession {
-    ContextTable.map(c => c.key).run.filterNot(key => key.trim.equals("loader")).toList
+    ContextTable.map(c => c.key).run.filterNot(key => key.trim.equals("loader")).toList.sorted
   }
 
   def getFilesStuckInSeen(mps:String, diff: Long):List[FileStuckInSeen] = dbConn withDynSession { //diff is time in seconds

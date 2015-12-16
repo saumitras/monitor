@@ -22,7 +22,7 @@ object FileStuckInParseAlert extends App {
         "L3", "NA", "NA",  new Timestamp(System.currentTimeMillis), "NA", "NA")
 
       val newEventId = MonitorDb.insertLcpEvent(event)
-      println("New event id " + newEventId)
+      //println("New event id " + newEventId)
 
       val (title, body) = getEmailBody(newEventId, files, event)
 

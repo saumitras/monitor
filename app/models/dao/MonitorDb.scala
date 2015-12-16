@@ -101,14 +101,13 @@ object MonitorDb {
 
 
   class CustConfigT(tag:Tag) extends Table[CustConfig](tag, "CUST_CONFIG") {
-    def id = column[Option[Long]]("ID", O.PrimaryKey, O.AutoInc)
-    def mps = column[String]("MPS")
+    def mps = column[String]("MPS", O.PrimaryKey)
     def emailMandatory = column[String]("EMAIL_MANDATORY")
     def emailInternal = column[String]("EMAIL_INTERNAL")
     def emailExternal = column[String]("EMAIL_EXTERNAL")
     def skipEmailRules = column[String]("SKIP_EMAIL_RULES")
 
-    def * = (id, mps, emailMandatory, emailInternal, emailExternal, skipEmailRules) <> (CustConfig.tupled, CustConfig.unapply)
+    def * = (mps, emailMandatory, emailInternal, emailExternal, skipEmailRules) <> (CustConfig.tupled, CustConfig.unapply)
   }
   val custConfig = TableQuery[CustConfigT]
 
@@ -203,7 +202,7 @@ object MonitorDb {
 
     def initCustomerConfig = {
       val rows = List(
-        CustConfig(None, "storvisor/storvisor/storvisor_pod","saumitra.srivastav7@gmail.com","saumitra.srivastav@glassbeam.com","gbmonitor1@gmail.com", "load_id=2131 OR mailVelocity>10 with window=3600s")
+        CustConfig("storvisor/storvisor/storvisor_pod","saumitra.srivastav7@gmail.com","saumitra.srivastav@glassbeam.com","gbmonitor1@gmail.com", "load_id=2131 OR mailVelocity>10 with window=3600s")
       )
       rows.foreach(r =>
         try {
@@ -389,6 +388,21 @@ object MonitorDb {
 
   def getCustomerConfig() = dbConn withDynSession {
     custConfig.list
+  }
+
+  def insertCustomerConfig(row:CustConfig) = dbConn withDynSession {
+    try {
+      custConfig.insert(row)
+    } catch {
+      case ex:org.h2.jdbc.JdbcSQLException =>
+        Logger.warn(ex.getMessage)
+      case ex:Exception =>
+        Logger.error("Error while adding new customer config " + ex.getStackTrace)
+    }
+  }
+
+  def updateCustomerConfig(row:CustConfig) = dbConn withDynSession {
+    custConfig.filter(_.mps === row.mps).update(row)
   }
 
 

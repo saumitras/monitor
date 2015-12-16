@@ -8,26 +8,24 @@ import play.api.Logger
 
 object SendMail {
 
-  //get all unsent custconfig from EMail_event and email_ops table and send it
-
   def sendAllMails() = {
     sendUnsentMail("event")
     sendUnsentMail("ops")
   }
 
   def sendUnsentMail(category:String) = {
-    Logger.info("Inside sendUnsentMail")
+    //Logger.info("Inside sendUnsentMail")
     val unsentEmails = MonitorDb.getUnsentEmail(category)
     for(mail <- unsentEmails) {
       //println("Sending mail. Details" + mail)
-      Logger.info(s"Sending mail. Type = $category, id=" + mail._1)
+      //Logger.info(s"Sending mail. Type = $category, id=" + mail._1)
       MonitorDb.updateMailSentCount(category,mail._1)
       sendMail(mail._2.split(",").toSeq, mail._3, mail._4)
     }
   }
 
   def sendMail(recipients:Seq[String], title:String, body:String):String = {
-    println("Sending custconfig to " + recipients)
+    //println("Sending custconfig to " + recipients)
     //println("Title:\n" + title + "\nBody\n" + body)
     //return ""
     val email = Email(
