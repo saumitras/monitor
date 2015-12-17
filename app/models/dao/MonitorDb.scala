@@ -369,20 +369,16 @@ object MonitorDb {
 
   }
 
-  def getUnsentEmail(category:String) = {
-    dbConn withDynSession {
-      category.toUpperCase match {
-        case "EVENT" =>
-          emailEvent.filter(_.sentCount === 0)
-            .map(r => (r.id.get, r.emailMandatory, r.titleInternal, r.bodyInternal)).list
-
-        case "OPS" =>
-          emailOps.filter(_.sentCount === 0)
-            .map(r => (r.id.get, r.recipient, r.title, r.body)).list
-
-      }
-    }
+  def getUnsentEventEmail() = dbConn withDynSession {
+    emailEvent.filter(_.sentCount === 0).list
+            //.map(r => (r.id.get, r.emailMandatory, r.titleInternal, r.bodyInternal)).list
   }
+
+  def getUnsentOpsEmail() = dbConn withDynSession {
+    emailOps.filter(_.sentCount === 0).list
+    //.map(r => (r.id.get, r.emailMandatory, r.titleInternal, r.bodyInternal)).list
+  }
+
 
 
 

@@ -7,6 +7,8 @@ import models.dao.MonitorDb
 import models.notification.Notification
 import play.api.Logger
 
+import scala.collection.mutable
+
 object FileStuckInParseAlert extends App {
 
   def generateAlert(h2:String, mps:String, check:Check, files:List[FileStuckInParse]) = {
@@ -24,16 +26,16 @@ object FileStuckInParseAlert extends App {
       val newEventId = MonitorDb.insertLcpEvent(event)
       //println("New event id " + newEventId)
 
-      val (title, body) = getEmailBody(newEventId, files, event)
+      val (title, bodyInternal, bodyExternal) = getEmailBody(newEventId, files, event)
+      val isExternalAllowed = check.emailExternal == "1"  //is email allowed for external(customer) email ids??
 
-      val isExternalAllowed = check.emailExternal == "1"
-      Notification.addEventNotification(newEventId, mps, title, title, body, body, isExternalAllowed)
+      Notification.addEventNotification(newEventId, mps, title, title, bodyInternal, bodyExternal, isExternalAllowed)
 
     }
   }
   //case class FileStuckInSeen(mps:String, loadId:Long, node:String, ts:Timestamp, obs_ts:Timestamp,
   //                           seen:Timestamp, fileType:Byte, name:String)
-  def getEmailBody(eventID:Long, files:List[FileStuckInParse], event:LCPEvent):(String,String) = {
+  def getEmailBody(eventID:Long, files:List[FileStuckInParse], event:LCPEvent):(String,String, String) = {
 
     val title = s"E-$eventID [${event.mps}] ${event.name} [${event.escalationLevel}] "
 
@@ -43,28 +45,53 @@ object FileStuckInParseAlert extends App {
     val count = files.size
     val loadIds = files.map(f => f.loadId).distinct
 
-    var body = s"<p>Number of files stuck in parsing: <b>$count</b><br><br>" +
-      "Total LoadID(s) = <b>" + loadIds.size + "</b><br><br>" +
-      "LoadID(s)= " + loadIds.take(MAX_LOAD_ID_TO_DISPLAY).mkString(",")
+    val commonBody = s"<p>Number of files stuck in parsing: <b>$count</b></p>" +
+      "<p>Bundle Count = <b>" + loadIds.size + "</b></p>"
 
-    if(loadIds.size > MAX_LOAD_ID_TO_DISPLAY) {
-      val diff = loadIds.size - MAX_LOAD_ID_TO_DISPLAY
-      body += s" <b>and $diff more</b>"
+
+    def getInternalBody() = {
+      var body = "<p>LoadID(s)= " + loadIds.take(MAX_LOAD_ID_TO_DISPLAY).mkString(",")
+
+      if(loadIds.size > MAX_LOAD_ID_TO_DISPLAY) {
+        val diff = loadIds.size - MAX_LOAD_ID_TO_DISPLAY
+        body += s" <b>and $diff more</b>"
+      }
+
+      body += "<p>"
+
+      body += "<br><br><h4>List of files stuck in parsing stage </h4><br>"
+
+      val tableContent = models.utils.Util.emailColsToTableRows(
+        List("LoadId", "Node", "Parser", "TS", "ObsTs", "Seen", "FileType", "Name"),
+        files.take(MAX_ROWS_TO_DISPLAY_IN_TABLE).map(x =>
+          List(x.loadId.toString, x.node, x.parser.getOrElse("NA"), x.ts.toString, x.obs_ts.toString,
+            x.seen.toString, x.fileType.toString, x.name)
+        )
+      )
+
+      body += tableContent
+
+      body
     }
 
-    body += "<br><br><h4>List of files stuck in parsing stage </h4> <br>"
 
-    val tableContent = models.utils.Util.emailColsToTableRows(
-      List("LoadId", "Node", "Parser", "TS", "ObsTs", "Seen", "FileType", "Name"),
-      files.take(MAX_ROWS_TO_DISPLAY_IN_TABLE).map(x =>
-        List(x.loadId.toString, x.node, x.parser.getOrElse("NA"), x.ts.toString, x.obs_ts.toString,
-              x.seen.toString, x.fileType.toString, x.name)
+    def getExternalBody() = {
+      var body = "<br><br><h4>List of files stuck in parsing stage </h4><br>"
+
+      val tableContent = models.utils.Util.emailColsToTableRows(
+        List("Observation Time", "Seen Time", "FileName"),
+        files.take(MAX_ROWS_TO_DISPLAY_IN_TABLE).map(x =>
+          List(x.obs_ts.toString, x.seen.toString, x.name)
+        )
       )
-    )
 
-    body += tableContent
+      body += tableContent
 
-    (title, body)
+      body
+    }
+
+
+    (title, commonBody + getInternalBody(), commonBody + getExternalBody())
   }
 
 

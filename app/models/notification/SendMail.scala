@@ -9,30 +9,44 @@ import play.api.Logger
 object SendMail {
 
   def sendAllMails() = {
-    sendUnsentMail("event")
-    sendUnsentMail("ops")
+    sendUnsentEventMail()
   }
 
-  def sendUnsentMail(category:String) = {
+  def sendUnsentEventMail() = {
     //Logger.info("Inside sendUnsentMail")
-    val unsentEmails = MonitorDb.getUnsentEmail(category)
+    val unsentEmails = MonitorDb.getUnsentEventEmail()
     for(mail <- unsentEmails) {
-      //println("Sending mail. Details" + mail)
-      //Logger.info(s"Sending mail. Type = $category, id=" + mail._1)
-      MonitorDb.updateMailSentCount(category,mail._1)
-      sendMail(mail._2.split(",").toSeq, mail._3, mail._4)
+      val bodyInternal = mail.bodyInternal
+      val bodyExternal = mail.bodyExternal
+      val titleInternal = mail.titleInternal
+      val titleExternal = mail.titleExternal
+      val emailMandatory = mail.emailMandatory.split(",").toSeq
+      val emailInternal = mail.emailInternal.split(",").toSeq
+      val emailExternal = mail.emailExternal.split(",").toSeq
+
+      try {
+        sendMail(bodyInternal, titleInternal, emailInternal, emailMandatory)
+        sendMail(bodyExternal, titleExternal, emailExternal, emailMandatory)
+        MonitorDb.updateMailSentCount("EVENT",mail.id.get)
+      } catch {
+        case ex:Exception =>
+          Logger.error("Exception while sending email. " + ex.getMessage)
+      }
+
+      //sendMail(mail._2.split(",").toSeq, mail._3, mail._4)
     }
   }
 
-  def sendMail(recipients:Seq[String], title:String, body:String):String = {
+  def sendMail(body:String, title:String, recipientsTo:Seq[String], recipientCC:Seq[String]):String = {
     //println("Sending custconfig to " + recipients)
     //println("Title:\n" + title + "\nBody\n" + body)
-    //return ""
+
+
     val email = Email(
-      title,
-      "Glassbeam Monitor <gbmonitor1@gmail.com>",
-      recipients,
-      //Seq("saumitra.srivastav7@gmail.com","saumitra.srivastav@glassbeam.com"),
+      subject = title,
+      from = "Glassbeam Monitor <gbmonitor1@gmail.com>",
+      to = recipientsTo.filter(_.size != 0),
+      cc = recipientCC.filter(_.size != 0),
       bodyHtml = Some(body)
     )
     MailerPlugin.send(email)
