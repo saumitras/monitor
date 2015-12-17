@@ -26,17 +26,17 @@ object FileStuckInSeenAlert {
       val newEventId = MonitorDb.insertLcpEvent(event)
       //println("New event id " + newEventId)
 
-      val (title, body) = getEmailBody(newEventId, files, event)
+      val (title, bodyInternal, bodyExternal) = getEmailBody(newEventId, files, event)
 
       val isExternalAllowed = check.emailExternal == "1"
 
-      Notification.addEventNotification(newEventId, mps, title, title, body, body, isExternalAllowed)
+      Notification.addEventNotification(newEventId, mps, title, title, bodyInternal, bodyExternal, isExternalAllowed)
 
     }
   }
 //case class FileStuckInSeen(mps:String, loadId:Long, node:String, ts:Timestamp, obs_ts:Timestamp,
 //                           seen:Timestamp, fileType:Byte, name:String)
-  def getEmailBody(eventId:Long, files:List[FileStuckInSeen], event:LCPEvent):(String,String) = {
+  def getEmailBody(eventId:Long, files:List[FileStuckInSeen], event:LCPEvent):(String,String,String) = {
 
     val title = s"E-$eventId [${event.mps}] ${event.name} [${event.escalationLevel}] "
 
@@ -46,28 +46,49 @@ object FileStuckInSeenAlert {
     val count = files.size
     val loadIds = files.map(f => f.loadId).distinct
 
-    var body = s"<p>Number of files stuck in seen: <b>$count</b><br><br>" +
-      "Total LoadID(s) = <b>" + loadIds.size + "</b><br><br>" +
-      "LoadID(s)= " + loadIds.take(MAX_LOAD_ID_TO_DISPLAY).mkString(",")
+    val commonBody = s"<p>Number of files stuck in seen: <b>$count</b></p>" +
+      "<p>Bundle Count = <b>" + loadIds.size + "</b></p>"
 
-    if(loadIds.size > MAX_LOAD_ID_TO_DISPLAY) {
-      val diff = loadIds.size - MAX_LOAD_ID_TO_DISPLAY
-      body += s" <b>and $diff more</b>"
+    def getInternalBody():String = {
+      var body = "<p>LoadID( s)= " + loadIds.take(MAX_LOAD_ID_TO_DISPLAY).mkString(",")
+      if(loadIds.size > MAX_LOAD_ID_TO_DISPLAY) {
+        val diff = loadIds.size - MAX_LOAD_ID_TO_DISPLAY
+        body += s" <b>and $diff more</b>"
+      }
+      body += "</p>"
+      body += "<h4>List of files stuck in seen stage </h4>"
+
+      val tableContent = models.utils.Util.emailColsToTableRows(
+        List("LoadId", "Node", "TS", "ObsTs", "Seen", "FileType", "Name"),
+        files.take(MAX_ROWS_TO_DISPLAY_IN_TABLE).map(x =>
+          List(x.loadId.toString, x.node, x.ts.toString, x.obs_ts.toString, x.seen.toString,
+            x.fileType.toString, x.name)
+        )
+      )
+
+      body += tableContent
+
+      body
+
     }
 
-    body += "<br><br><h4>List of files stuck in seen stage </h4> <br>"
+    def getExternalBody():String = {
 
-    val tableContent = models.utils.Util.emailColsToTableRows(
-      List("LoadId", "Node", "TS", "ObsTs", "Seen", "FileType", "Name"),
-      files.take(MAX_ROWS_TO_DISPLAY_IN_TABLE).map(x =>
-        List(x.loadId.toString, x.node, x.ts.toString, x.obs_ts.toString, x.seen.toString,
-          x.fileType.toString, x.name)
+      var body = "<h4>List of files stuck in seen stage </h4> <br>"
+      val tableContent = models.utils.Util.emailColsToTableRows(
+        List("Observation Time", "Filename"),
+        files.take(MAX_ROWS_TO_DISPLAY_IN_TABLE).map(x =>
+          List(x.obs_ts.toString, x.name)
+        )
       )
-    )
+      body += tableContent
 
-    body += tableContent
+      body
 
-    (title, body)
+    }
+
+    (title, commonBody + getInternalBody(), commonBody + getExternalBody())
+
   }
 }
 
