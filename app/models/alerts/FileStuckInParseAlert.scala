@@ -7,7 +7,6 @@ import models.dao.MonitorDb
 import models.notification.Notification
 import play.api.Logger
 
-import scala.collection.mutable
 
 object FileStuckInParseAlert extends App {
 

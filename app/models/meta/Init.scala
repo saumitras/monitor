@@ -21,9 +21,9 @@ object Init {
     MonitorDb.createTables()
     MonitorDb.initTables()
 
-    val CHECKS_HEARTBEAT = 30
-    val EMAIL_HEARTBEAT = 30
-    val CACHE_UPDATE_HEARTBEAT = 30
+    val CHECKS_HEARTBEAT = 30000
+    val EMAIL_HEARTBEAT = 30000
+    val CACHE_UPDATE_HEARTBEAT = 3000
 
     Logger.info(s"Setting up monitor-db cache update scheduler with interval = $CACHE_UPDATE_HEARTBEAT seconds")
     Akka.system.scheduler.schedule(0 seconds, CACHE_UPDATE_HEARTBEAT seconds)(models.MonitorConfig.updateConfig)

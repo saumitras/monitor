@@ -1,9 +1,42 @@
 $(document).ready(function(){
-
-    initBarChart1();
-    initBarChart2();
-
+    //new SummaryTiles();
+    initBarChart1()
+    initBarChart2()
 });
+
+
+var Summary = function() {
+
+    var summaryData = {};
+    function updateTiles() {
+        $('#tile1').html()
+    }
+
+    function updateCharts() {
+
+    }
+
+    function updateSummaryData(mode) {
+
+        $.when(ajax_getSummary()).then(function(){
+
+        });
+    }
+
+
+    function ajax_getSummary(data) {
+        return ($.ajax({
+            type: "GET",
+            url: "v1/api/summary/all",
+            data: data
+        }))
+    }
+
+};
+
+
+
+
 
 
 function initBarChart1() {

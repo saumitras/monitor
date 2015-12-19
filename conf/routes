@@ -17,6 +17,10 @@ GET        /v1/solr/cluster/logvault/healthcheck        controllers.SolrStats.ge
 
 GET        /v1/api/admin/client                         controllers.Admin.client(action:String, group:String, nodes:String)
 
+#summary tab API
+
+GET         /v1/api/summary/all                         controllers.Stats.getSummary()
+
 #event tab APIs
 GET        /v1/api/event/lcp/info/all                   controllers.LcpEvents.getAllLcpEvents()
 GET        /v1/api/event/lcp/close/:id                  controllers.LcpEvents.closeLcpEvent(id:Long, kb:String, closed_at:String, bug:String, component:String, owner:String)
