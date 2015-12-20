@@ -5,6 +5,7 @@ $(document).ready(function() {
 
 var LcpEventData = function() {
 
+
     var eventDataOpen = undefined;
     var eventDataClosed = undefined;
     var members = ['Saumitra','Bharath','Aklank','Raj'];
@@ -114,7 +115,7 @@ var LcpEventData = function() {
                         load_id: (value.load_id).replace(/,/g,', '),
                         occurred_at: value.occurred_at,
                         kb: value.kb,
-                        component: value.component,
+                        component: EVENT_COMPONENT_LABELS[value.component],
                         escalation_level: value.escalation_level
                     };
 

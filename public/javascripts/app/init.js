@@ -41,3 +41,11 @@ function getDateTime() {
     var dateTime = year+'-'+month+'-'+day+' '+hour+':'+minute+':'+second;
     return dateTime;
 }
+
+var EVENT_COMPONENT_LABELS = {
+    "platform": "Platform",
+    "solution": "Solutions",
+    "ops": "DevOps",
+    "thirdparty": "Third Party",
+    "unidentified": "Not Yet Identified"
+};
