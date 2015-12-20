@@ -25,8 +25,8 @@ object SendMail {
       val emailExternal = mail.emailExternal.split(",").toSeq
 
       try {
-        sendMail(bodyInternal, titleInternal, emailInternal, emailMandatory)
-        sendMail(bodyExternal, titleExternal, emailExternal, emailMandatory)
+        //sendMail(bodyInternal, titleInternal, emailInternal, emailMandatory)
+        //sendMail(bodyExternal, titleExternal, emailExternal, emailMandatory)
         MonitorDb.updateMailSentCount("EVENT",mail.id.get)
       } catch {
         case ex:Exception =>

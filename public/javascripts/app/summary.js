@@ -1,13 +1,13 @@
 $(document).ready(function(){
     new Summary();
-    //initBarChart1()
-    //initBarChart2()
+    initBarChart1()
+    initBarChart2()
 });
 
+var summaryData = undefined;
 
 var Summary = function() {
 
-    var summaryData = undefined;
 
     //scheduler which will kill itself after init is done
     updateSummaryData();
@@ -24,10 +24,19 @@ var Summary = function() {
         for(var i=1;i<=7;i++) {
             $('#tile' + i).html(summaryData['tile' + i])
         }
+
     }
 
     function updateCharts() {
+        var chart1 = $('#summary-chart1-div').highcharts();
+        chart1.xAxis[0].setCategories(summaryData.chart1.mpsList , true, true);
+        chart1.series[0].setData(summaryData.chart1.openData);
+        chart1.series[1].setData(summaryData.chart1.closedData);
 
+        var chart2 = $('#summary-chart2-div').highcharts();
+        chart2.xAxis[0].setCategories(summaryData.chart2.mpsList , true, true);
+        chart2.series[0].setData(summaryData.chart2.openData);
+        chart2.series[1].setData(summaryData.chart2.closedData);
     }
 
     function resetData() {
@@ -89,7 +98,48 @@ var Summary = function() {
             summaryData.tile6 = tile6;
             summaryData.tile7 = tile7;
 
+
+            //setting data for Events-By-Customer chart
+            var openEventsByMps = data['openEventsByMps'];
+            var closedEventsByMps = data['closedEventsByMps'];
+            var mpsList = (Object.keys(openEventsByMps)).merge(Object.keys(closedEventsByMps));
+
+            var openData = [];
+            var closedData = [];
+            $.each(mpsList, function(index,mps) {
+                openData.push(openEventsByMps[mps] == undefined ? 0 : openEventsByMps[mps]);
+                closedData.push((closedEventsByMps[mps] == undefined ? 0 : closedEventsByMps[mps]));
+            });
+
+            summaryData['chart1'] = {
+                mpsList: mpsList,
+                openData: openData,
+                closedData: closedData
+            };
+
+
+            //setting data for events-by-clients chart
+            var openEventsByClient = data['openEventsByClient'];
+            var closedEventsByClient = data['closedEventsByClient'];
+            mpsList = (Object.keys(openEventsByClient)).merge(Object.keys(closedEventsByClient));
+
+            openData = [];
+            closedData = [];
+            $.each(mpsList, function(index,mps) {
+                openData.push(openEventsByClient[mps] == undefined ? 0 : openEventsByClient[mps]);
+                closedData.push((closedEventsByClient[mps] == undefined ? 0 : closedEventsByClient[mps]));
+            });
+
+            summaryData['chart2'] = {
+                mpsList: mpsList,
+                openData: openData,
+                closedData: closedData
+            };
+
+
             resetData();
+
+
         });
 
     }
@@ -106,23 +156,22 @@ var Summary = function() {
 };
 
 
+function getChart1Template()  {
 
-
-
-
-function initBarChart1() {
-
-    $('#summary-chart1-div').highcharts({
+    var data = {
         chart: {
             type: 'bar'
         },
         credits: {
-                enabled: false
+            enabled: false
         },
         title: {
             text: 'Events per Customer'
         },
         xAxis: {
+            minTickInterval:1,
+            tickInterval: 1,
+            allowDecimals: false,
             categories: ["aruba-aruba-pod", "vce-vce-pod", "aruba-airwave-pod", "ibm-ibm-pod","ibm-ibm-v7000"]
         },
         yAxis: {
@@ -146,29 +195,32 @@ function initBarChart1() {
             name: 'Closed',
             data: [2, 2, 3, 2, 1]
         }]
-    });
+    };
 
+    return data;
 }
 
 
-function initBarChart2() {
-
-    $('#summary-chart2-div').highcharts({
+function getChart2Template() {
+    var data  = {
         chart: {
             type: 'bar'
         },
         credits: {
-                enabled: false
+            enabled: false
         },
         title: {
             text: 'Events per System'
         },
         xAxis: {
-            categories: ["lcp-01","lcp-03","lcp-09","lcp-17","lcp-19","solr-01","zk-01"]
+            minTickInterval:1,
+            tickInterval: 1,
+            allowDecimals: false,
+            categories: []//["lcp-01","lcp-03","lcp-09","lcp-17","lcp-19","solr-01","zk-01"]
         },
         yAxis: {
             min: 0,
-            title: {
+                title: {
                 text: 'Event count'
             }
         },
@@ -182,77 +234,24 @@ function initBarChart2() {
         },
         series: [{
             name: 'Open',
-            data: [5, 3, 4, 7, 2, 1, 1]
+            data: []//[5, 3, 4, 7, 2, 1, 1]
         }, {
             name: 'Closed',
-            data: [2, 2, 3, 2, 1, 1, 3]
+            data: []//[2, 2, 3, 2, 1, 1, 3]
         }]
-    });
+    };
+    return data;
+}
+
+function initBarChart1() {
+
+    $('#summary-chart1-div').highcharts(getChart1Template());
 
 }
 
 
+function initBarChart2() {
 
-function runningFormatter(value, row, index) {
-    return index;
-}
-
-function showCollectionDetails() {
-    $('#collection-details-modal').modal("show")
-}
-
-function populateCollectionTable() {
-
-    var data = [];
-
-    for(var i=1;i<200;i++) {
-        var obj = {
-            "collection": "collection " + i,
-            "state": "active",
-            "doc-count": i*100,
-            "size": i*3 + "MB",
-            "details":"<span class='details'>Details</span>"
-        }
-
-        data.push(obj);
-    }
-
-    $('#alerts-table-unack').bootstrapTable({
-        data: data
-    });
-    $('.temp-values').bootstrapTable({
-        data: data
-    });
-
-}
-
-function populateAliasTable() {
-
-
-    $.ajax({
-        'type': "GET",
-        'url': "/api/solr/alias",
-        'success':function(response) {
-            console.log(response);
-            var data = [];
-
-            response = {}
-            $.each(response, function(aliasName, collectionList) {
-                console.log(aliasName);
-                var cols = collectionList.split(",");
-
-                data.push({
-                    "alias": aliasName,
-                    "count": cols.length,
-                    "collections": cols.join(", ")
-                });
-            });
-
-            $('#table-alias').bootstrapTable({
-                data: data
-            });
-        }
-    });
-
+    $('#summary-chart2-div').highcharts(getChart2Template());
 
 }

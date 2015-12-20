@@ -33,14 +33,14 @@ object Stats extends Controller {
 
 
     def getEventByClient(events:List[LcpEventT#TableElementType], client:List[String]) = {
-      var result = Map[String, String]()
+      var result = Map[String, Int]()
       for(c <- client) {
         var count = 0
         for(e <- events) {
           if(e.source.contains(c))
             count += 1
         }
-        result += (c -> count.toString)
+        result += (c -> count)
       }
       result
     }

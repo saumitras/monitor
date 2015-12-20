@@ -49,3 +49,17 @@ var EVENT_COMPONENT_LABELS = {
     "thirdparty": "Third Party",
     "unidentified": "Not Yet Identified"
 };
+
+
+Array.prototype.merge = function(b){
+    var a = this.concat();                // clone current object
+    if(!b.push || !b.length) return a;    // if b is not an array, or empty, then return a unchanged
+    if(!a.length) return b.concat();      // if original is empty, return b
+
+    // go through all the elements of b
+    for(var i = 0; i < b.length; i++){
+        // if b's value is not in a, then add it
+        if(a.indexOf(b[i]) == -1) a.push(b[i]);
+    }
+    return a;
+}
