@@ -27,8 +27,13 @@ object Messages {
   case class CustConfig(mps:String, emailMandatory:String, emailInternal:String, emailExternal:String, skipEmailRules:String)
 
 
-
   case class EmailRecipient(mandatory:String, internal:String, external:String)
+
+
+  case class InitMailWatcher(host:String, user:String, password:String)
+  case object ReadMailBox
+  case class ProcessMailCmd(source:String, cmd:List[String])
+
 }
 
 

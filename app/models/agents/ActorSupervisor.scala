@@ -2,6 +2,7 @@ package models.agents
 
 import akka.actor.{Props, ActorRef, ActorSystem}
 import com.typesafe.config.ConfigFactory
+import models.dao.Messages._
 import models.notification.MailWatcher
 
 object ActorSupervisor {
