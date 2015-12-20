@@ -1,0 +1,8 @@
+email-reader
+============
+
+commands: MAKE %me OWNER
+commands: CLOSE this with reason="", component="platform", bugid
+commands: CLOSE this.
+commands: DISABLE mps for 4 hours.
+commands: DISABLE client for 4 minutes.

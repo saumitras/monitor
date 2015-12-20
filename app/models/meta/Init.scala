@@ -10,12 +10,14 @@ import play.api.libs.concurrent.Akka
 import play.api.libs.concurrent.Execution.Implicits._
 import play.api.Play.current
 import scala.concurrent.duration._
+import models.agents.ActorSupervisor
 
 object Init {
 
   def init() = {
 
-    //val actorSystem = models.agents.ActorSupervisor.monitorActorSystem
+    val actorSystem = ActorSupervisor.getSystem
+    ActorSupervisor.create("MailWatcher")
 
     Logger.info("Initializing monitor db...")
     MonitorDb.createTables()

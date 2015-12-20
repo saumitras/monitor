@@ -54,11 +54,11 @@ var Summary = function() {
             var tile3 = data.closedEventsCount + " closed" + " (" + data.closedEventsOwnerCount + " owners)";
 
             var numPlatformIssues = (data['issueGroup'] != undefined) ?
-                (data['issueGroup']['platform'] == undefined ? 0 : data.issueGroup.platform) : 0;
+                (data['issueGroup']['platform'] == undefined ? 0 : data.issueGroup['platform']) : 0;
             var numSolutionsIssues = (data['issueGroup'] != undefined) ?
-                (data['issueGroup']['solution'] == undefined ? 0 : data.issueGroup.platform) : 0;
+                (data['issueGroup']['solution'] == undefined ? 0 : data.issueGroup['solution']) : 0;
             var numOpsIssues = (data['issueGroup'] != undefined) ?
-                (data['issueGroup']['ops'] == undefined ? 0 : data.issueGroup.platform) : 0;
+                (data['issueGroup']['ops'] == undefined ? 0 : data.issueGroup['ops']) : 0;
             var tile4 = numPlatformIssues + " Platform issues";
             var tile5 = numSolutionsIssues + " Solution issues";
             var tile6 = numOpsIssues + " Ops issues";
