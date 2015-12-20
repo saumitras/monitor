@@ -9,7 +9,6 @@ var summaryData = undefined;
 var Summary = function() {
 
 
-    //scheduler which will kill itself after init is done
     updateSummaryData();
     var initializer = setInterval(function() {
         if(summaryData != undefined) {
@@ -44,31 +43,6 @@ var Summary = function() {
         updateCharts();
     }
 
-    /*
-     {
-     openEventsCount: 2,
-     openEventsOwnerCount: 2,
-     closedEventsCount: 11,
-     closedEventsOwnerCount: 1,
-     issueGroup: {
-     Platform: 11,
-     NA: 2
-     },
-     bugOpenedCount: 1,
-     openEventsByMps: {
-     storvisor/storvisor/storvisor_pod: 2
-     },
-     closedEventsByMps: {
-     storvisor/storvisor/storvisor_pod: 11
-     },
-     openEventsByClient: {
-     127.0.0.1: "2"
-     },
-     closedEventsByClient: {
-     127.0.0.1: "11"
-     }
-     }
-     */
 
     function updateSummaryData(mode) {
 
@@ -169,13 +143,15 @@ function getChart1Template()  {
             text: 'Events per Customer'
         },
         xAxis: {
+            min: 0,
             minTickInterval:1,
             tickInterval: 1,
             allowDecimals: false,
-            categories: ["aruba-aruba-pod", "vce-vce-pod", "aruba-airwave-pod", "ibm-ibm-pod","ibm-ibm-v7000"]
+            categories: []//["aruba-aruba-pod", "vce-vce-pod", "aruba-airwave-pod", "ibm-ibm-pod","ibm-ibm-v7000"]
         },
         yAxis: {
             min: 0,
+            minTickInterval:1,
             title: {
                 text: 'Event count'
             }
@@ -190,10 +166,10 @@ function getChart1Template()  {
         },
         series: [{
             name: 'Open',
-            data: [5, 3, 4, 7, 2]
+            data: []//[5, 3, 4, 7, 2]
         }, {
             name: 'Closed',
-            data: [2, 2, 3, 2, 1]
+            data: []//[2, 2, 3, 2, 1]
         }]
     };
 
@@ -204,23 +180,27 @@ function getChart1Template()  {
 function getChart2Template() {
     var data  = {
         chart: {
+            /*borderColor: '#FFF',
+            borderWidth: 1,*/
             type: 'bar'
         },
         credits: {
             enabled: false
         },
         title: {
-            text: 'Events per System'
+            text: 'Events Per System'
         },
         xAxis: {
+            /*min: 0,
             minTickInterval:1,
             tickInterval: 1,
-            allowDecimals: false,
+            allowDecimals: false,*/
             categories: []//["lcp-01","lcp-03","lcp-09","lcp-17","lcp-19","solr-01","zk-01"]
         },
         yAxis: {
             min: 0,
-                title: {
+            minTickInterval:1,
+            title: {
                 text: 'Event count'
             }
         },
