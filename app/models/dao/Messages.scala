@@ -32,7 +32,7 @@ object Messages {
 
   case class InitMailWatcher(host:String, user:String, password:String)
   case object ReadMailBox
-  case class ProcessMailCmd(source:String, cmd:List[String])
+  case class ProcessMailCmd(source:String, from:String, cmd:List[String])
 
 }
 

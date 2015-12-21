@@ -18,8 +18,9 @@ object Global extends GlobalSettings {
   override def onStop(app:Application) = {
     Logger.info("GBMonitor is stopping")
 
-    //models.agents.ActorSupervisor.monitorActorSystem.awaitTermination()
-
+    //models.agents.ActorSupervisor.getSystem.awaitTermination()
+    models.agents.ActorSupervisor.getSystem.shutdown()
+    Logger.info("GBMonitor stopped")
 
   }
 
