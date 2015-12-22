@@ -20,6 +20,7 @@ GET        /v1/api/admin/client                         controllers.Admin.client
 #summary tab API
 
 GET         /v1/api/summary/all                         controllers.Stats.getSummary()
+GET         /v1/api/user/info/all                       controllers.Stats.getUsersInfo()
 
 #event tab APIs
 GET        /v1/api/event/lcp/info/all                   controllers.LcpEvents.getAllLcpEvents()

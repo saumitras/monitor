@@ -41,7 +41,7 @@ object Init {
     actorSystem.scheduler.schedule(20 seconds, EMAIL_HEARTBEAT seconds)(models.notification.SendMail.sendAllMails)
 
     Logger.info(s"Setting up checks scheduler with interval = $CHECKS_HEARTBEAT seconds")
-    //actorSystem.scheduler.schedule(30 seconds, CHECKS_HEARTBEAT seconds)(models.checks.Schedule.runAllChecks)
+    actorSystem.scheduler.schedule(30 seconds, CHECKS_HEARTBEAT seconds)(models.checks.Schedule.runAllChecks)
 
 
 

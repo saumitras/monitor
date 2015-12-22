@@ -122,6 +122,7 @@ class MailWatcher extends Actor {
 
   def changeOwner(eventId:String, owner:String) = {
     Logger.info(s"== Changing owner eventId=$eventId owner=$owner")
+    models.dao.MonitorDb.setLcpEventOwner(eventId.toLong, owner)
   }
 
 }

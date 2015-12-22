@@ -1,5 +1,12 @@
 $(document).ready(function() {
-  new LcpEventData();
+
+    var initializer = setInterval(function() {
+        if(USERS != undefined) {
+            clearTimeout(initializer);
+            new LcpEventData();
+        }
+    },50);
+
 });
 
 
@@ -8,7 +15,8 @@ var LcpEventData = function() {
 
     var eventDataOpen = undefined;
     var eventDataClosed = undefined;
-    var members = ['Saumitra','Bharath','Aklank','Raj'];
+
+    var members = Object.keys(USERS);
 
     //data refresher which will run for lifetime of app
     var refresher = setInterval(function() {
@@ -60,7 +68,7 @@ var LcpEventData = function() {
             var component = $('#lcp-event-close-popup').find('.event-component').val();
             var kb = $('#lcp-event-close-popup').find('.event-kb').val();
             var bug = $('#lcp-event-close-popup').find('.event-bugid').val();
-            var owner = GLOBALS.userName
+            var owner = GLOBALS.userEmail
 
             closeEvent({
                 "id":eventId,
@@ -127,7 +135,7 @@ var LcpEventData = function() {
                       row['owner'] = populateOwnerList(value.owner);
                       open.push(row);
                     } else {
-                      row['owner'] = value.owner;
+                      row['owner'] = USERS[(value.owner)] == undefined ? "NA" : USERS[(value.owner)]['name'];
                       closed.push(row);
                     }
 
@@ -147,12 +155,14 @@ var LcpEventData = function() {
 
     function populateOwnerList(current) {
 
-        var ownerHtml = "<select class='event-owner'><option selected='selected'>" + current + "</option>";
-        //console.log(members);
+        var ownerHtml = "<select class='event-owner'>" +
+            "<option selected='selected' value='"+ current +"'>"
+                + USERS[current]['name'] +
+            "</option>";
+
         $.each(members,function(index, member) {
             if(member != current) {
-                //console.log(member);
-                ownerHtml += "<option>" + member + "</option>";
+                ownerHtml += "<option value='"+ member +"'>" + USERS[member]['name'] + "</option>";
             }
 
         });

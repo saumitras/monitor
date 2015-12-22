@@ -5,6 +5,8 @@ var GLOBALS = {
     'autoRefresh':false
 };
 
+var USERS = undefined;
+
 $(document).ready(function() {
     $('#auto-refresh-checkbox').bootstrapSwitch();
     $('#auto-refresh-checkbox').on('switchChange.bootstrapSwitch', function(event, state) {
@@ -62,4 +64,24 @@ Array.prototype.merge = function(b){
         if(a.indexOf(b[i]) == -1) a.push(b[i]);
     }
     return a;
+};
+
+
+setTimeout(function() {
+    updateUserInfo();
+}, 1000);
+
+function updateUserInfo() {
+    $.ajax({
+        type: "GET",
+        url: "v1/api/user/info/all",
+        'success': function (data) {
+            console.log(data);
+            USERS = data;
+            USERS['none'] = {
+                "name":"None",
+                "external":"0"
+            }
+        }
+    });
 }

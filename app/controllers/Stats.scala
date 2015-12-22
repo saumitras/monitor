@@ -62,4 +62,10 @@ object Stats extends Controller {
     Ok(response)
 
   }
+
+
+  def getUsersInfo() = Action {
+    val data = models.meta.Cache.getAllUser()
+    Ok(Json.toJson(data))
+  }
 }
