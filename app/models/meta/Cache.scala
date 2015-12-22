@@ -44,15 +44,22 @@ object Cache {
     MONITOR_USER.filter(_.email == email).head
   }
 
+  def doesUserExists(user:String, byName:Boolean):Boolean = {
+    if(byName)
+      MONITOR_USER.exists(x => x.name.toUpperCase.startsWith(user.toUpperCase))
+    else
+      MONITOR_USER.exists(_.email == user)
+  }
+
   def getUserInfoByName(name:String) = {
     MONITOR_USER.filter(r => r.name.toUpperCase.startsWith(name.toUpperCase)).head
   }
 
   def updateUser() = {
-    Logger.info("Updating users...")
+    //Logger.info("Updating users...")
     val users:List[UserT#TableElementType] = MonitorDb.getUser()
     MONITOR_USER = users
-    Logger.info("Users: " + MONITOR_USER)
+    //Logger.info("Users: " + MONITOR_USER)
   }
 
 

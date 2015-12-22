@@ -47,10 +47,15 @@ class MailWatcher extends Actor {
 
     case ProcessMailCmd(source:String, from:String, cmd:List[String]) =>
       //Logger.info(s"Inside ProcessCmd. Source: $source. Commands: $cmd")
-      val eventId = source.replaceAll(".*E-","").replaceAll(" .*","")
-      if(eventId.matches("\\d{1,}")) {
-        cmd.filter(_.size != 0).foreach(c => processCommands(eventId, from, c))
+      if(models.meta.Cache.doesUserExists(from, false)) {
+        val eventId = source.replaceAll(".*E-","").replaceAll(" .*","")
+        if(eventId.matches("\\d{1,}")) {
+          cmd.filter(_.size != 0).foreach(c => processCommands(eventId, from, c))
+        }
+      } else {
+        Logger.warn(s"User with email '$from' doesnot exists in database.")
       }
+
   }
 
 
@@ -78,45 +83,86 @@ class MailWatcher extends Actor {
             self ! ProcessMailCmd(subject, from, cmd)
           }
         }
-        message.setFlag(Flag.SEEN, false)
+        message.setFlag(Flag.SEEN, true)
       }
       inbox.close(false)
     }
   }
 
-  def processCommands(eventId:String, from:String, cmd:String) = {
+  def processCommands(eventId:String, fromEmail:String, cmd:String) = {
 
-    Logger.info(s"Inside proceesCommands. cmd=$cmd, size=${cmd.size}, from=$from, eventId=$eventId")
+    Logger.info(s"Inside proceesCommands. cmd=$cmd, size=${cmd.size}, from=$fromEmail, eventId=$eventId")
 
-    val closeCmdRegex = "close this with component=(.*)".r
-    val makeOwnerRegex = "make (.*) owner".r
+    val closeCmdRegex = "(?i)close\\s+this\\s+with\\s+component\\s*=\\s*(.*)".r
+    val makeOwnerRegex = "(?i)make\\s+(.*)\\s+owner".r
 
-    //change owner command
-    try {
-      val groups = {
-        val m = makeOwnerRegex.findAllIn(cmd)
-        m.hasNext
-        m.subgroups
-      }
+    var matchFound = false
+    if(!matchFound) tryChangeOwner
+    if(!matchFound) tryCloseEvent
 
-      if(groups.length == 1) {
-        val owner = groups(0)
-        if(owner.toUpperCase == "ME") {
-          changeOwner(eventId, from)
-        } else {
-          val userInfo = Cache.getUserInfoByName(owner)
-          changeOwner(eventId, userInfo.email)
+    def tryChangeOwner = {
+      //change owner command
+      try {
+        val groups = {
+          val m = makeOwnerRegex.findAllIn(cmd)
+          m.hasNext
+          m.subgroups
         }
+
+        if(groups.length == 1) {
+          matchFound = true
+          val owner = groups(0).trim
+          if(owner.toUpperCase == "ME") {
+            changeOwner(eventId, fromEmail)
+          } else {
+            if(models.meta.Cache.doesUserExists(owner, true)) {
+              val userInfo = Cache.getUserInfoByName(owner)
+              changeOwner(eventId, userInfo.email)
+            } else {
+              Logger.warn(s"User: $owner doesnot exists in database.")
+            }
+          }
+        }
+
+      } catch {
+        case ex:Exception =>
+          Logger.error("Exception occurred which processing email watcher command. " + ex.getMessage)
       }
 
-    } catch {
-      case ex:Exception =>
-        Logger.error("Exception occurred which processing email watcher command. " + ex.getMessage)
     }
+
+    def tryCloseEvent = {
+      //close bug option
+      try {
+        val groups = {
+          val m = closeCmdRegex.findAllIn(cmd)
+          m.hasNext
+          m.subgroups
+        }
+
+        if(groups.length == 1) {
+          matchFound = true
+          val component = groups(0).trim
+          val validComponents = List("platform","solution","ops")
+
+          if(validComponents.contains(component)) {
+            closeEvent(eventId.toLong, component, fromEmail)
+          } else {
+            Logger.warn(s"MailWatcher. Requested component = $component is not a valid component")
+          }
+        }
+
+      } catch {
+        case ex:Exception =>
+          Logger.error("Exception occurred which processing email watcher command. " + ex.getMessage)
+      }
+
+    }
+
   }
 
-
   def closeEvent(eventId:Long, component:String, owner:String) = {
+    Logger.info(s"[MailWatcher] Closing event=$eventId component=$component owner=$owner")
     models.dao.MonitorDb.closeLcpEvent(eventId, "","","",component,owner)
   }
 
