@@ -10,6 +10,7 @@ import play.api.Logger
 import scala.concurrent.duration._
 import akka.actor.Actor
 import scala.concurrent.ExecutionContext.Implicits.global
+import models.meta.Cache
 
 class MailWatcher extends Actor {
 
@@ -101,9 +102,10 @@ class MailWatcher extends Actor {
       if(groups.length == 1) {
         val owner = groups(0)
         if(owner.toUpperCase == "ME") {
-          changeOwner(eventId, owner)
+          changeOwner(eventId, from)
         } else {
-          changeOwner(eventId, owner)
+          val userInfo = Cache.getUserInfoByName(owner)
+          changeOwner(eventId, userInfo.email)
         }
       }
 
@@ -111,10 +113,6 @@ class MailWatcher extends Actor {
       case ex:Exception =>
         Logger.error("Exception occurred which processing email watcher command. " + ex.getMessage)
     }
-
-
-
-
   }
 
 
@@ -125,6 +123,7 @@ class MailWatcher extends Actor {
   def changeOwner(eventId:String, owner:String) = {
     Logger.info(s"== Changing owner eventId=$eventId owner=$owner")
   }
+
 }
 
 

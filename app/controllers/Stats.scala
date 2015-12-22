@@ -6,10 +6,6 @@ import play.api.libs.json.Json
 import play.api.mvc.{Action, Controller}
 import play.api.libs.json._
 
-case class ScalarValue(x:String)
-case class MapValue(x:Map[String, String])
-case class Result(res:Map[String, Either[ScalarValue, MapValue]])
-
 object Stats extends Controller {
   def getSummary() = Action {
     val data = MonitorDb.getAllLcpEvents()

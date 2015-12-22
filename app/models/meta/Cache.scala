@@ -1,7 +1,9 @@
 package models.meta
 
 import models.MonitorConfig
-import models.dao.LcpDb
+import models.dao.MonitorDb.UserT
+import models.dao.{MonitorDb, LcpDb}
+import models.dao.Messages._
 import play.api.Logger
 
 object Cache {
@@ -10,6 +12,7 @@ object Cache {
 
   var MPS_LIST = Map[String, List[String]]()
   var LAST_RUNS_CACHE = Map[String, Map[String, Cache.RunDetail]]()
+  var MONITOR_USER =List[User]()
 
   def getMps(h2:String):List[String] = {
     MPS_LIST.getOrElse(h2, List())
@@ -19,6 +22,40 @@ object Cache {
     val data = MPS_LIST.map(x => x._2).toList.flatten.distinct
     data
   }
+
+  def getAllUser():Map[String,Map[String, String]] = {
+    MONITOR_USER.map(u => Map(u.email -> Map(
+      "name" -> u.name,
+      "password" -> u.password,
+      "group" -> u.group,
+      "external" -> u.external,
+      "autoRefresh" -> u.autoRefresh
+    ))).reduceLeft(_ ++ _)
+  }
+
+  def getUserInfoByEmail(email:String):User = {
+    /*MONITOR_USER.filter(_.email == email).map(u => Map(u.email -> Map(
+      "name" -> u.name,
+      "password" -> u.password,
+      "group" -> u.group,
+      "external" -> u.external,
+      "autoRefresh" -> u.autoRefresh
+    ))).reduceLeft(_ ++ _)*/
+    MONITOR_USER.filter(_.email == email).head
+  }
+
+  def getUserInfoByName(name:String) = {
+    MONITOR_USER.filter(r => r.name.toUpperCase.startsWith(name.toUpperCase)).head
+  }
+
+  def updateUser() = {
+    Logger.info("Updating users...")
+    val users:List[UserT#TableElementType] = MonitorDb.getUser()
+    MONITOR_USER = users
+    Logger.info("Users: " + MONITOR_USER)
+  }
+
+
 
 
   def updateMpsList() = {

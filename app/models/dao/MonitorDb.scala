@@ -156,9 +156,21 @@ object MonitorDb {
   }
   val emailOps = TableQuery[EmailOpsT]
 
+  class UserT(tag:Tag) extends Table[User](tag, "USER") {
+    def email = column[String]("EMAIL", O.PrimaryKey)
+    def name = column[String]("NAME")
+    def password = column[String]("PASSWORD")
+    def group = column[String]("GROUP")
+    def autoRefresh = column[String]("AUTO_REFRESH")
+    def external = column[String]("EXTERNAL")
+
+    def * = (email, name, password, group, autoRefresh, external) <> (User.tupled, User.unapply)
+  }
+  val user = TableQuery[UserT]
+
 
   def createTables() = {
-    val tables = List(lcpDefaultChecks, lcpChecks, monitorConfig, lcpEvent, clients, emailEvent, emailOps, custConfig)
+    val tables = List(lcpDefaultChecks, lcpChecks, monitorConfig, lcpEvent, clients, emailEvent, emailOps, custConfig, user)
     tables.foreach(t =>
       try {
         val tableName = t.baseTableRow.tableName
@@ -182,6 +194,7 @@ object MonitorDb {
   def initTables() = {
     initLcpDefaultChecks
     initMonitorConfig
+    initUser
 
     def initLcpDefaultChecks = {
       val rows = List(
@@ -200,22 +213,6 @@ object MonitorDb {
       )
     }
 
-    def initCustomerConfig = {
-      val rows = List(
-        CustConfig("storvisor/storvisor/storvisor_pod","saumitra.srivastav7@gmail.com","saumitra.srivastav@glassbeam.com","gbmonitor1@gmail.com", "load_id=2131 OR mailVelocity>10 with window=3600s")
-      )
-      rows.foreach(r =>
-        try {
-          dbConn withDynSession {
-            custConfig.insert(r)
-          }.run
-        } catch {
-          case ex:org.h2.jdbc.JdbcSQLException =>
-            Logger.warn(ex.getMessage)
-        }
-      )
-    }
-
     def initMonitorConfig = {
       val rows = List(
         ("h2",Constants.DEFAULT_LCP_DB),
@@ -225,6 +222,24 @@ object MonitorDb {
         try {
           dbConn withDynSession {
             monitorConfig.insert(r)
+          }.run
+        } catch {
+          case ex:org.h2.jdbc.JdbcSQLException =>
+            Logger.warn(ex.getMessage)
+        }
+      )
+    }
+
+    def initUser = {
+      val rows = List(
+        User("saumitra.srivastav@glassbeam.com", "Saumitra", models.utils.Util.md5Hash("demo"), "admin", "0", "0"),
+        User("bharadwaj@glassbeam.com", "Bharadwaj", models.utils.Util.md5Hash("demo"), "admin", "0", "0"),
+        User("aklank@glassbeam.com", "Aklank", models.utils.Util.md5Hash("demo"), "admin", "0", "0")
+      )
+      rows.foreach(r =>
+        try {
+          dbConn withDynSession {
+            user.insert(r)
           }.run
         } catch {
           case ex:org.h2.jdbc.JdbcSQLException =>
@@ -401,6 +416,11 @@ object MonitorDb {
 
   def updateCustomerConfig(row:CustConfig) = dbConn withDynSession {
     custConfig.filter(_.mps === row.mps).update(row)
+  }
+
+
+  def getUser() = dbConn withDynSession {
+    user.list
   }
 
 
