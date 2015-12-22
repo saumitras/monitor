@@ -112,9 +112,9 @@ var LcpEventData = function() {
                     var row = {
                         name: value.name,
                         source: value.source,
-                        mps: value.mps,
+                        mps: value.mps, //.replace(/\//g," / "),
                         signature: value.signature,
-                        h2: value.h2,
+                        h2: value.h2.replace("jdbc:h2:tcp://",""),
                         id: value.id,
                         bug: value.bug,
                         resolution: value.resolution,
@@ -129,7 +129,7 @@ var LcpEventData = function() {
 
                     if(row.status == "open") {
                       row['actions'] =
-                          "<span class='link1 event-escalate' event-id='" + value.id + "'>Escalate</span>" +
+                          //"<span class='link1 event-escalate' event-id='" + value.id + "'>Escalate</span>" +
                           "<span class='link1 event-details' event-id='" + value.id + "'>Details</span>" +
                         "<span class='link1 event-update' event-id='" + value.id + "'>Close</span>";
                       row['owner'] = populateOwnerList(value.owner);
@@ -147,7 +147,6 @@ var LcpEventData = function() {
                 if(reset != undefined && reset == true) {
                     resetData()
                 }
-
             }
         })
     }
@@ -164,7 +163,6 @@ var LcpEventData = function() {
             if(member != current) {
                 ownerHtml += "<option value='"+ member +"'>" + USERS[member]['name'] + "</option>";
             }
-
         });
         ownerHtml += "</select>";
         //console.log(ownerHtml);

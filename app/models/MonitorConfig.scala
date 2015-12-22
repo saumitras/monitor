@@ -9,8 +9,8 @@ object MonitorConfig {
   var h2Hosts = List[String]()
   var zkHosts = List[String]()
 
-  def defaultMandatoryEmail = "saumitra.srivastav7@gmail.com, aklank.choudhary@glassbeam.com"
-  def defaultInternalEmail = "saumitra.srivastav@glassbeam.com, aklank.choudhary@glassbeam.com"
+  def defaultMandatoryEmail = "saumitra.srivastav7@gmail.com"
+  def defaultInternalEmail = "saumitra.srivastav@glassbeam.com"
 
   def updateConfig() = {
     config = MonitorDb.getConf()

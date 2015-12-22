@@ -18,7 +18,7 @@ object FileStuckInSeenAlert {
       Logger.info(s"There is already an open event with signature=$signature h2=$h2 mps=$mps cid=${check.cid}")
     } else {
       Logger.info(s"Adding new open event with signature=$signature h2=$h2 mps=$mps cid=${check.cid}")
-      val loadIds = files.map(f => f.loadId).take(10).mkString(",")
+      val loadIds = files.map(f => f.loadId).distinct.take(10).mkString(",")
       val sources = files.map(f => f.node).distinct.take(10).mkString(",")
       val event = LCPEvent(None, check.id.getOrElse(0), check.cid, signature, "open", check.description, mps, h2, loadIds, sources, new Timestamp(System.currentTimeMillis), "none",
         "L3", "NA", "NA",  new Timestamp(System.currentTimeMillis), "NA", "NA")

@@ -216,7 +216,9 @@ object MonitorDb {
     def initMonitorConfig = {
       val rows = List(
         ("h2",Constants.DEFAULT_LCP_DB),
-        ("zk",Constants.DEFAULT_ZK_HOST)
+        ("zk",Constants.DEFAULT_ZK_HOST),
+        ("l2_escalation_time", Constants.DEFAULT_L2_ESCALATION_TIME),
+        ("l3_escalation_time", Constants.DEFAULT_L3_ESCALATION_TIME)
       )
       rows.foreach(r =>
         try {
@@ -232,9 +234,11 @@ object MonitorDb {
 
     def initUser = {
       val rows = List(
-        User("saumitra.srivastav@glassbeam.com", "Saumitra", models.utils.Util.md5Hash("demo"), "admin", "0", "0"),
-        User("bharadwaj@glassbeam.com", "Bharadwaj", models.utils.Util.md5Hash("demo"), "admin", "0", "0"),
-        User("aklank@glassbeam.com", "Aklank", models.utils.Util.md5Hash("demo"), "admin", "0", "0")
+        User("saumitra.srivastav@glassbeam.com", "Saumitra S", models.utils.Util.md5Hash("demo"), "admin", "0", "0"),
+        User("saumitra.srivastav7@gmail.com", "Saumitra Gmail", models.utils.Util.md5Hash("demo"), "admin", "0", "0"),
+        User("saumitras01@gmail.com", "Saumitra External", models.utils.Util.md5Hash("demo"), "admin", "0", "0"),
+        User("bharadwaj@glassbeam.com", "Bharadwaj N", models.utils.Util.md5Hash("demo"), "admin", "0", "0"),
+        User("aklank@glassbeam.com", "Aklank C", models.utils.Util.md5Hash("demo"), "admin", "0", "0")
       )
       rows.foreach(r =>
         try {
@@ -348,6 +352,13 @@ object MonitorDb {
 
   }
 
+
+  def updateEscalationLevel(id:Long, level:String) = dbConn withDynSession {
+    lcpEvent.filter(_.id === id)
+      .map(r => r.escalationLevel)
+      .update(level)
+  }
+
   def updateClientConfig(action:String, group:String, nodes:String) = {
     val DELIMITER = ",,"
     Logger.info(s"Updating config for clients. action=$action, group=$group, nodes=$nodes")
@@ -373,6 +384,11 @@ object MonitorDb {
     }
   }
 
+  def getEventEmailById(id:Long) = dbConn withDynSession  {
+    emailEvent.filter(_.eventId === id).list.head
+  }
+
+
   def updateMailSentCount(category:String, id:Long) = dbConn withDynSession {
     category.toUpperCase match {
       case "EVENT" =>
@@ -385,6 +401,7 @@ object MonitorDb {
     }
 
   }
+
 
   def getUnsentEventEmail() = dbConn withDynSession {
     emailEvent.filter(_.sentCount === 0).list

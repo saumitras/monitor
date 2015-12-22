@@ -25,8 +25,8 @@ object Init {
     MonitorDb.createTables()
     MonitorDb.initTables()
 
-    val CACHE_UPDATE_HEARTBEAT = 20
-    val EMAIL_HEARTBEAT = 10
+    val CACHE_UPDATE_HEARTBEAT = 10
+    val EMAIL_HEARTBEAT = 30
     val CHECKS_HEARTBEAT = 10
 
     Logger.info(s"Setting up monitor-db cache update scheduler with interval = $CACHE_UPDATE_HEARTBEAT seconds")
@@ -36,6 +36,7 @@ object Init {
     actorSystem.scheduler.schedule(0 seconds, CACHE_UPDATE_HEARTBEAT seconds)(models.config.CustomerConfig.refreshCustomerConfig)
     actorSystem.scheduler.schedule(0 seconds, CACHE_UPDATE_HEARTBEAT seconds)(models.checks.Tasks.addCustChecksFromDefault)
     actorSystem.scheduler.schedule(0 seconds, CACHE_UPDATE_HEARTBEAT seconds)(models.clients.Tasks.updateClients)
+    actorSystem.scheduler.schedule(0 seconds, CACHE_UPDATE_HEARTBEAT seconds)(models.notification.Escalation.checkEscalation)
 
     Logger.info(s"Setting up email scheduler with interval = $EMAIL_HEARTBEAT seconds")
     actorSystem.scheduler.schedule(20 seconds, EMAIL_HEARTBEAT seconds)(models.notification.SendMail.sendAllMails)
