@@ -14,6 +14,8 @@ import scala.concurrent.ExecutionContext.Implicits.global
 class MailWatcher extends Actor {
 
   var inbox:Folder = null
+  var store:Store = null
+
   var mailBoxInitialized = false
   val POLLING_INTERVAL = 10 seconds
 
@@ -23,19 +25,17 @@ class MailWatcher extends Actor {
       val props = System.getProperties
       props.setProperty("mail.store.protocol", "imaps")
       val session = Session.getDefaultInstance(props, null)
-      val store = session.getStore("imaps")
+      store = session.getStore("imaps")
 
       try {
         store.connect(host, user, password)
         inbox = store.getFolder("Inbox")
-
         mailBoxInitialized = true
-
         context.system.scheduler.scheduleOnce(2 seconds, self, ReadMailBox)
 
       } catch {
         case ex:Exception =>
-          Logger.error("Exception")
+          Logger.error("Exception in MailWatcher. " + ex.getMessage)
       }
 
     case ReadMailBox =>
@@ -54,10 +54,12 @@ class MailWatcher extends Actor {
 
 
   def readMailBox() = {
-    if(mailBoxInitialized) {
+    if(mailBoxInitialized && store.isConnected) {
       Logger.info("Reading mailbox")
+
       inbox.open(Folder.READ_WRITE)
       val messages = inbox.search(new FlagTerm(new Flags(Flags.Flag.SEEN), false))
+      Logger.info(s"Found ${messages.size} new messages")
       for (message <- messages) {
         val subject = message.getSubject
         val from = message.getFrom.toList.head.asInstanceOf[InternetAddress].getAddress
@@ -75,7 +77,7 @@ class MailWatcher extends Actor {
             self ! ProcessMailCmd(subject, from, cmd)
           }
         }
-        message.setFlag(Flag.SEEN, true)
+        message.setFlag(Flag.SEEN, false)
       }
       inbox.close(false)
     }
@@ -85,7 +87,43 @@ class MailWatcher extends Actor {
 
     Logger.info(s"Inside proceesCommands. cmd=$cmd, size=${cmd.size}, from=$from, eventId=$eventId")
 
+    val closeCmdRegex = "close this with component=(.*)".r
+    val makeOwnerRegex = "make (.*) owner".r
 
+    //change owner command
+    try {
+      val groups = {
+        val m = makeOwnerRegex.findAllIn(cmd)
+        m.hasNext
+        m.subgroups
+      }
+
+      if(groups.length == 1) {
+        val owner = groups(0)
+        if(owner.toUpperCase == "ME") {
+          changeOwner(eventId, owner)
+        } else {
+          changeOwner(eventId, owner)
+        }
+      }
+
+    } catch {
+      case ex:Exception =>
+        Logger.error("Exception occurred which processing email watcher command. " + ex.getMessage)
+    }
+
+
+
+
+  }
+
+
+  def closeEvent(eventId:Long, component:String, owner:String) = {
+    models.dao.MonitorDb.closeLcpEvent(eventId, "","","",component,owner)
+  }
+
+  def changeOwner(eventId:String, owner:String) = {
+    Logger.info(s"== Changing owner eventId=$eventId owner=$owner")
   }
 }
 

@@ -311,6 +311,8 @@ object MonitorDb {
       .update(("closed",kb,new Timestamp(System.currentTimeMillis),bug,  component, owner))
   }
 
+
+
   def setLcpEventOwner(id:Long, owner:String) = dbConn withDynSession {
     lcpEvent.filter(_.id === id)
       .map(r => (r.owner))
