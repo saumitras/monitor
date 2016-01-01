@@ -11,4 +11,3 @@ html, body { height: 100%; }
 
 .link1, .details, .update { text-decoration: underline; margin-right: 10px; color: blue; cursor:pointer; }
 .style2 { color: #0D668C; font-weight: bold; }
-

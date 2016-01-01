@@ -217,6 +217,7 @@ object MonitorDb {
       val rows = List(
         ("h2",Constants.DEFAULT_LCP_DB),
         ("zk",Constants.DEFAULT_ZK_HOST),
+        ("lcp",""),
         ("l2_escalation_time", Constants.DEFAULT_L2_ESCALATION_TIME),
         ("l3_escalation_time", Constants.DEFAULT_L3_ESCALATION_TIME)
       )

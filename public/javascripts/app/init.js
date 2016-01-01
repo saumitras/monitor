@@ -15,6 +15,11 @@ $(document).ready(function() {
 
     $('#header-username').html("Saumitra")
 
+    $.feedback({
+        ajaxURL: '/v1/feedback/input',
+        html2canvasURL: 'assets/javascripts/lib/feedback/stable/2.0/html2canvas.js'
+    });
+
 });
 
 function getDateTime() {

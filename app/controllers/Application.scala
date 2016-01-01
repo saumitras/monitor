@@ -7,8 +7,15 @@ import play.api.mvc._
 import play.api.Play.current
 import org.apache.commons.io.IOUtils
 import models.MonitorConfig
+import play.api.libs.json._
+
 
 object Application extends Controller {
+
+  def auth = Action {
+    Ok(views.html.auth(""))
+  }
+
 
   def index = Action {
     //val readme = scala.io.Source.fromFile(Play.application.path + "/README.md").mkString
@@ -62,6 +69,14 @@ object Application extends Controller {
   def emailTest = Action {
     models.notification.SendMail.sendMailOld()
     Ok("Sent")
+  }
+
+  def parsefeedback() = Action {request =>
+    val paramVal = request.body.asFormUrlEncoded.get("feedback")(0)
+    //val x = Json.toJson(paramVal)
+    //println(x)
+    println(paramVal)
+    Ok("9")
   }
 
   /*

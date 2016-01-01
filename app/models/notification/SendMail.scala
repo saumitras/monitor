@@ -35,7 +35,7 @@ object SendMail {
     }
   }
 
-  def sendMail(body:String, title:String, recipientsTo:Seq[String], recipientCC:Seq[String]):String = {
+  def sendMail(body:String, title:String, recipientsTo:Seq[String], recipientCC:Seq[String]) = {
     //println("Sending custconfig to " + recipients)
     //println("Title:\n" + title + "\nBody\n" + body)
 
@@ -47,7 +47,7 @@ object SendMail {
       cc = recipientCC.filter(_.size != 0),
       bodyHtml = Some(body)
     )
-    MailerPlugin.send(email)
+    //MailerPlugin.send(email)
   }
 
 

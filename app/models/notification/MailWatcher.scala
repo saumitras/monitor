@@ -18,7 +18,7 @@ class MailWatcher extends Actor {
   var store:Store = null
 
   var mailBoxInitialized = false
-  val POLLING_INTERVAL = 10 seconds
+  val POLLING_INTERVAL = 10000 seconds
 
   def receive = {
     case InitMailWatcher(host:String, user:String, password:String) =>

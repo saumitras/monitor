@@ -18,9 +18,17 @@
         <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/styles.css")">
         <link rel="stylesheet" media="screen" href="@routes.Assets.at("javascripts/lib/alertify.js-0.3.11/themes/alertify.core.css")">
         <link rel="stylesheet" media="screen" href="@routes.Assets.at("javascripts/lib/alertify.js-0.3.11/themes/alertify.default.css")">
+        <link rel="stylesheet" media="screen" href="@routes.Assets.at("javascripts/lib/feedback/stable/2.0/feedback.css")">
 
         <!-- plugins and libraries -->
         <link rel="shortcut icon" type="image/png" href="@routes.Assets.at("img/favicon.png")">
+
+
+
+    </head>
+    <body>
+
+        @content
 
         <!-- js plugins -->
         <script src="@routes.Assets.at("javascripts/lib/jquery-1.9.0.min.js")" type="text/javascript"></script>
@@ -30,22 +38,14 @@
         <script src="@routes.Assets.at("javascripts/lib/highcharts/highcharts.js")" type="text/javascript"></script>
         <script src="@routes.Assets.at("javascripts/lib/highcharts/no-data-to-display.js")" type="text/javascript"></script>
 
-        <script src="@routes.Assets.at("javascripts/app/init.js")" type="text/javascript"></script>
+        <script src="@routes.Assets.at("javascripts/lib/feedback/stable/2.0/html2canvas.js")" type="text/javascript"></script>
+        <script src="@routes.Assets.at("javascripts/lib/feedback/stable/2.0/feedback.js")" type="text/javascript"></script>
 
-
-
-    </head>
-    <body>
-
-        @content
-
-        <!-- application js -->
-        <script src="@routes.Assets.at("javascripts/chart.js")" type="text/javascript"></script>
-        <script src="@routes.Assets.at("javascripts/app.js")" type="text/javascript"></script>
         <script src="@routes.Assets.at("javascripts/lib/alertify.js-0.3.11/lib/alertify.js")" type="text/javascript"></script>
 
-        @snip_popup1()
-        @snip_popup2()
+        <script src="@routes.Assets.at("javascripts/lib/jquery.md5.js")" type="text/javascript"></script>
+
+        <script src="@routes.Assets.at("javascripts/app/init.js")" type="text/javascript"></script>
 
 
     </body>
