@@ -64,8 +64,12 @@ object Stats extends Controller {
   }
 
 
-  def getUsersInfo() = Action {
+  def getUsersInfo(email:String = "") = Action {
     val data = models.meta.Cache.getAllUser()
-    Ok(Json.toJson(data))
+    if(email.nonEmpty)
+      Ok(Json.toJson(Map(email -> data.getOrElse(email, Map()))))
+    else
+      Ok(Json.toJson(data))
   }
+
 }

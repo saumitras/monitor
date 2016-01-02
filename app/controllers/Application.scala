@@ -8,6 +8,7 @@ import play.api.Play.current
 import org.apache.commons.io.IOUtils
 import models.MonitorConfig
 import play.api.libs.json._
+import play.twirl.api.Html
 
 
 object Application extends Controller {
@@ -16,53 +17,44 @@ object Application extends Controller {
     Ok(views.html.auth(""))
   }
 
-
-  def index = Action {
-    //val readme = scala.io.Source.fromFile(Play.application.path + "/README.md").mkString
-    //val html = new Markdown4jProcessor().process(readme)
-
-    //sendMail()
-    //Ok(IOUtils.toString(Play.application.resourceAsStream("routes").get))
-
-
-    Ok(views.html.index("Your new application is ready."))
-
+  def index =  {
+    Auth.route(views.html.index(""))
   }
 
-  def lcpevents = Action {
-    Ok(views.html.lcpevents(""))
+  def lcpevents =  {
+    Auth.route(views.html.lcpevents(""))
   }
 
-  def solrevents = Action {
-    Ok(views.html.solrevents(""))
+  def solrevents =  {
+    Auth.route(views.html.solrevents(""))
   }
 
-  def clients = Action {
-    Ok(views.html.clients(""))
+  def clients =  {
+    Auth.route(views.html.clients(""))
   }
 
-  def lcpchecks = Action {
-    Ok(views.html.lcpchecks(""))
+  def lcpchecks =  {
+    Auth.route(views.html.lcpchecks(""))
   }
 
-  def solrchecks = Action {
-    Ok(views.html.solrchecks(""))
+  def solrchecks =  {
+    Auth.route(views.html.solrchecks(""))
   }
 
-  def reports = Action {
-    Ok(views.html.reports(""))
+  def reports =  {
+    Auth.route(views.html.reports(""))
   }
 
-  def admin = Action {
-    Ok(views.html.admin(""))
+  def admin =  {
+    Auth.route(views.html.admin(""))
   }
 
-  def kb = Action {
-    Ok(views.html.kb(""))
+  def kb =  {
+    Auth.route(views.html.kb(""))
   }
 
-  def custconfig = Action {
-    Ok(views.html.custconfig(""))
+  def custconfig =  {
+    Auth.route(views.html.custconfig(""))
   }
 
 
@@ -79,29 +71,4 @@ object Application extends Controller {
     Ok("9")
   }
 
-  /*
-  def sendMail() = {
-    import play.api.libs.mailer._
-
-    val custconfig = Email(
-      "Simple custconfig",
-      "saumitra.srivastav7@gmail.com",
-      Seq("saumitra.srivastav7@gmail.com","saumitra.srivastav@glassbeam.com"),
-      // adds attachment
-      bodyText = Some("A text message"),
-      bodyHtml = Some("<html>" +
-        "<head>" +
-        "<style> body { background-color: #CCC; } </style>" +
-        "</head>" +
-        "<body>" +
-        "<table style='border: 2px solid red; border-collapse:collapse;  background-color: #CCC;' >" +
-        "<tr><td>C1</td><td>C1</td></tr>" +
-        "<tr><td>C1</td><td>C1</td></tr>" +
-        "</table>" +
-        "</body>" +
-        "</html>")
-    )
-    MailerPlugin.send(custconfig)
-  }
-*/
 }

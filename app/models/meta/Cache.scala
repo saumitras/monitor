@@ -33,7 +33,7 @@ object Cache {
     ))).reduceLeft(_ ++ _)
   }
 
-  def getUserInfoByEmail(email:String):User = {
+  def getUserInfoByEmail(email:String):Option[User] = {
     /*MONITOR_USER.filter(_.email == email).map(u => Map(u.email -> Map(
       "name" -> u.name,
       "password" -> u.password,
@@ -41,7 +41,7 @@ object Cache {
       "external" -> u.external,
       "autoRefresh" -> u.autoRefresh
     ))).reduceLeft(_ ++ _)*/
-    MONITOR_USER.filter(_.email == email).head
+    MONITOR_USER.find(_.email == email)
   }
 
   def doesUserExists(user:String, byName:Boolean):Boolean = {

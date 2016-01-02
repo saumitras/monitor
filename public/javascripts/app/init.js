@@ -1,23 +1,48 @@
 var GLOBALS = {
-    'userName': "saumitra",
-    'userDisplayName': "Saumitra",
-    'userEmail': "saumitra.srivastav@glassbeam.com",
+    'userName': "",
+    'userDisplayName': "",
+    'userEmail': "",
     'autoRefresh':false
 };
 
 var USERS = undefined;
 
 $(document).ready(function() {
-    $('#auto-refresh-checkbox').bootstrapSwitch();
-    $('#auto-refresh-checkbox').on('switchChange.bootstrapSwitch', function(event, state) {
-        GLOBALS.autoRefresh = state
-    });
 
-    $('#header-username').html("Saumitra")
+    $.when(updateUserInfo()).then(function(response) {
 
-    $.feedback({
-        ajaxURL: '/v1/feedback/input',
-        html2canvasURL: 'assets/javascripts/lib/feedback/stable/2.0/html2canvas.js'
+        USERS = response;
+        USERS['none'] = {
+            "name":"None",
+            "external":"0"
+        };
+
+
+
+
+        var currentUserEmail = Cookies.get("username");
+        var userData = USERS[currentUserEmail];
+        if(userData != undefined) {
+            var name = userData['name'];
+            $('#header-username').html(name)
+
+            var autoRefresh = userData['autoRefresh'] != "0";
+            $('#auto-refresh-checkbox').bootstrapSwitch('state', autoRefresh);
+
+            $('#auto-refresh-checkbox').on('switchChange.bootstrapSwitch', function(event, state) {
+                GLOBALS.autoRefresh = state
+            });
+        }
+
+        $('#header-signout').click(function() {
+            logout()
+        });
+
+
+        $.feedback({
+            ajaxURL: '/v1/feedback/input',
+            html2canvasURL: 'assets/javascripts/lib/feedback/stable/2.0/html2canvas.js'
+        });
     });
 
 });
@@ -72,21 +97,17 @@ Array.prototype.merge = function(b){
 };
 
 
-setTimeout(function() {
-    updateUserInfo();
-}, 1000);
-
 function updateUserInfo() {
-    $.ajax({
+    console.log("Inside updateUserInfo")
+    return ($.ajax({
         type: "GET",
-        url: "v1/api/user/info/all",
-        'success': function (data) {
-            console.log(data);
-            USERS = data;
-            USERS['none'] = {
-                "name":"None",
-                "external":"0"
-            }
-        }
-    });
+        url: "v1/api/user/info/all"
+    }));
+}
+
+
+function logout() {
+    document.cookie = "username=";
+    document.cookie = "password=";
+    window.location = "/"
 }

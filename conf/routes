@@ -1,52 +1,53 @@
 # Map static resources from the /public folder to the /assets URL path
-GET        /assets/*file                                controllers.Assets.at(path="/public", file)
+GET         /assets/*file                                controllers.Assets.at(path="/public", file)
 
 
-GET        /auth                                            controllers.Application.auth
+GET         /auth                                        controllers.Application.auth
 
-GET        /                                            controllers.Application.index
-GET        /lcpevents                                   controllers.Application.lcpevents
-GET        /solrevents                                  controllers.Application.solrevents
-GET        /clients                                     controllers.Application.clients
-GET        /lcpchecks                                   controllers.Application.lcpchecks
-GET        /solrchecks                                  controllers.Application.solrchecks
-GET        /reports                                     controllers.Application.reports
-GET        /admin                                       controllers.Application.admin
-GET        /kb                                          controllers.Application.kb
-GET        /custconfig                                  controllers.Application.custconfig
+GET         /                                            controllers.Application.index
+GET         /lcpevents                                   controllers.Application.lcpevents
+GET         /solrevents                                  controllers.Application.solrevents
+GET         /clients                                     controllers.Application.clients
+GET         /lcpchecks                                   controllers.Application.lcpchecks
+GET         /solrchecks                                  controllers.Application.solrchecks
+GET         /reports                                     controllers.Application.reports
+GET         /admin                                       controllers.Application.admin
+GET         /kb                                          controllers.Application.kb
+GET         /custconfig                                  controllers.Application.custconfig
 
-GET        /v1/solr/cluster/explorer/healthcheck        controllers.SolrStats.getExplorerClusterHealth(sensu:Option[Boolean])
-GET        /v1/solr/cluster/logvault/healthcheck        controllers.SolrStats.getLogvaultClusterHealth(sensu:Option[Boolean])
+GET         /v1/solr/cluster/explorer/healthcheck        controllers.SolrStats.getExplorerClusterHealth(sensu:Option[Boolean])
+GET         /v1/solr/cluster/logvault/healthcheck        controllers.SolrStats.getLogvaultClusterHealth(sensu:Option[Boolean])
 
-GET        /v1/api/admin/client                         controllers.Admin.client(action:String, group:String, nodes:String)
+GET         /v1/api/admin/client                         controllers.Admin.client(action:String, group:String, nodes:String)
 
 #summary tab API
 
-GET         /v1/api/summary/all                         controllers.Stats.getSummary()
-GET         /v1/api/user/info/all                       controllers.Stats.getUsersInfo()
+GET         /v1/api/summary/all                          controllers.Stats.getSummary()
+GET         /v1/api/user/info/all                        controllers.Stats.getUsersInfo(email:String = "")
+GET         /v1/api/user/info/single/:email              controllers.Stats.getUsersInfo(email:String)
 
 #event tab APIs
-GET        /v1/api/event/lcp/info/all                   controllers.LcpEvents.getAllLcpEvents()
-GET        /v1/api/event/lcp/close/:id                  controllers.LcpEvents.closeLcpEvent(id:Long, kb:String, closed_at:String, bug:String, component:String, owner:String)
-GET        /v1/api/event/lcp/setowner/:id/:owner        controllers.LcpEvents.setOwner(id:Long, owner:String)
+GET         /v1/api/event/lcp/info/all                   controllers.LcpEvents.getAllLcpEvents()
+GET         /v1/api/event/lcp/close/:id                  controllers.LcpEvents.closeLcpEvent(id:Long, kb:String, closed_at:String, bug:String, component:String, owner:String)
+GET         /v1/api/event/lcp/setowner/:id/:owner        controllers.LcpEvents.setOwner(id:Long, owner:String)
 
 #client tab API
-GET        /v1/api/client/info/all                      controllers.Client.getAllClient()
-GET        /v1/api/client/info/single                   controllers.Client.getSingleClientInfo(name:String)
+GET         /v1/api/client/info/all                      controllers.Client.getAllClient()
+GET         /v1/api/client/info/single                   controllers.Client.getSingleClientInfo(name:String)
 
 #checks tab API
-GET        /v1/api/checks/info/:mode                    controllers.LcpChecks.getChecksInfo(mode:String, id:Option[String])
-GET        /v1/api/checks/update/:id                    controllers.LcpChecks.updateCheck(id:String, mps:String, name:String, interval:String, criticalThreshold:String, warningThreshold: String, waitDuration:String, status:String, emailExternal:String)
+GET         /v1/api/checks/info/:mode                    controllers.LcpChecks.getChecksInfo(mode:String, id:Option[String])
+GET         /v1/api/checks/update/:id                    controllers.LcpChecks.updateCheck(id:String, mps:String, name:String, interval:String, criticalThreshold:String, warningThreshold: String, waitDuration:String, status:String, emailExternal:String)
 
 #customer config tab API
-GET        /v1/api/custconfig/info                      controllers.CustConfig.getCustomerConfig()
-GET        /v1/api/custconfig/update                    controllers.CustConfig.updateCustConfig(mps:String,emailMandatory:String, emailInternal:String, emailExternal:String, skipEmailRules:String)
+GET         /v1/api/custconfig/info                      controllers.CustConfig.getCustomerConfig()
+GET         /v1/api/custconfig/update                    controllers.CustConfig.updateCustConfig(mps:String,emailMandatory:String, emailInternal:String, emailExternal:String, skipEmailRules:String)
 
-GET        /v1/api/mpslist                              controllers.CustConfig.getMpsList()
+GET         /v1/api/mpslist                              controllers.CustConfig.getMpsList()
 
 #test apis
-GET        /v1/api/emailtest                            controllers.Application.emailTest()
+GET         /v1/api/emailtest                            controllers.Application.emailTest()
 
 
 #feedback
-POST        /v1/feedback/input               controllers.Application.parsefeedback()
+POST        /v1/feedback/input                           controllers.Application.parsefeedback()
