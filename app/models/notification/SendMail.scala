@@ -52,14 +52,16 @@ object SendMail {
   }
 
   def sendFeebackMail(body:String, title:String, imgPath:String) = {
+    println("Sending feedback email...")
     val email = Email(
       subject = title,
-      attachments = Seq(AttachmentFile("attach", new File("/tmp/saved.png"))),
+      attachments = Seq(AttachmentFile("screenshot.png", new File(imgPath))),
       from = "Glassbeam Monitor <gbmonitor1@gmail.com>",
-      to = Seq("saumitra.srivastav7@gmail.com","saumitra.srivastav@glassbeam.com"),
+      to = Constants.FEEDBACK_RECIPIENT,
       bodyHtml = Some(body)
     )
     MailerPlugin.send(email)
+    println("Sent")
   }
 
 

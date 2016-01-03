@@ -17,7 +17,7 @@ $(document).ready(function() {
             "external":"0"
         };
 
-        var currentUserEmail = Cookies.get("username");
+        var currentUserEmail = currentUser();
         var userData = USERS[currentUserEmail];
         if(userData != undefined) {
             var name = userData['name'];
@@ -93,6 +93,9 @@ Array.prototype.merge = function(b){
     return a;
 };
 
+function currentUser() {
+    return Cookies.get("username");
+}
 
 function updateUserInfo() {
     console.log("Inside updateUserInfo")

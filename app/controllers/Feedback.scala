@@ -10,7 +10,9 @@ import org.json4s.DefaultFormats
 import org.json4s.jackson.JsonMethods.{parse => jparse}
 
 import play.api.mvc.{Controller, Action}
-
+import play.libs.Akka
+import scala.concurrent.duration._
+import scala.concurrent.ExecutionContext.Implicits.global
 
 object Feedback extends Controller {
   implicit private val formats = DefaultFormats
@@ -40,7 +42,7 @@ object Feedback extends Controller {
       ImageIO.write(bfi , "png", outputFile)
       bfi.flush()
 
-      sendFeedBackMail(imgPath, note, url, userAgent, platform, user)
+      Akka.system.scheduler.scheduleOnce(0 seconds)(sendFeedBackMail(imgPath, note, url, userAgent, platform, user))
 
       Ok("0")
     } catch {
@@ -52,15 +54,14 @@ object Feedback extends Controller {
   }
 
   def sendFeedBackMail(imgPath:String, note:String, url:String, userAgent:String, platform:String, user:String) = {
-    val body = s"<strong>URL:</strong> $url" +
-      s"<strong>URL:</strong>UserAgent: $userAgent" +
-      s"<strong>Platform:</strong> $platform" +
-      s"<strong>Description:</strong> $note"
+    val body = s"<strong>Description: </strong> $note" +
+      s"<br><br><strong>URL: </strong>$url" +
+      s"<br><br><strong>Platform: </strong> $platform" +
+      s"<br><br><strong>User-Agent: </strong>UserAgent: $userAgent"
 
-    val title = s"New feedback from $user"
+    val title = s"New feedback from $user [" + System.currentTimeMillis() / 1000 + "]"
 
-    println(s"Title = $title")
-    println(body)
+    models.notification.SendMail.sendFeebackMail(body, title, imgPath)
   }
 
 }
