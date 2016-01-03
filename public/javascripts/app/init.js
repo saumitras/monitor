@@ -17,9 +17,6 @@ $(document).ready(function() {
             "external":"0"
         };
 
-
-
-
         var currentUserEmail = Cookies.get("username");
         var userData = USERS[currentUserEmail];
         if(userData != undefined) {
@@ -110,4 +107,13 @@ function logout() {
     document.cookie = "username=";
     document.cookie = "password=";
     window.location = "/"
+}
+
+
+function isGlassbeamEmail(email) {
+    var validEmailRegex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+    var glassbeamEmailRegex = /(@glassbeam.com)$/;
+
+    return (validEmailRegex.test(email) && glassbeamEmailRegex.test(email) )
+
 }
