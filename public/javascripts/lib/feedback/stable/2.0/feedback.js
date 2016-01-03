@@ -513,6 +513,7 @@
 						post.img = img;
 						post.note = $('#feedback-note').val();
                         var data = {feedback: JSON.stringify(post)};
+                        data['user'] = GLOBALS.userEmail;
                         //var data = {feedback: "saumitra"};
 						$.ajax({
 							url: settings.ajaxURL,

@@ -5,6 +5,7 @@ import play.api.libs.mailer.MailerPlugin
 import play.api.libs.mailer._
 import play.api.Play.current
 import play.api.Logger
+import java.io.File
 
 object SendMail {
 
@@ -48,6 +49,17 @@ object SendMail {
       bodyHtml = Some(body)
     )
     //MailerPlugin.send(email)
+  }
+
+  def sendFeebackMail(body:String, title:String, imgPath:String) = {
+    val email = Email(
+      subject = title,
+      attachments = Seq(AttachmentFile("attach", new File("/tmp/saved.png"))),
+      from = "Glassbeam Monitor <gbmonitor1@gmail.com>",
+      to = Seq("saumitra.srivastav7@gmail.com","saumitra.srivastav@glassbeam.com"),
+      bodyHtml = Some(body)
+    )
+    MailerPlugin.send(email)
   }
 
 

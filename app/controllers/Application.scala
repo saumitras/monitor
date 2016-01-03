@@ -7,12 +7,44 @@ import play.api.mvc._
 import play.api.Play.current
 import org.apache.commons.io.IOUtils
 import models.MonitorConfig
-import play.api.libs.json._
+import org.json4s._
+import org.json4s.jackson.JsonMethods.{parse => jparse}
 import play.twirl.api.Html
 
 
 object Application extends Controller {
+  implicit private val formats = DefaultFormats
 
+  def test1 = Action {
+    val json =
+      """
+        |{
+        |    "glossary": {
+        |        "title": "example glossary",
+        |		"GlossDiv": {
+        |            "title": "S",
+        |			"GlossList": {
+        |                "GlossEntry": {
+        |                    "ID": "SGML",
+        |					"SortAs": "SGML",
+        |					"GlossTerm": "Standard Generalized Markup Language",
+        |					"Acronym": "SGML",
+        |					"Abbrev": "ISO 8879:1986",
+        |					"GlossDef": {
+        |                        "para": "A meta-markup language, used to create markup languages such as DocBook.",
+        |						"GlossSeeAlso": ["GML", "XML"]
+        |                    },
+        |					"GlossSee": "markup"
+        |                }
+        |            }
+        |        }
+        |    }
+        |}
+      """.stripMargin
+    val data = jparse(json)
+    val title = (data).extract[Map[String,Any]]
+    Ok(title.keys.mkString(","))
+  }
   def auth = Action {
     Ok(views.html.auth(""))
   }
@@ -67,7 +99,10 @@ object Application extends Controller {
     val paramVal = request.body.asFormUrlEncoded.get("feedback")(0)
     //val x = Json.toJson(paramVal)
     //println(x)
-    println(paramVal)
+    //println(paramVal)
+    val data = jparse(paramVal)
+    val title = data.extract[Map[String,Any]]
+    println(title.keys)
     Ok("9")
   }
 
