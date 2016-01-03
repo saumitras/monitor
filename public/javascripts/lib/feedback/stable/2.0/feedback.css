@@ -2,7 +2,7 @@
   font-size: 14px;
   position: fixed;
   bottom: -3px;
-  right: 60px;
+  left: 0px;
   width: auto;
 }
 #feedback-module p {  font-size: 13px }
@@ -132,7 +132,7 @@
   height: auto;
 }
 .feedback-btn {
-  padding: 10px;
+  padding: 3px 5px 3px 2px;
   outline: 0;
   background-clip: padding-box;
   -webkit-box-shadow: 0 4px 16px rgba(0,0,0,.2);
@@ -144,26 +144,17 @@
   text-align: center;
   cursor: pointer;
   font-family: 'Open sans';
-  border: 1px solid #dcdcdc;
-  border: 1px solid rgba(0,0,0,0.1);
-  color: #444;
-  border-radius: 2px;
-  background-color: #f5f5f5;
-  background-image: -webkit-linear-gradient(top,#f5f5f5,#f1f1f1);
-  background-image: -moz-linear-gradient(top,#f5f5f5,#f1f1f1);
-  background-image: -ms-linear-gradient(top,#f5f5f5,#f1f1f1);
-  background-image: -o-linear-gradient(top,#f5f5f5,#f1f1f1);
-  background-image: linear-gradient(top,#f5f5f5,#f1f1f1);
+  border: 0px solid #dcdcdc;
+    background-color: #434348;
+    color: #FFF;
+  border-top-right-radius: 10px;
+  /*border-bottom-right-radius: 10px;*/
+
 }
 .feedback-btn-gray:hover {
-  color: #333;
-  border: 1px solid #c6c6c6;
-  background-color: #f8f8f8;
-  background-image: -webkit-linear-gradient(top,#f8f8f8,#f1f1f1);
-  background-image: -moz-linear-gradient(top,#f8f8f8,#f1f1f1);
-  background-image: -ms-linear-gradient(top,#f8f8f8,#f1f1f1);
-  background-image: -o-linear-gradient(top,#f8f8f8,#f1f1f1);
-  background-image: linear-gradient(top,#f8f8f8,#f1f1f1);
+    color: #e7e7e7;
+    background-color: #0D668C;
+
 }
 .feedback-btn-blue {
   text-align: center;
