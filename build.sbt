@@ -1,13 +1,3 @@
-import AssemblyKeys._
-
-assemblySettings
-
-mainClass in assembly := Some("play.core.server.NettyServer")
-
-fullClasspath in assembly += Attributed.blank(PlayKeys.playPackageAssets.value)
-
-resolvers += "Restlet Repository" at "http://maven.restlet.org"
-
 name := "GBMonitor"
 
 version := "1.0"
@@ -15,6 +5,8 @@ version := "1.0"
 lazy val `gbmonitor` = (project in file(".")).enablePlugins(PlayScala)
 
 scalaVersion := "2.11.7"
+
+resolvers += "Restlet Repository" at "http://maven.restlet.org"
 
 libraryDependencies ++= Seq(
   "com.typesafe.play" %% "play-mailer" % "2.4.1" withSources(),
@@ -39,3 +31,18 @@ libraryDependencies ++= Seq(
 )
 
 unmanagedResourceDirectories in Test <+=  baseDirectory ( _ /"target/web/public/test" )
+
+libraryDependencies ~= { _ map {
+  case m if m.organization == "com.typesafe.play" =>
+    m.exclude("commons-logging", "commons-logging")
+  case m => m
+}}
+
+// Take the first ServerWithStop because it's packaged into two jars
+assemblyMergeStrategy in assembly := {
+  case "play/core/server/ServerWithStop.class" => MergeStrategy.first
+  case "org/slf4j/impl/StaticLoggerBinder.class" => MergeStrategy.first
+  case "org/slf4j/impl/StaticMarkerBinder.class" => MergeStrategy.first
+  case "org/slf4j/impl/StaticMDCBinder.class" => MergeStrategy.first
+  case other => (assemblyMergeStrategy in assembly).value(other)
+}
