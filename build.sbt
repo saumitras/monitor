@@ -6,6 +6,8 @@ mainClass in assembly := Some("play.core.server.NettyServer")
 
 fullClasspath in assembly += Attributed.blank(PlayKeys.playPackageAssets.value)
 
+resolvers += "Restlet Repository" at "http://maven.restlet.org"
+
 name := "GBMonitor"
 
 version := "1.0"
