@@ -163,8 +163,8 @@ object MonitorDb {
     def group = column[String]("GROUP")
     def autoRefresh = column[String]("AUTO_REFRESH")
     def external = column[String]("EXTERNAL")
-
-    def * = (email, name, password, group, autoRefresh, external) <> (User.tupled, User.unapply)
+    def active = column[String]("ACTIVE")
+    def * = (email, name, password, group, autoRefresh, external, active) <> (User.tupled, User.unapply)
   }
   val user = TableQuery[UserT]
 
@@ -235,11 +235,11 @@ object MonitorDb {
 
     def initUser = {
       val rows = List(
-        User("saumitra.srivastav@glassbeam.com", "Saumitra S", models.utils.Util.md5Hash("demo"), "admin", "0", "0"),
-        User("saumitra.srivastav7@gmail.com", "Saumitra Gmail", models.utils.Util.md5Hash("demo"), "admin", "0", "0"),
-        User("saumitras01@gmail.com", "Saumitra External", models.utils.Util.md5Hash("demo"), "admin", "0", "0"),
-        User("bharadwaj@glassbeam.com", "Bharadwaj N", models.utils.Util.md5Hash("demo"), "admin", "0", "0"),
-        User("aklank@glassbeam.com", "Aklank C", models.utils.Util.md5Hash("demo"), "admin", "0", "0")
+        //User("saumitra.srivastav@glassbeam.com", "Saumitra S", models.utils.Util.md5Hash("demo"), "admin", "0", "0", "1"),
+        User("saumitra.srivastav7@gmail.com", "Saumitra Gmail", models.utils.Util.md5Hash("demo"), "admin", "0", "0", "1"),
+        User("saumitras01@gmail.com", "Saumitra External", models.utils.Util.md5Hash("demo"), "admin", "0", "0", "1")
+        //User("bharadwaj@glassbeam.com", "Bharadwaj N", models.utils.Util.md5Hash("demo"), "admin", "0", "0", "1"),
+        //User("aklank@glassbeam.com", "Aklank C", models.utils.Util.md5Hash("demo"), "admin", "0", "0", "1")
       )
       rows.foreach(r =>
         try {
@@ -436,6 +436,10 @@ object MonitorDb {
     custConfig.filter(_.mps === row.mps).update(row)
   }
 
+
+  def insertUser(u:User) = dbConn withDynSession {
+    user.insert(u)
+  }
 
   def getUser() = dbConn withDynSession {
     user.list

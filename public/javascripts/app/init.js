@@ -9,7 +9,7 @@ var USERS = undefined;
 
 $(document).ready(function() {
 
-    $.when(updateUserInfo()).then(function(response) {
+    $.when(ajax_updateUserInfo()).then(function(response) {
 
         USERS = response;
         USERS['none'] = {
@@ -97,7 +97,7 @@ function currentUser() {
     return Cookies.get("username");
 }
 
-function updateUserInfo() {
+function ajax_updateUserInfo() {
     console.log("Inside updateUserInfo")
     return ($.ajax({
         type: "GET",

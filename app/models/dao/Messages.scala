@@ -25,7 +25,7 @@ object Messages {
                         bodyInternal:String, bodyExternal:String)
   case class EmailOps(id:Option[Long], group:String, title:String, recipient:String, sentCount:Int, body:String)
   case class CustConfig(mps:String, emailMandatory:String, emailInternal:String, emailExternal:String, skipEmailRules:String)
-  case class User(email:String, name:String, password:String, group:String, autoRefresh:String, external:String)
+  case class User(email:String, name:String, password:String, group:String, autoRefresh:String, external:String, active:String = "0")
 
 
   case class EmailRecipient(mandatory:String, internal:String, external:String)

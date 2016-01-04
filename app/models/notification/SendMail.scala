@@ -36,11 +36,8 @@ object SendMail {
     }
   }
 
-  def sendMail(body:String, title:String, recipientsTo:Seq[String], recipientCC:Seq[String]) = {
-    //println("Sending custconfig to " + recipients)
-    //println("Title:\n" + title + "\nBody\n" + body)
-
-
+  def sendMail(body:String, title:String, recipientsTo:Seq[String], recipientCC:Seq[String] = Seq()) = {
+    println("Sending mail")
     val email = Email(
       subject = title,
       from = "Glassbeam Monitor <gbmonitor1@gmail.com>",
@@ -48,7 +45,8 @@ object SendMail {
       cc = recipientCC.filter(_.size != 0),
       bodyHtml = Some(body)
     )
-    //MailerPlugin.send(email)
+    MailerPlugin.send(email)
+    println("Sent")
   }
 
   def sendFeebackMail(body:String, title:String, imgPath:String) = {

@@ -4,8 +4,6 @@ GET         /assets/*file                                controllers.Assets.at(p
 GET         /test1                                       controllers.Application.test1
 
 GET         /auth                                        controllers.Application.auth
-
-
 GET         /                                            controllers.Application.index
 GET         /lcpevents                                   controllers.Application.lcpevents
 GET         /solrevents                                  controllers.Application.solrevents
@@ -16,6 +14,8 @@ GET         /reports                                     controllers.Application
 GET         /admin                                       controllers.Application.admin
 GET         /kb                                          controllers.Application.kb
 GET         /custconfig                                  controllers.Application.custconfig
+
+GET         /v1/auth/add                                 controllers.Auth.addNewUser(email:String, name:String, password:String)
 
 GET         /v1/solr/cluster/explorer/healthcheck        controllers.SolrStats.getExplorerClusterHealth(sensu:Option[Boolean])
 GET         /v1/solr/cluster/logvault/healthcheck        controllers.SolrStats.getLogvaultClusterHealth(sensu:Option[Boolean])

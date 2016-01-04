@@ -16,7 +16,7 @@ object Escalation {
     check("L3", L3_DURATION)
 
     def check(level:String, duration:Int) = {
-      Logger.info("Checking escalation")
+      //Logger.info("Checking escalation")
       //get all open events since last 4 hours
       //create a new email template for them and send email
 

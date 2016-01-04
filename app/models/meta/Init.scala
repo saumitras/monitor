@@ -25,8 +25,8 @@ object Init {
     MonitorDb.createTables()
     MonitorDb.initTables()
 
-    val CACHE_UPDATE_HEARTBEAT = 10000
-    val EMAIL_HEARTBEAT = 15000
+    val CACHE_UPDATE_HEARTBEAT = 10
+    val EMAIL_HEARTBEAT = 15
     val CHECKS_HEARTBEAT = 10000
 
     Logger.info(s"Setting up monitor-db cache update scheduler with interval = $CACHE_UPDATE_HEARTBEAT seconds")
