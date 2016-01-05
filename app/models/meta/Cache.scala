@@ -29,7 +29,8 @@ object Cache {
       "password" -> u.password,
       "group" -> u.group,
       "external" -> u.external,
-      "autoRefresh" -> u.autoRefresh
+      "autoRefresh" -> u.autoRefresh,
+      "active" -> u.active
     ))).reduceLeft(_ ++ _)
   }
 

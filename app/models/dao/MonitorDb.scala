@@ -441,8 +441,15 @@ object MonitorDb {
     user.insert(u)
   }
 
-  def getUser() = dbConn withDynSession {
-    user.list
+  def getUser(email:String = "") = dbConn withDynSession {
+    if(email.isEmpty)
+      user.list
+    else
+      user.filter(_.email === email).list
+  }
+
+  def activateUser(email:String) =  dbConn withDynSession {
+    user.filter(_.email === email).map(r => r.active).update("1")
   }
 
 

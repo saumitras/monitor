@@ -12,17 +12,20 @@ import akka.actor.Actor
 import scala.concurrent.ExecutionContext.Implicits.global
 import models.meta.Cache
 
-class MailWatcher extends Actor {
+import scala.language.postfixOps
+
+class MailWatcher() extends Actor {
 
   var inbox:Folder = null
   var store:Store = null
 
   var mailBoxInitialized = false
-  val POLLING_INTERVAL = 10000 seconds
+  var POLLING_INTERVAL = 30 seconds
 
   def receive = {
-    case InitMailWatcher(host:String, user:String, password:String) =>
-      Logger.info(s"InitMailWatcher called with host=$host, user:$user, password:$password")
+    case InitMailWatcher(host:String, user:String, password:String, pollingInterval:Int) =>
+      Logger.info(s"InitMailWatcher called with host=$host, user:$user, password:$password, pollingInterval:$pollingInterval")
+      POLLING_INTERVAL = pollingInterval seconds
       val props = System.getProperties
       props.setProperty("mail.store.protocol", "imaps")
       val session = Session.getDefaultInstance(props, null)
@@ -45,23 +48,33 @@ class MailWatcher extends Actor {
       context.system.scheduler.scheduleOnce(POLLING_INTERVAL, self, ReadMailBox)
 
 
-    case ProcessMailCmd(source:String, from:String, cmd:List[String]) =>
-      //Logger.info(s"Inside ProcessCmd. Source: $source. Commands: $cmd")
-      if(models.meta.Cache.doesUserExists(from, false)) {
-        val eventId = source.replaceAll(".*E-","").replaceAll(" .*","")
+    case ProcessMailCmd(subject:String,  fromEmail:String, cmd:List[String]) =>
+      Logger.info(s"Inside ProcessCmd. From:$fromEmail Subject: $subject. Commands: $cmd")
+      if(models.meta.Cache.doesUserExists(fromEmail, false)) {
+        if(subject.matches(".*Activate your GBMonitor Account.*")) {
+          activateUser(fromEmail)
+        }
+
+        val eventId = subject.replaceAll(".*E-","").replaceAll(" .*","")
         if(eventId.matches("\\d{1,}")) {
-          cmd.filter(_.size != 0).foreach(c => processCommands(eventId, from, c))
+          cmd.filter(_.size != 0).foreach(c => processCommands(eventId, fromEmail, c))
         }
       } else {
-        Logger.warn(s"User with email '$from' doesnot exists in database.")
+        Logger.warn(s"User with email '$fromEmail' doesnot exists in database.")
       }
 
   }
 
 
+  def activateUser(email:String) = {
+    println(s"Activating user $email")
+    models.auth.AuthUtils.activateUser(email)
+  }
+
+
   def readMailBox() = {
     if(mailBoxInitialized && store.isConnected) {
-      Logger.info("Reading mailbox")
+      //Logger.info("Reading mailbox")
 
       inbox.open(Folder.READ_WRITE)
       val messages = inbox.search(new FlagTerm(new Flags(Flags.Flag.SEEN), false))
@@ -74,14 +87,13 @@ class MailWatcher extends Actor {
         val mpCount = mp.getCount
 
         if(mpCount > 0) {
-
           val bp = mp.getBodyPart(0)
           val text = bp.getContent.toString
           val lines = text.split("\n")
-          if(lines.nonEmpty) {
-            val cmd = lines.head.split(";").map(_.trim).filter(_.nonEmpty).toList
-            self ! ProcessMailCmd(subject, from, cmd)
-          }
+
+          val cmd = lines.head.split(";").map(_.trim).filter(_.nonEmpty).toList
+          self ! ProcessMailCmd(subject, from, cmd)
+
         }
         message.setFlag(Flag.SEEN, true)
       }

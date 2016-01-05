@@ -17,17 +17,18 @@ object Init {
 
   def init() = {
 
+    val CACHE_UPDATE_HEARTBEAT = 10
+    val EMAIL_HEARTBEAT = 15
+    val CHECKS_HEARTBEAT = 10000
+    val EMAIL_WATCHER_POLLING_DURATION = 15
+
     val actorSystem = ActorSupervisor.getSystem
     val mailWatcherActor = ActorSupervisor.get("MailWatcher")
-    mailWatcherActor ! InitMailWatcher("imap.gmail.com", "gbmonitor1@gmail.com", "PASS*123#")
+    mailWatcherActor ! InitMailWatcher("imap.gmail.com", "gbmonitor1@gmail.com", "PASS*123#", EMAIL_WATCHER_POLLING_DURATION)
 
     Logger.info("Initializing monitor db...")
     MonitorDb.createTables()
     MonitorDb.initTables()
-
-    val CACHE_UPDATE_HEARTBEAT = 10
-    val EMAIL_HEARTBEAT = 15
-    val CHECKS_HEARTBEAT = 10000
 
     Logger.info(s"Setting up monitor-db cache update scheduler with interval = $CACHE_UPDATE_HEARTBEAT seconds")
     actorSystem.scheduler.schedule(0 seconds, CACHE_UPDATE_HEARTBEAT seconds)(models.MonitorConfig.updateConfig)

@@ -2,6 +2,7 @@ import akka.actor.ActorSystem
 import com.typesafe.config.ConfigFactory
 import play.api._
 import models._
+import play.libs.Akka
 
 
 object Global extends GlobalSettings {
@@ -20,6 +21,7 @@ object Global extends GlobalSettings {
 
     //models.agents.ActorSupervisor.getSystem.awaitTermination()
     models.agents.ActorSupervisor.getSystem.shutdown()
+    Akka.system().shutdown()
     Logger.info("GBMonitor stopped")
 
   }

@@ -31,7 +31,7 @@ object Messages {
   case class EmailRecipient(mandatory:String, internal:String, external:String)
 
 
-  case class InitMailWatcher(host:String, user:String, password:String)
+  case class InitMailWatcher(host:String, user:String, password:String, pollingInterval:Int)
   case object ReadMailBox
   case class ProcessMailCmd(source:String, from:String, cmd:List[String])
 
