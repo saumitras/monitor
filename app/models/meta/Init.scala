@@ -20,11 +20,12 @@ object Init {
     val CACHE_UPDATE_HEARTBEAT = 10
     val EMAIL_HEARTBEAT = 15
     val CHECKS_HEARTBEAT = 10000
-    val EMAIL_WATCHER_POLLING_DURATION = 15
+    val EMAIL_WATCHER_POLLING_DURATION = 20
 
     val actorSystem = ActorSupervisor.getSystem
     val mailWatcherActor = ActorSupervisor.get("MailWatcher")
-    mailWatcherActor ! InitMailWatcher("imap.gmail.com", "gbmonitor1@gmail.com", "PASS*123#", EMAIL_WATCHER_POLLING_DURATION)
+    //mailWatcherActor ! InitMailWatcher("imap.gmail.com", "gbmonitor1@gmail.com", "PASS*123#", EMAIL_WATCHER_POLLING_DURATION)
+    mailWatcherActor ! InitMailWatcher("mail11.123together.com", "gbmonitor@glassbeam.com", "gla55beam", EMAIL_WATCHER_POLLING_DURATION)
 
     Logger.info("Initializing monitor db...")
     MonitorDb.createTables()

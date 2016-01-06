@@ -40,7 +40,7 @@ object SendMail {
     println("Sending mail")
     val email = Email(
       subject = title,
-      from = "Glassbeam Monitor <gbmonitor1@gmail.com>",
+      from = "Glassbeam Monitor <gbmonitor@glassbeam.com>",
       to = recipientsTo.filter(_.size != 0),
       cc = recipientCC.filter(_.size != 0),
       bodyHtml = Some(body)
@@ -54,7 +54,7 @@ object SendMail {
     val email = Email(
       subject = title,
       attachments = Seq(AttachmentFile("screenshot.png", new File(imgPath))),
-      from = "Glassbeam Monitor <gbmonitor1@gmail.com>",
+      from = "Glassbeam Monitor <gbmonitor@glassbeam.com>",
       to = Constants.FEEDBACK_RECIPIENT,
       bodyHtml = Some(body)
     )

@@ -76,28 +76,45 @@ class MailWatcher() extends Actor {
     if(mailBoxInitialized && store.isConnected) {
       //Logger.info("Reading mailbox")
 
-      inbox.open(Folder.READ_WRITE)
-      val messages = inbox.search(new FlagTerm(new Flags(Flags.Flag.SEEN), false))
-      Logger.info(s"Found ${messages.size} new messages")
-      for (message <- messages) {
-        val subject = message.getSubject
-        val from = message.getFrom.toList.head.asInstanceOf[InternetAddress].getAddress
+      try {
+        inbox.open(Folder.READ_WRITE)
+        val messages = inbox.search(new FlagTerm(new Flags(Flags.Flag.SEEN), false))
+        Logger.info(s"Found ${messages.size} new messages")
+        for (message <- messages) {
+          val subject = message.getSubject
+          val from = message.getFrom.toList.head.asInstanceOf[InternetAddress].getAddress
 
-        val mp = message.getContent.asInstanceOf[Multipart]
-        val mpCount = mp.getCount
+          val commands:List[String] = Constants.MAIL_PROVIDER match {
+            case "AWS" =>
+              val lines = message.getContent.toString.split("\n")
+              val cmd = lines.head.split(";").map(_.trim).filter(_.nonEmpty).toList
+              cmd
 
-        if(mpCount > 0) {
-          val bp = mp.getBodyPart(0)
-          val text = bp.getContent.toString
-          val lines = text.split("\n")
-
-          val cmd = lines.head.split(";").map(_.trim).filter(_.nonEmpty).toList
-          self ! ProcessMailCmd(subject, from, cmd)
-
+            case "GMAIL" =>
+              val mp = message.getContent.asInstanceOf[Multipart]
+              val mpCount = mp.getCount
+              if(mpCount > 0) {
+                val bp = mp.getBodyPart(0)
+                val text = bp.getContent.toString
+                val lines = text.split("\n")
+                val cmd = lines.head.split(";").map(_.trim).filter(_.nonEmpty).toList
+                cmd
+              } else {
+                List()
+              }
+          }
+          self ! ProcessMailCmd(subject, from, commands)
+          message.setFlag(Flag.SEEN, true)
         }
-        message.setFlag(Flag.SEEN, true)
+
+        inbox.close(false)
+
+      } catch  {
+        case ex:Exception =>
+          Logger.error("[MailWatcher] Error while reading mailbox. " + ex.getMessage)
+          println(ex.getStackTrace)
       }
-      inbox.close(false)
+
     }
   }
 

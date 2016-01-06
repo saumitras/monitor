@@ -48,10 +48,10 @@ var Summary = function() {
 
         $.when(ajax_getSummary()).then(function(data){
             summaryData = {};
-            var totalEvents = data.openEventsCount +  data.closedEventsCount
-            var tile1 = totalEvents + " events" + " (0 warnings, " + totalEvents + " critical)";
-            var tile2 = data.openEventsCount + " open" + " (" + data.openEventsOwnerCount + " owners)";
-            var tile3 = data.closedEventsCount + " closed" + " (" + data.closedEventsOwnerCount + " owners)";
+            var totalEvents = data.openEventsCount +  data.closedEventsCount;
+            var tile1 = totalEvents + " events" + " <span class='small'>(0 warnings, " + totalEvents + " critical)</span>";
+            var tile2 = data.openEventsCount + " open" + " <span class='small'>(" + data.openEventsOwnerCount + " owners)</span>";
+            var tile3 = data.closedEventsCount + " closed" + " <span class='small'>(" + data.closedEventsOwnerCount + " owners)</span>";
 
             var numPlatformIssues = (data['issueGroup'] != undefined) ?
                 (data['issueGroup']['platform'] == undefined ? 0 : data.issueGroup['platform']) : 0;
