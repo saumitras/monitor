@@ -130,7 +130,7 @@ var CustConfig = function() {
 
         return ($.ajax({
             type: "GET",
-            url: "v1/api/custconfig/info",
+            url: "v1/api/config/info",
             data: params
         }))
     }
@@ -139,7 +139,7 @@ var CustConfig = function() {
 
         return ($.ajax({
             type: "GET",
-            url: "v1/api/custconfig/update",
+            url: "v1/api/config/update",
             data: data
         }))
     }

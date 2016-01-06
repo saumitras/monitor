@@ -13,7 +13,7 @@ GET         /solrchecks                                  controllers.Application
 GET         /reports                                     controllers.Application.reports
 GET         /admin                                       controllers.Application.admin
 GET         /kb                                          controllers.Application.kb
-GET         /custconfig                                  controllers.Application.custconfig
+GET         /config                                      controllers.Application.custconfig
 
 GET         /v1/auth/add                                 controllers.Auth.addNewUser(email:String, name:String, password:String)
 
@@ -42,8 +42,8 @@ GET         /v1/api/checks/info/:mode                    controllers.LcpChecks.g
 GET         /v1/api/checks/update/:id                    controllers.LcpChecks.updateCheck(id:String, mps:String, name:String, interval:String, criticalThreshold:String, warningThreshold: String, waitDuration:String, status:String, emailExternal:String)
 
 #customer config tab API
-GET         /v1/api/custconfig/info                      controllers.CustConfig.getCustomerConfig()
-GET         /v1/api/custconfig/update                    controllers.CustConfig.updateCustConfig(mps:String,emailMandatory:String, emailInternal:String, emailExternal:String, skipEmailRules:String)
+GET         /v1/api/config/info                          controllers.CustConfig.getCustomerConfig()
+GET         /v1/api/config/update                        controllers.CustConfig.updateCustConfig(mps:String,emailMandatory:String, emailInternal:String, emailExternal:String, skipEmailRules:String)
 
 GET         /v1/api/mpslist                              controllers.CustConfig.getMpsList()
 
