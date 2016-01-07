@@ -18,6 +18,10 @@ object Application extends Controller {
     Ok(views.html.auth(""))
   }
 
+  def agent = Action {
+    Ok(views.html.agent(""))
+  }
+
   def index =  {
     Auth.route(views.html.index(""))
   }

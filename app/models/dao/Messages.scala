@@ -35,6 +35,8 @@ object Messages {
   case object ReadMailBox
   case class ProcessMailCmd(source:String, from:String, cmd:List[String])
 
+
+
 }
 
 

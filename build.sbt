@@ -9,6 +9,9 @@ scalaVersion := "2.11.7"
 resolvers += "Restlet Repository" at "http://maven.restlet.org"
 
 libraryDependencies ++= Seq(
+  "org.apache.httpcomponents" % "httpclient" % "4.5.1" withSources(),
+  "commons-codec" % "commons-codec" % "1.10",
+  "com.amazonaws" % "aws-java-sdk" % "1.10.44",
   "com.typesafe.play" %% "play-mailer" % "2.4.1" withSources(),
   "joda-time" % "joda-time" % "2.4"  withSources(),
   "org.apache.curator" % "curator-client" % "2.7.0"  withSources(),
