@@ -218,8 +218,18 @@ object MonitorDb {
         ("h2",Constants.DEFAULT_LCP_DB),
         ("zk",Constants.DEFAULT_ZK_HOST),
         ("lcp",""),
-        ("l2_escalation_time", Constants.DEFAULT_L2_ESCALATION_TIME),
-        ("l3_escalation_time", Constants.DEFAULT_L3_ESCALATION_TIME)
+        ("emailProvider",Constants.MAIL_PROVIDER),
+        ("feedbackMailRecipients",Constants.FEEDBACK_RECIPIENT.mkString(",")),
+        ("emailProvider",Constants.MAIL_PROVIDER),
+        ("l3EscalationDuration",Constants.DEFAULT_L3_ESCALATION_TIME),
+        ("l3EscalationMailRecipients",Constants.DEFAULT_L3_MAIL_RECIPIENTS),
+        ("l2EscalationDuration",Constants.DEFAULT_L2_ESCALATION_TIME),
+        ("l2EscalationMailRecipients",Constants.DEFAULT_L2_MAIL_RECIPIENTS),
+        ("pauseAllChecks","false"),
+        ("pauseAllExternalMails","false"),
+        ("pauseAllTriggers","true"),
+        ("s3Bucket",Constants.S3_BUCKET),
+        ("s3BaseDirectory",Constants.S3_BASE_PATH)
       )
       rows.foreach(r =>
         try {
@@ -271,6 +281,10 @@ object MonitorDb {
 
   def getConf():Map[String, String] = dbConn withDynSession {
     monitorConfig.list.map(x => x._1 -> x._2).filter(_._2.nonEmpty).toMap
+  }
+
+  def updateMonitorConfig(key:String, value:String) =  dbConn withDynSession {
+    monitorConfig.filter(_.key === key).map(r => r.value).update(value)
   }
 
   def getDefaultLcpChecks(idList: String):List[DefaultCheck] = dbConn withDynSession {
@@ -451,14 +465,6 @@ object MonitorDb {
   def activateUser(email:String) =  dbConn withDynSession {
     user.filter(_.email === email).map(r => r.active).update("1")
   }
-
-
-}
-
-
-
-object MonitorDbData {
-
 
 
 }

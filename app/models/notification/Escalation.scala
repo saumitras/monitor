@@ -9,8 +9,8 @@ object Escalation {
 
   def checkEscalation() = {
 
-    val L2_DURATION = MonitorDb.getConf().getOrElse("l2_escalation_time",Constants.DEFAULT_L2_ESCALATION_TIME).toInt * 60
-    val L3_DURATION = MonitorDb.getConf().getOrElse("l3_escalation_time",Constants.DEFAULT_L2_ESCALATION_TIME).toInt * 60
+    val L2_DURATION = MonitorDb.getConf().getOrElse("l2EscalationDuration",Constants.DEFAULT_L2_ESCALATION_TIME).toInt * 60
+    val L3_DURATION = MonitorDb.getConf().getOrElse("l3EscalationDuration",Constants.DEFAULT_L3_ESCALATION_TIME).toInt * 60
 
     check("L2", L2_DURATION)
     check("L3", L3_DURATION)
@@ -53,7 +53,7 @@ object Escalation {
       val newBody = s"<p><b>Escalating this event to level $level. Please look at event and update it to avoid further escalation.</b></p>" + body
 
       Logger.info(s"Sending escalation email for event id = $id")
-      SendMail.sendMail(newBody, "ESCALATED " + newTitle, recipients.split(",").toSeq, Seq[String]())
+      SendMail.sendMail(newBody, "Escalated!!! " + newTitle, recipients.split(",").toSeq, Seq[String]())
 
     }
 

@@ -1,6 +1,6 @@
 $(document).ready(function(){
     new GlobalConfig();
-    $('#username').editable({
+    /*$('#username').editable({
         type: 'select',
         mode: 'inline',
         pk: 1,
@@ -12,12 +12,91 @@ $(document).ready(function(){
             {value: 2, text: 'status 2'},
             {value: 3, text: 'status 3'}
         ]
-    });
+    });*/
+
     new CustConfig();
 });
 
+
 var GlobalConfig = function() {
-    $('#monitor-config-global').bootstrapTable()
+
+    $.when(ajax_getGlobalConfig()).then(function(response){
+        console.log(response);
+        var displayableConfigs = [
+            {key:"emailProvider", label:"Email Provider"},
+            {key:"feedbackMailRecipients", label:"Feedback Email Recipients"},
+            {key:"l3EscalationDuration", label:"L2 Escalation Duration (in minutes)"},
+            {key:"l2EscalationDuration", label:"L1 Escalation Duration (in minutes)"},
+            {key:"l3EscalationMailRecipients", label:"L2 additional emails"},
+            {key:"l2EscalationMailRecipients", label:"L1 additional emails"},
+            {key:"pauseAllChecks", label:"Pause All Checks"},
+            {key:"pauseAllTriggers", label:"Pause All Triggers"},
+            {key:"pauseAllExternalMails", label:"Pause All External Emails"},
+            {key:"s3Bucket", label:"S3 Bucket Name"},
+            {key:"s3BaseDirectory", label:"S3 Base Directory"}
+        ];
+        var data = [];
+        $.each(displayableConfigs, function(index, config) {
+            var key = config.key;
+            var label = config.label;
+
+            var remoteValue = response[key];
+            if(remoteValue != undefined) {
+                data.push({
+                    config:label,
+                    value: "<span class='config-x-editable' id='" + key + "'>" + remoteValue + "</span>"
+                });
+            }
+        });
+        console.log(data);
+        $('#monitor-config-global').bootstrapTable({
+            data: data
+        });
+
+        makeConfigXEditable();
+
+    });
+
+    function makeConfigXEditable() {
+        $("#monitor-config-global").find('.config-x-editable').each(function(){
+            var id = $(this).attr("id");
+            if(id == "pauseAllChecks" || id=="pauseAllTriggers" || id=="pauseAllExternalMails") {
+                $('#' + id).editable({
+                    type: 'select',
+                    mode: 'inline',
+                    pk: 1,
+                    url: '/v1/api/config/global/update',
+                    params: {"key":id},
+                    source: [
+                        {value: "false", text: 'false'},
+                        {value: "true", text: 'true'}
+                    ]
+                });
+
+            } else {
+                $('#' + id).editable({
+                    type: 'text',
+                    mode: 'inline',
+                    pk: 1,
+                    url: '/v1/api/config/global/update',
+                    params: {"key":id}
+                });
+            }
+        })
+    };
+
+   /* function getXEditableValue(key, value) {
+        var str = "<span id='" + key + "'>" + value + "</span>";
+        return str;
+    }*/
+
+    function ajax_getGlobalConfig() {
+        return ($.ajax({
+            type: "GET",
+            url: "v1/api/config/global/info"
+        }))
+    }
+
 };
 var CustConfig = function() {
 
@@ -29,7 +108,7 @@ var CustConfig = function() {
     updateConfigData();
     var initializer = setInterval(function() {
         if(custConfig != undefined) {
-            console.log(custConfig);
+            //console.log(custConfig);
             //populateMpsDropdown(Object.keys(custConfig));
             resetData();
             clearTimeout(initializer);
@@ -61,8 +140,8 @@ var CustConfig = function() {
                 skipEmailRules:skipEmailRules
             };
 
-            console.log("Updating data...");
-            console.log(data);
+            //console.log("Updating data...");
+            //console.log(data);
 
             $.when(ajax_updateCustConfig(data)).then(function(resp) {
                 updateConfigData(true);
@@ -115,12 +194,12 @@ var CustConfig = function() {
 
     function updateConfigData(reset) {
         $.when(ajax_getCustConfig()).then(function(resp) {
-            console.log(resp);
+            //console.log(resp);
             custConfig = resp;
 
             respToRows(resp);
-            console.log("custConfigTable");
-            console.log(custConfigTable);
+            //console.log("custConfigTable");
+            //console.log(custConfigTable);
             function respToRows(resp) {
                 custConfigTable = [];
                 $.each(resp, function(mps, values){

@@ -42,6 +42,7 @@ GET         /v1/api/checks/update/:id                    controllers.LcpChecks.u
 #customer config tab API
 GET         /v1/api/config/info                          controllers.CustConfig.getCustomerConfig()
 GET         /v1/api/config/update                        controllers.CustConfig.updateCustConfig(mps:String,emailMandatory:String, emailInternal:String, emailExternal:String, skipEmailRules:String)
+GET         /v1/api/config/global/info                   controllers.CustConfig.getGlobalConfig()
 POST        /v1/api/config/global/update                 controllers.CustConfig.updateGlobalConfig()
 
 

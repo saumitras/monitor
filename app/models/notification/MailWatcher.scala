@@ -84,7 +84,7 @@ class MailWatcher() extends Actor {
           val subject = message.getSubject
           val from = message.getFrom.toList.head.asInstanceOf[InternetAddress].getAddress
 
-          val commands:List[String] = Constants.MAIL_PROVIDER match {
+          val commands:List[String] = Constants.MAIL_PROVIDER.toUpperCase match {
             case "AWS" =>
               val lines = message.getContent.toString.split("\n")
               val cmd = lines.head.split(";").map(_.trim).filter(_.nonEmpty).toList

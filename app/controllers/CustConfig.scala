@@ -22,12 +22,20 @@ object CustConfig extends Controller{
     Ok("1")
   }
 
+  def getGlobalConfig() = Action {
+    val data = models.MonitorConfig.getMonitorConfig()
+    Ok(Json.toJson(data))
+  }
+
   def updateGlobalConfig() = Action { request =>
 
     val key = request.body.asFormUrlEncoded.get("key")(0)
     val value = request.body.asFormUrlEncoded.get("value")(0)
 
+    models.dao.MonitorDb.updateMonitorConfig(key, value)
     Logger.info(s"Updating global config. Key=$key, value:$value")
     Ok("1")
   }
+
+
 }

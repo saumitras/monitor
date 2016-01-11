@@ -17,4 +17,7 @@ object MonitorConfig {
     h2Hosts = config.getOrElse("h2", "").split(",").filter(_.nonEmpty).toList
     zkHosts = config.getOrElse("zk", "").split("|").filter(_.nonEmpty).toList
   }
+
+  def getMonitorConfig() = config
+
 }
