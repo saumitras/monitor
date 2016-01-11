@@ -2,6 +2,7 @@ package controllers
 
 import play.api.mvc.{Action, Controller}
 import play.api.libs.json.Json
+import play.api.Logger
 
 object CustConfig extends Controller{
 
@@ -18,6 +19,15 @@ object CustConfig extends Controller{
   def updateCustConfig(mps:String,emailMandatory:String, emailInternal:String, emailExternal:String, skipEmailRules:String) = Action {
     val result = models.config.CustomerConfig.updateCustConfig(mps,emailMandatory, emailInternal, emailExternal, skipEmailRules)
     models.config.CustomerConfig.refreshCustomerConfig()
+    Ok("1")
+  }
+
+  def updateGlobalConfig() = Action { request =>
+
+    val key = request.body.asFormUrlEncoded.get("key")(0)
+    val value = request.body.asFormUrlEncoded.get("value")(0)
+
+    Logger.info(s"Updating global config. Key=$key, value:$value")
     Ok("1")
   }
 }

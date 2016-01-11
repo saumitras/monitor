@@ -23,7 +23,7 @@ object Init {
 
       //TODO: is anything more needs to be done in agent mode??
     } else {
-      
+
       val CACHE_UPDATE_HEARTBEAT = 10
       val EMAIL_HEARTBEAT = 15
       val CHECKS_HEARTBEAT = 10000

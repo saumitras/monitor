@@ -1,7 +1,24 @@
 $(document).ready(function(){
+    new GlobalConfig();
+    $('#username').editable({
+        type: 'select',
+        mode: 'inline',
+        pk: 1,
+        url: '/v1/api/config/global/update',
+        title: 'Enter username',
+        params: {"key":"123"},
+        source: [
+            {value: 1, text: 'status 1'},
+            {value: 2, text: 'status 2'},
+            {value: 3, text: 'status 3'}
+        ]
+    });
     new CustConfig();
 });
 
+var GlobalConfig = function() {
+    $('#monitor-config-global').bootstrapTable()
+};
 var CustConfig = function() {
 
     var custConfig = undefined;

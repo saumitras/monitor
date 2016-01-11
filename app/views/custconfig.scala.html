@@ -10,9 +10,103 @@
        $('#header-tab-custconfig').addClass("active");
     </script>
 
-
     <!-- Begin Body -->
     <div class="container overwrite-margin">
+
+        <div class="row">
+
+            <div class="col-md-12">
+
+                <h4><span class="style2" >Global configuration</span></h4>
+
+                <div class="row">
+                    <div class="col-md-12">
+
+                        <div class="parent-l1">
+                            <table id="monitor-config-global"
+                            data-sort-name="config"
+                            data-search="false"
+                            data-show-columns="false"
+                            >
+                                <thead>
+                                    <tr>
+                                        <th data-field="config">Config Name</th>
+                                        <th data-field="value">Value</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>L2 escalation recipients</td>
+                                        <td>saumitra.srivastav7@@gmail.com</td>
+                                    </tr>
+                                    <tr>
+                                        <td>L1 escalation recipients</td>
+                                        <td>
+                                            @*<a href="#" id="username" data-type="text" data-pk="1" data-url="/post" data-title="Enter username">superuser</a>*@
+                                            <span id="username">superuser</span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>L2 escalation duration (mins)</td>
+                                        <td>240</td>
+                                    </tr>
+                                    <tr>
+                                        <td>L1 escalation duration (mins)</td>
+                                        <td>720</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Pause all checks</td>
+                                        <td>false</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Pause all emails</td>
+                                        <td>false</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Pause all external emails</td>
+                                        <td>false</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Pause all triggers</td>
+                                        <td>false</td>
+                                    </tr>
+                                    <tr>
+                                        <td>S3 Bucket</td>
+                                        <td>gb-s3-dev</td>
+                                    </tr>
+                                    <tr>
+                                        <td>S3 Agents Root Directory</td>
+                                        <td>monitor/agents/data/</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Feedback email recipient</td>
+                                        <td>saumitra.srivastav@@glassbeam.com, saumitras01@@gmail.com</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Email Provider</td>
+                                        <td>
+                                            <input type="radio" name="email-provider" id="email-provider-aws" value="aws" />
+                                            <label for="email-provider-aws" class="table-label">AWS</label>
+                                            <input type="radio" name="email-provider" id="email-provider-gmail" value="aws"  />
+                                            <label for="email-provider-gmail" class="table-label">Gmail</label>
+                                        </td>
+                                    </tr>
+
+
+
+                                </tbody>
+                            </table>
+                        </div>
+
+
+                    </div> <!-- end of col -->
+                </div> <!-- end of row -->
+<br>
+                <hr />
+
+            </div>
+        </div>
+
         <div class="row">
 
             <div class="col-md-12">
@@ -59,10 +153,11 @@
                     </div> <!-- end of col -->
                 </div> <!-- end of row -->
 
-                <hr />
 
             </div>
         </div>
+
+
     </div>
 
 
