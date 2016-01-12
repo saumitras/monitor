@@ -26,7 +26,7 @@ object Init {
 
       val CACHE_UPDATE_HEARTBEAT = 10
       val EMAIL_HEARTBEAT = 15
-      val CHECKS_HEARTBEAT = 10000
+      val CHECKS_HEARTBEAT = 15
       val EMAIL_WATCHER_POLLING_DURATION = 20
 
       val actorSystem = ActorSupervisor.getSystem

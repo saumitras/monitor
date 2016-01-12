@@ -1,7 +1,8 @@
 package models.alerts
 
 import java.sql.Timestamp
-import models.dao.Messages.{LCPEvent, FileStuckInSeen, Check}
+import models.agents.ActorSupervisor
+import models.dao.Messages.{ActivateAgent, LCPEvent, FileStuckInSeen, Check}
 import models.dao.MonitorDb
 import play.api.Logger
 
@@ -31,6 +32,12 @@ object FileStuckInSeenAlert {
       val isExternalAllowed = check.emailExternal == "1"
 
       Notification.addEventNotification(newEventId, mps, title, title, bodyInternal, bodyExternal, isExternalAllowed)
+
+      val triggerPaused = MonitorDb.getConf().getOrElse("pauseAllTriggers","true").toBoolean
+      if(! triggerPaused) {
+        val remoteSender = ActorSupervisor.get("REMOTESENDER")
+        remoteSender ! ActivateAgent(newEventId.toString)
+      }
 
     }
   }

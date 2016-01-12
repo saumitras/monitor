@@ -44,6 +44,13 @@ object ActorSupervisor {
         val a = system.actorOf(Props[RemoteListener], "RemoteListener")
         actorRefs += (name.toUpperCase -> a)
         a
+
+      case "REMOTESENDER" =>
+        Logger.info("Creating remotesender actor")
+        /*val senderSystem = ActorSystem("Agent", ConfigFactory.load("agent"))*/
+        val a = system.actorOf(Props[RemoteSender], "RemoteSender")
+        actorRefs += (name.toUpperCase -> a)
+        a
     }
   }
 
