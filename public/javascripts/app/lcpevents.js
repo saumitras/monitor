@@ -75,7 +75,7 @@ var LcpEventData = function() {
                 "component": component,
                 "kb":kb,
                 "bug":bug,
-                "owner":owner
+                "owner":currentUser()
             })
         });
 

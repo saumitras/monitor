@@ -86,11 +86,9 @@ class MailWatcher() extends Actor {
 
           val commands:List[String] = Constants.MAIL_PROVIDER.toUpperCase match {
             case "AWS" =>
-              val lines = message.getContent.toString.split("\n")
-              val cmd = lines.head.split(";").map(_.trim).filter(_.nonEmpty).toList
-              cmd
+              parseMultipart(message)
 
-            case "GMAIL" =>
+            case "GMAIL" => //TODO: remove this case...not needed
               val mp = message.getContent.asInstanceOf[Multipart]
               val mpCount = mp.getCount
               if(mpCount > 0) {
@@ -114,6 +112,32 @@ class MailWatcher() extends Actor {
           Logger.error("[MailWatcher] Error while reading mailbox. " + ex.getMessage)
           println(ex.getStackTrace)
       }
+
+    }
+  }
+
+  def parseMultipart(message: Message) = {
+    val lines = message.getContent.toString.split("\n")
+    val cmd = lines.head.split(";").map(_.trim).filter(_.nonEmpty).toList
+
+    if(cmd.length != 0 ) {
+      if(cmd(0).matches(".*MimeMultipart.*")) {
+        val mp = message.getContent.asInstanceOf[Multipart]
+        val mpCount = mp.getCount
+        if(mpCount > 0) {
+          val bp = mp.getBodyPart(0)
+          val text = bp.getContent.toString
+          val lines = text.split("\n")
+          val cmd = lines.head.split(";").map(_.trim).filter(_.nonEmpty).toList
+          cmd
+        } else {
+          List()
+        }
+      } else {
+        cmd
+      }
+    } else {
+      cmd
 
     }
   }

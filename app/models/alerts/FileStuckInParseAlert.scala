@@ -2,6 +2,7 @@ package models.alerts
 
 import java.sql.Timestamp
 
+import models.agents.ActorSupervisor
 import models.dao.Messages._
 import models.dao.MonitorDb
 import models.notification.Notification
@@ -29,6 +30,12 @@ object FileStuckInParseAlert extends App {
       val isExternalAllowed = check.emailExternal == "1"  //is email allowed for external(customer) email ids??
 
       Notification.addEventNotification(newEventId, mps, title, title, bodyInternal, bodyExternal, isExternalAllowed)
+
+      val triggerPaused = MonitorDb.getConf().getOrElse("pauseAllTriggers","true").toBoolean
+      if(! triggerPaused) {
+        val remoteSender = ActorSupervisor.get("REMOTESENDER")
+        remoteSender ! ActivateAgent(newEventId.toString)
+      }
 
     }
   }
