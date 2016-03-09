@@ -10,9 +10,9 @@ object Admin extends Controller {
     val resp = Map("status" -> "0",
       "msg" -> s"Client request processed: action=$action, group:$group, nodes=$nodes")
 
-    if(action.toUpperCase == "ADD" && group.toUpperCase == "H2") {
-      MonitorDb.updateClientConfig(action, "lcp", "127.0.0.1")
-    }
+    //if(action.toUpperCase == "ADD" && group.toUpperCase == "H2") {
+    //  MonitorDb.updateClientConfig(action, "lcp", "127.0.0.1")
+    //}
 
     Ok(Json.toJson(resp))
 
