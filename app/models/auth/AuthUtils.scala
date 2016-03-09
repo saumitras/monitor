@@ -6,6 +6,7 @@ import models.dao.Messages._
 import play.libs.Akka
 import scala.concurrent.duration._
 import scala.concurrent.ExecutionContext.Implicits.global
+import play.api.Logger
 
 object AuthUtils {
 
@@ -13,7 +14,7 @@ object AuthUtils {
     val existingUsers = MonitorDb.getUser().find(_.email == email).toList
     if(existingUsers.isEmpty) {
       val user = User(email, name, password, "admin", "0", "0")
-      println("Inserting user " + email)
+      Logger.info("Inserting user new " + email)
       MonitorDb.insertUser(user)
       Cache.updateUser()
       Akka.system.scheduler.scheduleOnce(0 seconds)(sendNewUserRegistrationMail(user))
@@ -28,7 +29,7 @@ object AuthUtils {
     val body = s"Dear ${u.name},<br><br>" +
       s"Greetings!!" +
       s"<br><br>" +
-      s"Your account is created for GBMonitor. To activate your account, please confirm your identity by replying to this mail with an empty response." +
+      s"Your account is created for GBMonitor. To activate your account, please confirm your identity by replying to this mail." +
       s"<br><br>" +
       s"You can reach us at <a href='mailto:gbmonitor@glassbeam.com'>gbmonitor@glassbeam.com</a> for any assistance." +
       s"<br><br>" +

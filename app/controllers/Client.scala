@@ -16,7 +16,6 @@ object Client extends Controller {
         "stash_duration" -> client.stashDuration.toString
       )
     )
-   // Ok(Json.toJson(clients))
     Ok(Json.toJson(clients))
   }
 

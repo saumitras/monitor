@@ -9,7 +9,7 @@ import models.notification.Notification
 import play.api.Logger
 
 
-object FileStuckInParseAlert extends App {
+object FileStuckInParseAlert {
 
   def generateAlert(h2:String, mps:String, check:Check, files:List[FileStuckInParse]) = {
     Logger.info("Raising alert for check: " + check)
